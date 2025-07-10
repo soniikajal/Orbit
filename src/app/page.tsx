@@ -101,24 +101,27 @@ const HomePage: React.FC = () => {
         <div className="w-full flex flex-col justify-start items-start mt-8 sm:mt-12 md:mt-16">
           <div className="w-full flex flex-col justify-start items-start">
             {/* Hero Content */}
-            <div className="relative w-full sm:w-4/5 md:w-3/5 h-auto flex flex-col justify-end items-center">
-              <h1 className="text-[120px] sm:text-[200px] md:text-[250px] lg:text-[300px] font-bold leading-[160px] sm:leading-[260px] md:leading-[320px] lg:leading-[400px] text-left text-global-text2 font-['Playfair_Display_SC']">
-                NSUT
-              </h1>
-              <h2 className="text-[60px] sm:text-[80px] md:text-[100px] lg:text-[120px] font-normal leading-[58px] sm:text-[78px] md:leading-[98px] lg:leading-[117px] text-left text-[#f45b69] font-['Lost_in_South'] mb-8 sm:mb-12 md:mb-16 lg:mb-[118px] ml-4 sm:ml-8 md:ml-12 lg:ml-[105px]">
-                Survival Kit
-              </h2>
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-global-text2 w-full font-inter ml-2 sm:ml-4 md:ml-6 lg:ml-[9px]">
+            <div className="relative w-full h-auto flex flex-col justify-start items-start">
+              <div className="relative">
+                <h1 className="text-[120px] sm:text-[160px] md:text-[200px] lg:text-[280px] xl:text-[320px] font-bold leading-[0.8] text-left text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  NSUT
+                </h1>
+                <h2 className="absolute top-[80%] left-[15%] text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] xl:text-[120px] font-normal leading-[0.8] text-[#F45B69] tracking-wide" style={{ fontFamily: 'Lost in South, cursive' }}>
+                  SURVIVAL KIT
+                </h2>
+              </div>
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl font-inter mt-8 sm:mt-12 md:mt-16">
                 Your complete guide to NSUT&apos;s campus. Access map, resources, events, and connect with fellow students all in one place
               </p>
             </div>
             {/* Get Started Button */}
             <Button
               variant="primary"
-              className="mt-6 sm:mt-7 md:mt-8 lg:mt-[28px] ml-2 sm:ml-4 md:ml-6 lg:ml-[8px] px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] text-xl sm:text-2xl md:text-3xl lg:text-[30px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[37px] text-global-text2 bg-global-background6 rounded-[30px] font-inter"
+              className="mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] font-inter shadow-[0px_4px_0px_#000000] hover:shadow-[0px_2px_0px_#000000] hover:translate-y-[2px] transition-all duration-200"
+              style={{ borderRadius: '9999px' }}
               onClick={() => console.log('Get Started clicked')}
             >
-              Get Started
+              Get Started →
             </Button>
             {/* What We Offer Section */}
             <div className="w-full flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-[60px] justify-start items-center mt-16 sm:mt-20 md:mt-24 lg:mt-[130px]">
