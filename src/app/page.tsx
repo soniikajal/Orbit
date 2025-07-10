@@ -32,36 +32,36 @@ const HomePage: React.FC = () => {
   const teamMembers: TeamMember[] = [
     {
       id: '1',
-      name: 'John Smith',
+      name: 'Kajal Soni',
       position: 'CEO and Founder',
       experience: '10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy',
       image: '/images/img_picture.png'
     },
     {
       id: '2',
-      name: 'Jane Doe',
-      position: 'Director of Operations',
+      name: 'Manik Bhushan',
+      position: 'Design Lead',
       experience: '7+ years of experience in project management and team leadership. Strong organizational and communication skills',
       image: '/images/img_picture.png'
     },
     {
       id: '3',
-      name: 'Michael Brown',
-      position: 'Senior SEO Specialist',
+      name: 'Parkhi Mudgal',
+      position: 'Design Lead',
       experience: '5+ years of experience in SEO and content creation. Proficient in keyword research and on-page optimization',
       image: '/images/img_picture.png'
     },
     {
       id: '4',
-      name: 'Emily Johnson',
-      position: 'PPC Manager',
+      name: 'Aastha Pandey',
+      position: 'Content Lead',
       experience: '3+ years of experience in paid search advertising. Skilled in campaign management and performance analysis',
       image: '/images/img_picture.png'
     },
     {
       id: '5',
-      name: 'Brian Williams',
-      position: 'Social Media Specialist',
+      name: 'Kushagra Kataria',
+      position: 'Dev Lead',
       experience: '4+ years of experience in social media marketing. Proficient in creating and scheduling content, analyzing metrics, and building engagement',
       image: '/images/img_picture.png'
     },
@@ -253,7 +253,7 @@ const HomePage: React.FC = () => {
             {/* Meet the Team Section */}
             <div className="w-full flex flex-col justify-start items-center mt-20 sm:mt-24 md:mt-28 lg:mt-[114px]">
               {/* Section Header */}
-              <div className="w-full flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-[36px] justify-start items-end">
+              <div className="w-full flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-[36px] justify-start items-center">
                 <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[38px]">
                   <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Meet the team
@@ -263,7 +263,7 @@ const HomePage: React.FC = () => {
                   </p>
                 </div>
                 {/* Team Grid */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-[42px] mr-0 sm:mr-16 md:mr-20 lg:mr-[90px]">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-[42px]">
                   {teamMembers.map((member, index) => (
                     <div
                       key={member.id}
@@ -310,14 +310,16 @@ const HomePage: React.FC = () => {
                   ))}
                 </div>
                 {/* See All Team Button */}
-                <Button
-                  variant="secondary"
-                  className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white mr-20 sm:mr-24 md:mr-28 lg:mr-[124px]"
-                  style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '14px' }}
-                  onClick={() => console.log('See all team clicked')}
-                >
-                  See all team
-                </Button>
+                <div className="w-full flex justify-end">
+                  <Button
+                    variant="secondary"
+                    className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white"
+                    style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '14px' }}
+                    onClick={() => console.log('See all team clicked')}
+                  >
+                    See all team
+                  </Button>
+                </div>
               </div>
             </div>
             {/* Contact Section */}
@@ -429,68 +431,80 @@ const HomePage: React.FC = () => {
                   <div className="w-full flex flex-row justify-start items-center">
                     <div className="w-full flex flex-row justify-start items-center gap-4 sm:gap-5 md:gap-6 lg:gap-[20px]">
                       {/* Instagram Button */}
-                      <button
-                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] bg-global-background5 rounded-2xl p-1 sm:p-1.5 md:p-2 lg:p-[6px]"
-                        aria-label="Instagram"
-                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
-                      >
-                        <Image
-                          src="/images/img_social_icon_black_900.svg"
-                          alt="Instagram"
-                          width={30}
-                          height={30}
-                          className="w-full h-full"
-                        />
-                      </button>
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center">
+                        <button
+                          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
+                          aria-label="Instagram"
+                        >
+                          <Image
+                            src="/images/img_social_icon_black_900.svg"
+                            alt="Instagram"
+                            width={30}
+                            height={30}
+                            className="w-[30px] h-[30px]"
+                          />
+                        </button>
+                      </div>
                       {/* LinkedIn Button */}
-                      <button
-                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] bg-global-background5 rounded-2xl p-1 sm:p-1.5 md:p-2 lg:p-[6px]"
-                        aria-label="LinkedIn"
-                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
-                      >
-                        <Image
-                          src="/images/img_social_icon_black_900_30x30.svg"
-                          alt="LinkedIn"
-                          width={30}
-                          height={30}
-                          className="w-full h-full"
-                        />
-                      </button>
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center">
+                        <button
+                          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
+                          aria-label="LinkedIn"
+                        >
+                          <Image
+                            src="/images/img_social_icon_black_900_30x30.svg"
+                            alt="LinkedIn"
+                            width={30}
+                            height={30}
+                            className="w-[30px] h-[30px]"
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
                   {/* Contact Info and Newsletter */}
                   <div className="w-full flex flex-col lg:flex-row justify-start items-center gap-8 sm:gap-10 md:gap-12 lg:gap-0">
                     {/* Contact Info */}
                     <div className="w-full lg:w-2/5 flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-start">
-                      <div className="bg-[#f45b6a] rounded-md px-1 sm:px-1.5 md:px-2 lg:px-[6px] py-1 sm:py-1.5 md:py-2 lg:py-[6px]">
-                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-global-text1 font-space-grotesk">
+                      <div className="bg-[#f45b6a] rounded-lg px-3 sm:px-4 md:px-5 lg:px-[16px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] inline-block">
+                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white font-space-grotesk">
                           Contact us:
                         </span>
                       </div>
                       <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start">
                         <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
-                          Email: info@positivus.com
+                          Email: nsutorbit@gmail.com
                         </p>
                         <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
-                          Phone: 555-567-8901
+                          Phone: 7827044075
                         </p>
                         <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text4 font-space-grotesk">
-                          Address: 1234 Main St<br />Moonstone City, Stardust State 12345
+                          NSUT, Sector 3, Dwarka,<br />New Delhi - 110078
                         </p>
                       </div>
                     </div>
                     {/* Newsletter Signup */}
-                    <div className="w-full lg:flex-1 flex flex-col sm:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-center items-center bg-global-background1 rounded-2xl p-8 sm:p-10 md:p-12 lg:p-[40px]">
+                    <div className="w-full lg:flex-1 flex flex-col sm:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-center items-center p-8 sm:p-10 md:p-12 lg:p-[40px]">
                       <EditText
                         type="email"
                         placeholder="Email"
                         value={newsletterEmail}
                         onChange={handleNewsletterEmailChange}
-                        className="w-full border-global-text4 text-global-text4 placeholder:text-global-text4"
+                        className="w-full bg-transparent border-2 border-white text-white placeholder:text-white/70 rounded-lg px-4 py-3"
+                        style={{ 
+                          backgroundColor: 'transparent',
+                          borderColor: 'white',
+                          color: 'white'
+                        }}
                       />
                       <Button
                         variant="danger"
-                        className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-global-text1 bg-[#f45b6a] rounded-2xl font-space-grotesk"
+                        className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-3 sm:py-3.5 md:py-4 lg:py-[12px] text-lg sm:text-xl md:text-2xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] text-center text-black font-space-grotesk"
+                        style={{ 
+                          backgroundColor: '#f45b6a', 
+                          borderRadius: '8px',
+                          border: 'none'
+                        }}
                         onClick={handleNewsletterSubmit}
                       >
                         Subscribe to news
@@ -503,7 +517,7 @@ const HomePage: React.FC = () => {
                   <div className="w-full h-[1px] bg-global-text4"></div>
                   <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
                     <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
-                      © 2023 Positivus. All Rights Reserved.
+                      © 2025 Orbit.  All Rights Reserved.
                     </p>
                     <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline font-space-grotesk self-end">
                       Privacy Policy
