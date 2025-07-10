@@ -10,9 +10,19 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   
   const survivalKitRef = useRef<HTMLDivElement>(null);
   const quickLinksRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -32,15 +42,15 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   }, []);
 
   return (
-    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 ${className}`}>
+    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'} ${className}`}>
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0">
           {/* Logo */}
-          <div className="w-full lg:w-auto flex justify-center lg:justify-start">
+          <div className={`w-full lg:w-auto flex justify-center lg:justify-start transition-all duration-800 ease-out delay-200 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <img 
               src="/images/img_orbit_1.png" 
               alt="NSUT Logo" 
-              className="w-[120px] h-[73px] sm:w-[150px] sm:h-[91px] md:w-[180px] md:h-[109px] lg:w-[200px] lg:h-[122px]"
+              className="w-[120px] h-[73px] sm:w-[150px] sm:h-[91px] md:w-[180px] md:h-[109px] lg:w-[200px] lg:h-[122px] hover:scale-105 transition-transform duration-300"
             />
           </div>
 
@@ -56,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           </button>
 
           {/* Navigation Menu */}
-          <nav className={`${menuOpen ? 'block' : 'hidden'} lg:block w-full lg:w-auto`}>
+          <nav className={`${menuOpen ? 'block' : 'hidden'} lg:block w-full lg:w-auto transition-all duration-800 ease-out delay-400 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
             <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
               {/* Main Navigation */}
               <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
@@ -64,16 +74,16 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 <div className="flex flex-col items-center group">
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
                   >
                     Home
                   </button>
-                  <div className="h-[1px] w-[54px] bg-[#facc6b] mt-1"></div>
+                  <div className="h-[1px] w-[54px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px]"></div>
                 </div>
 
                 <button 
                   role="menuitem"
-                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200"
+                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
                 >
                   Navigation
                 </button>
@@ -82,12 +92,12 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 <div className="relative" ref={survivalKitRef}>
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200 flex items-center gap-1"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105"
                     onClick={() => setSurvivalKitOpen(!survivalKitOpen)}
                   >
                     Survival Kit
                     <svg 
-                      className={`w-4 h-4 transition-transform duration-200 ${survivalKitOpen ? 'rotate-180' : ''}`} 
+                      className={`w-4 h-4 transition-all duration-300 ${survivalKitOpen ? 'rotate-180 scale-110' : ''}`} 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -98,10 +108,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   
                   {/* Dropdown Menu */}
                   {survivalKitOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                       <div className="py-2">
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                           onClick={() => {
                             setSurvivalKitOpen(false);
                             // Add navigation logic here
@@ -110,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           Study Hub
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                           onClick={() => {
                             setSurvivalKitOpen(false);
                             // Add navigation logic here
@@ -119,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           Event Board
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                           onClick={() => {
                             setSurvivalKitOpen(false);
                             // Add navigation logic here
@@ -128,7 +138,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                           Launchpad
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                           onClick={() => {
                             setSurvivalKitOpen(false);
                             // Add navigation logic here
@@ -146,12 +156,12 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   <div className="relative" ref={quickLinksRef}>
                     <button 
                       role="menuitem"
-                      className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200 flex items-center gap-1"
+                      className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105"
                       onClick={() => setQuickLinksOpen(!quickLinksOpen)}
                     >
                       Quick Links
                       <svg 
-                        className={`w-4 h-4 transition-transform duration-200 ${quickLinksOpen ? 'rotate-180' : ''}`} 
+                        className={`w-4 h-4 transition-all duration-300 ${quickLinksOpen ? 'rotate-180 scale-110' : ''}`} 
                         fill="none" 
                         stroke="currentColor" 
                         viewBox="0 0 24 24"
@@ -162,10 +172,10 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     
                     {/* Dropdown Menu */}
                     {quickLinksOpen && (
-                      <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
                         <div className="py-2">
                           <button
-                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                             onClick={() => {
                               setQuickLinksOpen(false);
                               // Add navigation logic here
@@ -174,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             Academic Calendar
                           </button>
                           <button
-                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                             onClick={() => {
                               setQuickLinksOpen(false);
                               // Add navigation logic here
@@ -183,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             Societies and Clubs
                           </button>
                           <button
-                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                             onClick={() => {
                               setQuickLinksOpen(false);
                               // Add navigation logic here
@@ -192,7 +202,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                             CUMS Website
                           </button>
                           <button
-                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                             onClick={() => {
                               setQuickLinksOpen(false);
                               // Add navigation logic here
@@ -207,7 +217,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
                   >
                     About Us
                   </button>
@@ -218,7 +228,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               <div className="mt-4 lg:mt-0">
                 <Button
                   variant="outline"
-                  className="px-6 py-4 sm:px-7 sm:py-5 md:px-8 md:py-5 text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 border border-global-text2 rounded-xl sm:rounded-2xl hover:bg-global-background2 transition-all duration-200"
+                  className="px-6 py-4 sm:px-7 sm:py-5 md:px-8 md:py-5 text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 border border-global-text2 rounded-xl sm:rounded-2xl hover:bg-global-background2 transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 >
                   Login/Signup
                 </Button>

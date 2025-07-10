@@ -6,6 +6,25 @@ module.exports = {
       fontFamily: {
         'space-grotesk': ['Space Grotesk', 'sans-serif'],
       },
+      transitionDuration: {
+        '1500': '1500ms',
+        '1800': '1800ms',
+        '2000': '2000ms',
+        '2200': '2200ms',
+        '2800': '2800ms',
+        '3500': '3500ms',
+      },
+      transitionDelay: {
+        '300': '300ms',
+        '800': '800ms',
+        '1200': '1200ms',
+        '2000': '2000ms',
+        '2200': '2200ms',
+        '3500': '3500ms',
+      },
+      transitionTimingFunction: {
+        'elegant': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
       colors: {
         global: {
           background1: "var(--global-bg-1)",
