@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from '../ui/Button';
 
 interface HeaderProps {
@@ -8,6 +8,28 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
+  const [quickLinksOpen, setQuickLinksOpen] = useState(false);
+  
+  const survivalKitRef = useRef<HTMLDivElement>(null);
+  const quickLinksRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (survivalKitRef.current && !survivalKitRef.current.contains(event.target as Node)) {
+        setSurvivalKitOpen(false);
+      }
+      if (quickLinksRef.current && !quickLinksRef.current.contains(event.target as Node)) {
+        setQuickLinksOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 ${className}`}>
@@ -46,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   >
                     Home
                   </button>
-                  <div className="h-[1px] w-[54px] bg-header-background1 mt-1"></div>
+                  <div className="h-[1px] w-[54px] bg-[#facc6b] mt-1"></div>
                 </div>
 
                 <button 
@@ -56,20 +78,132 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                   Navigation
                 </button>
 
-                <button 
-                  role="menuitem"
-                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200"
-                >
-                  Survival Kit ↓
-                </button>
-
-                <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
+                {/* Survival Kit Dropdown */}
+                <div className="relative" ref={survivalKitRef}>
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200 flex items-center gap-1"
+                    onClick={() => setSurvivalKitOpen(!survivalKitOpen)}
                   >
-                    Quick Links ↓
+                    Survival Kit
+                    <svg 
+                      className={`w-4 h-4 transition-transform duration-200 ${survivalKitOpen ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </button>
+                  
+                  {/* Dropdown Menu */}
+                  {survivalKitOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                      <div className="py-2">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          onClick={() => {
+                            setSurvivalKitOpen(false);
+                            // Add navigation logic here
+                          }}
+                        >
+                          Study Hub
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          onClick={() => {
+                            setSurvivalKitOpen(false);
+                            // Add navigation logic here
+                          }}
+                        >
+                          Event Board
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          onClick={() => {
+                            setSurvivalKitOpen(false);
+                            // Add navigation logic here
+                          }}
+                        >
+                          Launchpad
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                          onClick={() => {
+                            setSurvivalKitOpen(false);
+                            // Add navigation logic here
+                          }}
+                        >
+                          Phonebook
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
+                  {/* Quick Links Dropdown */}
+                  <div className="relative" ref={quickLinksRef}>
+                    <button 
+                      role="menuitem"
+                      className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-colors duration-200 flex items-center gap-1"
+                      onClick={() => setQuickLinksOpen(!quickLinksOpen)}
+                    >
+                      Quick Links
+                      <svg 
+                        className={`w-4 h-4 transition-transform duration-200 ${quickLinksOpen ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {/* Dropdown Menu */}
+                    {quickLinksOpen && (
+                      <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <div className="py-2">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            onClick={() => {
+                              setQuickLinksOpen(false);
+                              // Add navigation logic here
+                            }}
+                          >
+                            Academic Calendar
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            onClick={() => {
+                              setQuickLinksOpen(false);
+                              // Add navigation logic here
+                            }}
+                          >
+                            Societies and Clubs
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            onClick={() => {
+                              setQuickLinksOpen(false);
+                              // Add navigation logic here
+                            }}
+                          >
+                            CUMS Website
+                          </button>
+                          <button
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-colors duration-200"
+                            onClick={() => {
+                              setQuickLinksOpen(false);
+                              // Add navigation logic here
+                            }}
+                          >
+                            Time Table
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   <button 
                     role="menuitem"
