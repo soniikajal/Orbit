@@ -87,6 +87,26 @@ const HomePage: React.FC = () => {
     setContactForm({ name: '', email: '', message: '' });
   };
 
+  const handleNameChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    const stringValue = typeof value === 'string' ? value : value.target.value;
+    handleContactFormChange('name', stringValue);
+  };
+
+  const handleEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    const stringValue = typeof value === 'string' ? value : value.target.value;
+    handleContactFormChange('email', stringValue);
+  };
+
+  const handleMessageChange = (value: string | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const stringValue = typeof value === 'string' ? value : value.target.value;
+    handleContactFormChange('message', stringValue);
+  };
+
+  const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    const stringValue = typeof value === 'string' ? value : value.target.value;
+    setNewsletterEmail(stringValue);
+  };
+
   const handleNewsletterSubmit = () => {
     console.log('Newsletter subscription:', newsletterEmail);
     setNewsletterEmail('');
@@ -110,15 +130,15 @@ const HomePage: React.FC = () => {
                   SURVIVAL KIT
                 </h2>
               </div>
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl font-inter mt-8 sm:mt-12 md:mt-16">
+              <p className="text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl mt-8 sm:mt-12 md:mt-16" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Your complete guide to NSUT&apos;s campus. Access map, resources, events, and connect with fellow students all in one place
               </p>
             </div>
             {/* Get Started Button */}
             <Button
               variant="primary"
-              className="mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] font-inter shadow-[0px_4px_0px_#000000] hover:shadow-[0px_2px_0px_#000000] hover:translate-y-[2px] transition-all duration-200"
-              style={{ borderRadius: '9999px' }}
+              className="mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_2px_0px_#000000] hover:translate-y-[2px] transition-all duration-200"
+              style={{ borderRadius: '9999px', fontFamily: 'Inter, sans-serif' }}
               onClick={() => console.log('Get Started clicked')}
             >
               Get Started →
@@ -127,7 +147,7 @@ const HomePage: React.FC = () => {
             <div className="w-full flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-[60px] justify-start items-center mt-16 sm:mt-20 md:mt-24 lg:mt-[130px]">
               {/* Section Header */}
               <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-8 md:gap-12 lg:gap-[54px]">
-                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 font-inter">
+                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 'bold' }}>
                   What we offer
                 </h2>
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%] font-space-grotesk">
@@ -139,10 +159,10 @@ const HomePage: React.FC = () => {
                 {/* Event Board */}
                 <div className="w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px]">
                   <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2 font-inter">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Event Board
                     </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] font-inter">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Stay updated with campus events, workshops, seminars, and competitions. Never miss an opportunity to grow and network.
                     </p>
                   </div>
@@ -154,7 +174,7 @@ const HomePage: React.FC = () => {
                       height={40}
                       className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
                     />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2 font-inter">
+                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       View Events
                     </span>
                   </div>
@@ -162,10 +182,10 @@ const HomePage: React.FC = () => {
                 {/* Launch Pad */}
                 <div className="w-full flex flex-col justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px]">
                   <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text4 font-inter">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Launch Pad
                     </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text4 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] font-inter">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text4 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Connect with seniors, join study groups, and get help from the NSUT community. We&apos;re here to support your journey.
                     </p>
                   </div>
@@ -177,7 +197,7 @@ const HomePage: React.FC = () => {
                       height={40}
                       className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
                     />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text4 font-inter">
+                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Explore Projects
                     </span>
                   </div>
@@ -185,10 +205,10 @@ const HomePage: React.FC = () => {
                 {/* Campus Navigation */}
                 <div className="w-full flex flex-col justify-start items-center bg-[#f45b6a] border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000]">
                   <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2 font-inter">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Campus Navigation
                     </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] font-inter">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Navigate the campus with ease using our interactive maps. Find classrooms, labs, hostels and important buildings quickly.
                     </p>
                   </div>
@@ -200,7 +220,7 @@ const HomePage: React.FC = () => {
                       height={40}
                       className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
                     />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2 font-inter">
+                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Explore Campus
                     </span>
                   </div>
@@ -208,10 +228,10 @@ const HomePage: React.FC = () => {
                 {/* Study Hub */}
                 <div className="w-full flex flex-col justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000]">
                   <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2 font-inter">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Study Hub
                     </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[64%] font-inter">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[64%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics.
                     </p>
                   </div>
@@ -223,7 +243,7 @@ const HomePage: React.FC = () => {
                       height={40}
                       className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
                     />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2 font-inter">
+                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Explore Resources
                     </span>
                   </div>
@@ -235,10 +255,10 @@ const HomePage: React.FC = () => {
               {/* Section Header */}
               <div className="w-full flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-[36px] justify-start items-end">
                 <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[38px]">
-                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 font-inter">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Meet the team
                   </h2>
-                  <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%] font-inter">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Meet the skilled and experienced team behind our successful digital marketing strategies
                   </p>
                 </div>
@@ -282,7 +302,7 @@ const HomePage: React.FC = () => {
                       {/* Divider and Experience */}
                       <div className="w-full flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-center mb-5 sm:mb-6 md:mb-7 lg:mb-[26px]">
                         <div className="w-full h-[1px] bg-global-text2"></div>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full font-inter">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full" style={{ fontFamily: 'Inter, sans-serif' }}>
                           {member.experience}
                         </p>
                       </div>
@@ -292,7 +312,8 @@ const HomePage: React.FC = () => {
                 {/* See All Team Button */}
                 <Button
                   variant="secondary"
-                  className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-global-text4 bg-global-background1 rounded-2xl font-inter mr-20 sm:mr-24 md:mr-28 lg:mr-[124px]"
+                  className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white mr-20 sm:mr-24 md:mr-28 lg:mr-[124px]"
+                  style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '14px' }}
                   onClick={() => console.log('See all team clicked')}
                 >
                   See all team
@@ -300,40 +321,41 @@ const HomePage: React.FC = () => {
               </div>
             </div>
             {/* Contact Section */}
-            <div className="relative w-full flex justify-center items-center mt-24 sm:mt-28 md:mt-32 lg:mt-[154px] h-auto">
-              {/* Contact Form */}
-              <div className="bg-global-background2 rounded-[44px] p-12 sm:p-14 md:p-16 lg:p-[60px] pt-14 sm:pt-16 md:pt-18 lg:pt-[60px] pb-14 sm:pb-16 md:pb-18 lg:pb-[60px] pl-16 sm:pl-20 md:pl-24 lg:pl-[100px] pr-12 sm:pr-14 md:pr-16 lg:pr-[56px] mr-16 sm:mr-20 md:pr-24 lg:mr-[100px]">
-                <div className="flex flex-col gap-8 sm:gap-9 md:gap-10 lg:gap-[40px] justify-start items-start w-full max-w-lg">
-                  {/* Radio Buttons */}
-                  <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-0 pr-0 sm:pr-4 md:pr-6 lg:pr-[16px]">
-                    <div className="flex flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-center items-center">
-                      <button
-                        onClick={() => setFeedbackType('sayHi')}
-                        className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px]"
-                        aria-label="Say Hi option"
-                      >
-                        <Image
-                          src="/images/img_radiobutton.svg"
-                          alt="Radio Button"
-                          width={28}
-                          height={28}
-                          className="w-full h-full"
-                        />
-                      </button>
-                      <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk self-start">
-                        Say Hi
-                      </span>
+            <div className="relative w-full mt-24 sm:mt-28 md:mt-32 lg:mt-[154px]">
+              {/* Extended Grey Background */}
+              <div className="w-full bg-global-background2 rounded-[44px] py-14 sm:py-16 md:py-18 lg:py-[60px] px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto relative">
+                  {/* Contact Form - Left Side */}
+                  <div className="w-full lg:w-1/2 flex flex-col gap-8 sm:gap-9 md:gap-10 lg:gap-[40px] justify-start items-start pl-8 sm:pl-12 md:pl-16 lg:pl-[60px]">
+                    {/* Radio Buttons */}
+                    <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
+                      <div className="flex flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-center">
+                        <button
+                          onClick={() => setFeedbackType('sayHi')}
+                          className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px]"
+                          aria-label="Say Hi option"
+                        >
+                          <Image
+                            src="/images/img_radiobutton.svg"
+                            alt="Radio Button"
+                            width={28}
+                            height={28}
+                            className="w-full h-full"
+                          />
+                        </button>
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                          Say Hi
+                        </span>
+                      </div>
+                      <div className="flex flex-row justify-start items-center gap-3 sm:gap-4 md:gap-5 lg:gap-[14px]">
+                        <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px] bg-global-background5 border border-global-text1 rounded-2xl"></div>
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                          Leave a feedback
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-row justify-start items-center flex-1 px-0 sm:px-2 md:px-3 lg:px-[16px]">
-                      <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px] bg-global-background5 border border-global-text1 rounded-2xl"></div>
-                      <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk self-start ml-3 sm:ml-4 md:ml-5 lg:ml-[14px]">
-                        Leave a feedback
-                      </span>
-                    </div>
-                  </div>
-                  {/* Form Fields */}
-                  <div className="w-full flex flex-col gap-8 sm:gap-9 md:gap-10 lg:gap-[40px] justify-start items-center">
-                    <div className="w-full flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[24px] justify-start items-center">
+                    {/* Form Fields */}
+                    <div className="w-full max-w-md flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[24px] justify-start items-start">
                       {/* Name Field */}
                       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 lg:gap-[6px] justify-center items-start">
                         <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 font-space-grotesk">
@@ -342,7 +364,7 @@ const HomePage: React.FC = () => {
                         <EditText
                           placeholder="Name"
                           value={contactForm.name}
-                          onChange={(value) => handleContactFormChange('name', value)}
+                          onChange={handleNameChange}
                           className="w-full"
                         />
                       </div>
@@ -355,7 +377,7 @@ const HomePage: React.FC = () => {
                           type="email"
                           placeholder="Email"
                           value={contactForm.email}
-                          onChange={(value) => handleContactFormChange('email', value)}
+                          onChange={handleEmailChange}
                           required
                           className="w-full"
                         />
@@ -368,34 +390,34 @@ const HomePage: React.FC = () => {
                         <TextArea
                           placeholder="Message"
                           value={contactForm.message}
-                          onChange={(value) => handleContactFormChange('message', value)}
+                          onChange={handleMessageChange}
                           required
                           rows={6}
                           className="w-full"
                         />
                       </div>
+                      {/* Submit Button */}
+                      <Button
+                        variant="secondary"
+                        className="w-full px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-white font-space-grotesk mt-4 sm:mt-5 md:mt-6 lg:mt-[20px]"
+                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
+                        onClick={handleContactSubmit}
+                      >
+                        Send Message
+                      </Button>
                     </div>
-                    {/* Submit Button */}
-                    <Button
-                      variant="secondary"
-                      fullWidth
-                      className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-global-text4 bg-global-background1 rounded-2xl font-space-grotesk"
-                      onClick={handleContactSubmit}
-                    >
-                      Send Message
-                    </Button>
+                  </div>
+                  {/* Illustration - Right Side */}
+                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-1/2 lg:w-2/5 flex items-center justify-end pr-8 sm:pr-12 md:pr-16 lg:pr-[60px] hidden lg:flex">
+                    <Image
+                      src="/images/img_illustration.png"
+                      alt="Contact Illustration"
+                      width={466}
+                      height={648}
+                      className="w-3/4 h-auto max-w-xs max-h-full object-contain"
+                    />
                   </div>
                 </div>
-              </div>
-              {/* Illustration */}
-              <div className="absolute right-0 top-12 sm:top-14 md:top-16 lg:top-[62px] w-1/3 sm:w-2/5 md:w-1/3 lg:w-[34%]">
-                <Image
-                  src="/images/img_illustration.png"
-                  alt="Contact Illustration"
-                  width={466}
-                  height={648}
-                  className="w-full h-auto"
-                />
               </div>
             </div>
             {/* Footer */}
@@ -405,33 +427,30 @@ const HomePage: React.FC = () => {
                 <div className="w-full flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-[66px] justify-start items-center">
                   {/* Social Icons */}
                   <div className="w-full flex flex-row justify-start items-center">
-                    <div className="w-full flex flex-row justify-start items-center">
+                    <div className="w-full flex flex-row justify-start items-center gap-4 sm:gap-5 md:gap-6 lg:gap-[20px]">
+                      {/* Instagram Button */}
                       <button
                         className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] bg-global-background5 rounded-2xl p-1 sm:p-1.5 md:p-2 lg:p-[6px]"
-                        aria-label="Social media link"
+                        aria-label="Instagram"
+                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
                       >
                         <Image
                           src="/images/img_social_icon_black_900.svg"
-                          alt="Social Icon"
+                          alt="Instagram"
                           width={30}
                           height={30}
                           className="w-full h-full"
                         />
                       </button>
-                      <Image
-                        src="/images/img_social_icon_white_a700.svg"
-                        alt="Social Icon"
-                        width={30}
-                        height={30}
-                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] ml-4 sm:ml-5 md:ml-6 lg:ml-[20px]"
-                      />
+                      {/* LinkedIn Button */}
                       <button
-                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] bg-global-background5 rounded-2xl p-1 sm:p-1.5 md:p-2 lg:p-[6px] ml-4 sm:ml-5 md:ml-6 lg:ml-[20px]"
-                        aria-label="Social media link"
+                        className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-[30px] lg:h-[30px] bg-global-background5 rounded-2xl p-1 sm:p-1.5 md:p-2 lg:p-[6px]"
+                        aria-label="LinkedIn"
+                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
                       >
                         <Image
                           src="/images/img_social_icon_black_900_30x30.svg"
-                          alt="Social Icon"
+                          alt="LinkedIn"
                           width={30}
                           height={30}
                           className="w-full h-full"
@@ -466,7 +485,7 @@ const HomePage: React.FC = () => {
                         type="email"
                         placeholder="Email"
                         value={newsletterEmail}
-                        onChange={setNewsletterEmail}
+                        onChange={handleNewsletterEmailChange}
                         className="w-full border-global-text4 text-global-text4 placeholder:text-global-text4"
                       />
                       <Button
