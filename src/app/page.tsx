@@ -286,18 +286,20 @@ const HomePage: React.FC = () => {
                             {member.position}
                           </p>
                         </div>
-                        <button
-                          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] ml-2 sm:ml-3 md:ml-4 lg:ml-[8px]"
-                          aria-label={`View ${member.name} profile`}
-                        >
-                          <Image
-                            src="/images/img_social_icon.svg"
-                            alt="Social Icon"
-                            width={34}
-                            height={34}
-                            className="w-full h-full"
-                          />
-                        </button>
+                        <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3 lg:gap-[8px] items-center">
+                          <button
+                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center"
+                            aria-label={`View ${member.name} LinkedIn profile`}
+                          >
+                            <i className="fa-brands fa-linkedin-in text-[#F45B6A] text-[16px]"></i>
+                          </button>
+                          <button
+                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center"
+                            aria-label={`View ${member.name} Instagram profile`}
+                          >
+                            <i className="fa-brands fa-instagram text-[#F45B6A] text-[16px]"></i>
+                          </button>
+                        </div>
                       </div>
                       {/* Divider and Experience */}
                       <div className="w-full flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-center mb-5 sm:mb-6 md:mb-7 lg:mb-[26px]">
@@ -436,13 +438,7 @@ const HomePage: React.FC = () => {
                           className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
                           aria-label="Instagram"
                         >
-                          <Image
-                            src="/images/img_social_icon_black_900.svg"
-                            alt="Instagram"
-                            width={30}
-                            height={30}
-                            className="w-[30px] h-[30px]"
-                          />
+                          <i className="fa-brands fa-instagram text-black text-[30px]"></i>
                         </button>
                       </div>
                       {/* LinkedIn Button */}
@@ -451,13 +447,7 @@ const HomePage: React.FC = () => {
                           className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
                           aria-label="LinkedIn"
                         >
-                          <Image
-                            src="/images/img_social_icon_black_900_30x30.svg"
-                            alt="LinkedIn"
-                            width={30}
-                            height={30}
-                            className="w-[30px] h-[30px]"
-                          />
+                          <i className="fa-brands fa-linkedin-in text-black text-[30px]"></i>
                         </button>
                       </div>
                     </div>
