@@ -1,5 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import { isAdmin } from './admin'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -22,11 +23,21 @@ export const authOptions: NextAuthOptions = {
       return true // Allow sign-in
     },
     async session({ session, token }) {
-      // Add custom fields to session if needed
+      // Add admin role to session
+      if (session.user && session.user.email && isAdmin(session.user.email)) {
+        session.user.role = 'admin'
+      } else if (session.user) {
+        session.user.role = 'user'
+      }
       return session
     },
     async jwt({ token, user }) {
-      // Add custom fields to JWT token if needed
+      // Add admin role to JWT token
+      if (token.email && isAdmin(token.email)) {
+        token.role = 'admin'
+      } else {
+        token.role = 'user'
+      }
       return token
     },
   },

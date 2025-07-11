@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import Button from '../ui/Button';
 import SignInButton from '../auth/SignInButton';
 import SignOutButton from '../auth/SignOutButton';
 

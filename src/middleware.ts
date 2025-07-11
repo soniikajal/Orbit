@@ -19,6 +19,7 @@ export const config = {
   matcher: [
     '/dashboard/:path*',
     '/profile/:path*',
+    '/admin/:path*',
     // Add other protected routes here
   ],
 }
