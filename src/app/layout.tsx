@@ -8,8 +8,8 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: 'Next.js with Tailwind CSS',
-  description: 'A boilerplate project with Next.js and Tailwind CSS',
+  title: 'Orbit - NSUT Survival Kit',
+  description: 'Your complete guide to NSUT campus. Access maps, resources, events, and connect with fellow students all in one place.',
   icons: {
     icon: [
       { url: '/favicon.ico', type: 'image/x-icon' }
