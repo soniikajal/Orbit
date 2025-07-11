@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import Button from '../ui/Button';
 import SignInButton from '../auth/SignInButton';
 import SignOutButton from '../auth/SignOutButton';
@@ -9,7 +10,7 @@ interface HeaderProps {
   className?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ className = '' }) => {
+const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
@@ -63,12 +64,14 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
               {/* Home Menu Item with Active State */}
               <div className="flex flex-col items-center group">
-                <button 
-                  role="menuitem"
-                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
-                >
-                  Home
-                </button>
+                <Link href="/">
+                  <button 
+                    role="menuitem"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
+                  >
+                    Home
+                  </button>
+                </Link>
                 <div className="h-[1px] w-[54px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px]"></div>
               </div>
 
@@ -222,9 +225,6 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               </div>
             ) : session ? (
               <div className="flex items-center gap-4">
-                <span className="text-sm text-global-text2 hidden sm:block">
-                  Welcome, {session.user?.name?.split(' ')[0]}!
-                </span>
                 <SignOutButton className="px-4 py-2 text-sm" />
               </div>
             ) : (
@@ -246,6 +246,8 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
       </div>
     </header>
   );
-};
+});
+
+Header.displayName = 'Header';
 
 export default Header;

@@ -193,28 +193,27 @@ const HomePage: React.FC = () => {
                 Your complete guide to NSUT&apos;s campus. Access map, resources, events, and connect with fellow students all in one place
               </p>
             </div>
-            {/* Get Started Button */}
+            {/* Get Started / View Dashboard Button */}
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-              <Button
-                variant="primary"
-                className={`mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_8px_0px_#000000] hover:translate-y-[-4px] transition-all duration-500 ease-elegant hover:duration-200 ${isLoaded ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}
-                style={{ borderRadius: '9999px', fontFamily: 'Inter, sans-serif' }}
-                onClick={scrollToWhatWeOffer}
-              >
-                Get Started →
-              </Button>
-              
-              {/* Dashboard Link for Authenticated Users */}
-              {session && (
+              {session ? (
                 <Link href="/dashboard">
                   <Button
-                    variant="secondary"
-                    className={`mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-white bg-[#f45b6a] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_8px_0px_#000000] hover:translate-y-[-4px] transition-all duration-500 ease-elegant hover:duration-200 ${isLoaded ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}
+                    variant="primary"
+                    className={`mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_8px_0px_#000000] hover:translate-y-[-4px] transition-all duration-500 ease-elegant hover:duration-200 ${isLoaded ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}
                     style={{ borderRadius: '9999px', fontFamily: 'Inter, sans-serif' }}
                   >
-                    Go to Dashboard →
+                    View Dashboard →
                   </Button>
                 </Link>
+              ) : (
+                <Button
+                  variant="primary"
+                  className={`mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_8px_0px_#000000] hover:translate-y-[-4px] transition-all duration-500 ease-elegant hover:duration-200 ${isLoaded ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}
+                  style={{ borderRadius: '9999px', fontFamily: 'Inter, sans-serif' }}
+                  onClick={scrollToWhatWeOffer}
+                >
+                  Get Started →
+                </Button>
               )}
             </div>
             {/* What We Offer Section */}
