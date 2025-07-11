@@ -396,14 +396,44 @@ const HomePage: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3 lg:gap-[8px] items-center">
                           <button
-                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center"
+                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center hover:scale-110 transition-transform duration-200"
                             aria-label={`View ${member.name} LinkedIn profile`}
+                            onClick={() => {
+                              // Add LinkedIn URLs for each team member
+                              const linkedinUrls: { [key: string]: string } = {
+                                'Kajal Soni': 'https://www.linkedin.com/in/kajalsoni2006/',
+                                'Manik Bhushan': 'https://www.linkedin.com/in/manik-bhushan/',
+                                'Parkhi Mudgal': 'https://www.linkedin.com/in/parkhi-mudgal-9a4285323/',
+                                'Aastha Pandey': 'https://www.linkedin.com/in/aastha-pandey/',
+                                'Kushagra Kataria': 'https://www.linkedin.com/in/kushagra-kataria/',
+                                'Sarah Kim': 'https://www.linkedin.com/in/sarah-kim/'
+                              };
+                              const url = linkedinUrls[member.name];
+                              if (url) {
+                                window.open(url, '_blank');
+                              }
+                            }}
                           >
                             <i className="fa-brands fa-linkedin-in text-[#F45B6A] text-[16px]"></i>
                           </button>
                           <button
-                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center"
+                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center hover:scale-110 transition-transform duration-200"
                             aria-label={`View ${member.name} Instagram profile`}
+                            onClick={() => {
+                              // Add Instagram URLs for each team member
+                              const instagramUrls: { [key: string]: string } = {
+                                'Kajal Soni': 'https://www.instagram.com/rustic.reverie_/',
+                                'Manik Bhushan': 'https://www.instagram.com/iammvnik/',
+                                'Parkhi Mudgal': 'https://www.instagram.com/p_mudgal26/',
+                                'Aastha Pandey': 'https://www.instagram.com/aastha.pandey/',
+                                'Kushagra Kataria': 'https://www.instagram.com/kushagra.kataria/',
+                                'Sarah Kim': 'https://www.instagram.com/sarah.kim/'
+                              };
+                              const url = instagramUrls[member.name];
+                              if (url) {
+                                window.open(url, '_blank');
+                              }
+                            }}
                           >
                             <i className="fa-brands fa-instagram text-[#F45B6A] text-[16px]"></i>
                           </button>

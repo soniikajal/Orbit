@@ -1,7 +1,7 @@
 // Admin utility functions
 export const ADMIN_EMAILS = [
   'kajal.soni.ug24@nsut.ac.in',
-  'manik.bhushan@nsut.ac.in', 
+  'manik.bhushan.ug23@nsut.ac.in', 
   'parkhi.mudgal@nsut.ac.in',
   'aastha.pandey@nsut.ac.in',
   'kushagra.kataria@nsut.ac.in',
