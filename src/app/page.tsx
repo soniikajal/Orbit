@@ -30,6 +30,7 @@ const HomePage: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -61,6 +62,16 @@ const HomePage: React.FC = () => {
     return () => {
       sections.forEach((section) => observer.unobserve(section));
     };
+  }, []);
+
+  useEffect(() => {
+    // Handle scroll-to-top arrow visibility
+    const handleScroll = () => {
+      setShowScrollToTop(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const teamMembers: TeamMember[] = [
@@ -146,6 +157,17 @@ const HomePage: React.FC = () => {
     setNewsletterEmail('');
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToWhatWeOffer = () => {
+    const element = document.getElementById('what-we-offer');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="w-full bg-[#fffcf9] flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
@@ -173,9 +195,9 @@ const HomePage: React.FC = () => {
               variant="primary"
               className={`mt-8 sm:mt-10 md:mt-12 lg:mt-[40px] ml-0 px-12 sm:px-14 md:px-16 lg:px-[60px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-xl sm:text-2xl md:text-3xl lg:text-[24px] font-bold leading-8 sm:leading-9 md:leading-10 lg:leading-[30px] text-black bg-[#f4c430] shadow-[0px_4px_0px_#000000] hover:shadow-[0px_8px_0px_#000000] hover:translate-y-[-4px] transition-all duration-500 ease-elegant hover:duration-200 ${isLoaded ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}
               style={{ borderRadius: '9999px', fontFamily: 'Inter, sans-serif' }}
-              onClick={() => console.log('Get Started clicked')}
+              onClick={scrollToWhatWeOffer}
             >
-              Get Started    →
+              Get Started →
             </Button>
             {/* What We Offer Section */}
             <div 
@@ -569,6 +591,31 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll to Top Arrow */}
+        <button
+          onClick={scrollToTop}
+          className={`fixed bottom-8 right-8 w-12 h-12 bg-[#f4c430] hover:bg-[#e6b52a] text-black rounded-full shadow-lg hover:shadow-xl transition-all duration-500 ease-out transform hover:scale-110 z-50 flex items-center justify-center ${
+            showScrollToTop 
+              ? 'opacity-100 translate-y-0 pointer-events-auto' 
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+          aria-label="Scroll to top"
+        >
+          <svg 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="transition-transform duration-300 ease-out"
+          >
+            <polyline points="18,15 12,9 6,15"></polyline>
+          </svg>
+        </button>
       </div>
     </div>
   );
