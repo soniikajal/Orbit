@@ -29,11 +29,22 @@ const HomePage: React.FC = () => {
     email: '',
     message: ''
   });
-  const [feedbackType, setFeedbackType] = useState<'sayHi' | 'feedback'>('sayHi');
+  const [feedbackType, setFeedbackType] = useState<'askQuery' | 'leaveFeedback' | 'reportBug'>('askQuery');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [showScrollToTop, setShowScrollToTop] = useState(false);
+
+  // Effect to prefill form when session loads
+  useEffect(() => {
+    if (session?.user) {
+      setContactForm(prev => ({
+        ...prev,
+        name: session.user?.name || '',
+        email: session.user?.email || ''
+      }));
+    }
+  }, [session]);
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -421,26 +432,44 @@ const HomePage: React.FC = () => {
                     <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
                       <div className="flex flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-center">
                         <button
-                          onClick={() => setFeedbackType('sayHi')}
+                          onClick={() => setFeedbackType('askQuery')}
                           className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px]"
-                          aria-label="Say Hi option"
+                          aria-label="Ask a Query option"
                         >
-                          <Image
-                            src="/images/img_radiobutton.svg"
-                            alt="Radio Button"
-                            width={28}
-                            height={28}
-                            className="w-full h-full"
-                          />
+                          <div className={`w-full h-full ${feedbackType === 'askQuery' ? 'bg-white' : 'bg-global-background5'} border border-global-text1 rounded-2xl flex items-center justify-center`}>
+                            {feedbackType === 'askQuery' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
+                          </div>
                         </button>
                         <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
-                          Say Hi
+                          Ask a Query
                         </span>
                       </div>
                       <div className="flex flex-row justify-start items-center gap-3 sm:gap-4 md:gap-5 lg:gap-[14px]">
-                        <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px] bg-global-background5 border border-global-text1 rounded-2xl"></div>
+                        <button
+                          onClick={() => setFeedbackType('leaveFeedback')}
+                          className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px]"
+                          aria-label="Leave a Feedback option"
+                        >
+                          <div className={`w-full h-full ${feedbackType === 'leaveFeedback' ? 'bg-white' : 'bg-global-background5'} border border-global-text1 rounded-2xl flex items-center justify-center`}>
+                            {feedbackType === 'leaveFeedback' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
+                          </div>
+                        </button>
                         <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
-                          Leave a feedback
+                          Leave a Feedback
+                        </span>
+                      </div>
+                      <div className="flex flex-row justify-start items-center gap-3 sm:gap-4 md:gap-5 lg:gap-[14px]">
+                        <button
+                          onClick={() => setFeedbackType('reportBug')}
+                          className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-[28px] lg:h-[28px]"
+                          aria-label="Report a Bug option"
+                        >
+                          <div className={`w-full h-full ${feedbackType === 'reportBug' ? 'bg-white' : 'bg-global-background5'} border border-global-text1 rounded-2xl flex items-center justify-center`}>
+                            {feedbackType === 'reportBug' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
+                          </div>
+                        </button>
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                          Report a Bug
                         </span>
                       </div>
                     </div>
@@ -455,7 +484,8 @@ const HomePage: React.FC = () => {
                           placeholder="Name"
                           value={contactForm.name}
                           onChange={handleNameChange}
-                          className="w-full"
+                          disabled={!!session?.user}
+                          className={`w-full ${session?.user ? 'opacity-75 cursor-not-allowed' : ''}`}
                         />
                       </div>
                       {/* Email Field */}
@@ -468,8 +498,9 @@ const HomePage: React.FC = () => {
                           placeholder="Email"
                           value={contactForm.email}
                           onChange={handleEmailChange}
+                          disabled={!!session?.user}
                           required
-                          className="w-full"
+                          className={`w-full ${session?.user ? 'opacity-75 cursor-not-allowed' : ''}`}
                         />
                       </div>
                       {/* Message Field */}
