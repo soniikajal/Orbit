@@ -1,12 +1,16 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
 import Button from '../ui/Button';
+import SignInButton from '../auth/SignInButton';
+import SignOutButton from '../auth/SignOutButton';
 
 interface HeaderProps {
   className?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ className = '' }) => {
+  const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
@@ -224,14 +228,22 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 </div>
               </div>
 
-              {/* Login/Signup Button */}
+              {/* Auth Buttons */}
               <div className="mt-4 lg:mt-0">
-                <Button
-                  variant="outline"
-                  className="px-6 py-4 sm:px-7 sm:py-5 md:px-8 md:py-5 text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 border border-global-text2 rounded-xl sm:rounded-2xl hover:bg-global-background2 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                >
-                  Login/Signup
-                </Button>
+                {status === 'loading' ? (
+                  <div className="px-6 py-4 text-base font-space-grotesk text-global-text2">
+                    Loading...
+                  </div>
+                ) : session ? (
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm text-global-text2 hidden sm:block">
+                      Welcome, {session.user?.name?.split(' ')[0]}!
+                    </span>
+                    <SignOutButton className="px-4 py-2 text-sm" />
+                  </div>
+                ) : (
+                  <SignInButton className="px-6 py-4 text-base font-space-grotesk font-normal border border-global-text2 rounded-xl hover:bg-global-background2 transition-all duration-300 hover:scale-105 hover:shadow-lg" />
+                )}
               </div>
             </div>
           </nav>
