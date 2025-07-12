@@ -253,7 +253,7 @@ const HomePage: React.FC = () => {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
                   What we offer
                 </h2>
-                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%] font-space-grotesk">
+                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%]" style={{ fontFamily: 'Inter, sans-serif' }}>
                   From finding your next class to finding your next project team—we've got everything to help you settle in, grow, and thrive.
                 </p>
               </div>
@@ -387,10 +387,10 @@ const HomePage: React.FC = () => {
                           className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-[102px] lg:h-[102px] self-center"
                         />
                         <div className="flex flex-col justify-start items-start flex-1 self-end">
-                          <h3 className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-global-text2 font-space-grotesk">
+                          <h3 className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                             {member.name}
                           </h3>
-                          <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text2 font-space-grotesk">
+                          <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                             {member.position}
                           </p>
                         </div>
@@ -485,7 +485,7 @@ const HomePage: React.FC = () => {
                             {feedbackType === 'askQuery' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
                           </div>
                         </button>
-                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Ask a Query
                         </span>
                       </div>
@@ -499,7 +499,7 @@ const HomePage: React.FC = () => {
                             {feedbackType === 'leaveFeedback' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
                           </div>
                         </button>
-                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Leave a Feedback
                         </span>
                       </div>
@@ -513,7 +513,7 @@ const HomePage: React.FC = () => {
                             {feedbackType === 'reportBug' && <div className="w-3 h-3 bg-[#f45b6a] rounded-full"></div>}
                           </div>
                         </button>
-                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1 font-space-grotesk">
+                        <span className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text1" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Report a Bug
                         </span>
                       </div>
@@ -522,7 +522,7 @@ const HomePage: React.FC = () => {
                     <div className="w-full max-w-md flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[24px] justify-start items-start">
                       {/* Name Field */}
                       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 lg:gap-[6px] justify-center items-start">
-                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 font-space-grotesk">
+                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 " style={{ fontFamily: 'Inter, sans-serif' }}>
                           Name
                         </label>
                         <EditText
@@ -536,7 +536,7 @@ const HomePage: React.FC = () => {
                       </div>
                       {/* Email Field */}
                       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 lg:gap-[6px] justify-center items-start">
-                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 font-space-grotesk">
+                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 " style={{ fontFamily: 'Inter, sans-serif' }}>
                           Email*
                         </label>
                         <EditText
@@ -552,7 +552,7 @@ const HomePage: React.FC = () => {
                       </div>
                       {/* Message Field */}
                       <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 lg:gap-[4px] justify-center items-start">
-                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1 font-space-grotesk">
+                        <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Message*
                         </label>
                         <TextArea
@@ -568,8 +568,8 @@ const HomePage: React.FC = () => {
                       {/* Submit Button */}
                       <Button
                         variant="secondary"
-                        className="w-full px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-white font-space-grotesk mt-4 sm:mt-5 md:mt-6 lg:mt-[20px] hover:scale-105 hover:shadow-lg transition-all duration-300"
-                        style={{ backgroundColor: '#262626', borderRadius: '30px' }}
+                        className="w-full px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-white mt-4 sm:mt-5 md:mt-6 lg:mt-[20px] hover:scale-105 hover:shadow-lg transition-all duration-300"
+                        style={{ backgroundColor: '#262626', borderRadius: '30px', fontFamily: 'Inter, sans-serif' }}
                         onClick={handleContactSubmit}
                       >
                         Send Message
@@ -626,18 +626,18 @@ const HomePage: React.FC = () => {
                     {/* Contact Info */}
                     <div className="w-full lg:w-2/5 flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-start">
                       <div className="bg-[#f45b6a] rounded-lg px-3 sm:px-4 md:px-5 lg:px-[16px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] inline-block">
-                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white font-space-grotesk" style={{ borderRadius: '30px'  }}>
+                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white" style={{ borderRadius: '30px', fontFamily: 'Inter, sans-serif' }}>
                           Contact us:
                         </span>
                       </div>
                       <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start">
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
                           Email: nsutorbit@gmail.com
                         </p>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
                           Phone: 7827044075
                         </p>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text4 font-space-grotesk">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
                           NSUT, Sector 3, Dwarka,<br />New Delhi - 110078
                         </p>
                       </div>
@@ -659,11 +659,12 @@ const HomePage: React.FC = () => {
                       />
                       <Button
                         variant="danger"
-                        className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-3 sm:py-3.5 md:py-4 lg:py-[12px] text-lg sm:text-xl md:text-2xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] text-center text-black font-space-grotesk hover:scale-105 hover:shadow-lg transition-all duration-300"
+                        className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-3 sm:py-3.5 md:py-4 lg:py-[12px] text-lg sm:text-xl md:text-2xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] text-center text-black hover:scale-105 hover:shadow-lg transition-all duration-300"
                         style={{ 
                           backgroundColor: '#f45b6a', 
                           borderRadius: '30px',
-                          border: 'none'
+                          border: 'none',
+                          fontFamily: 'Inter, sans-serif'
                         }}
                         onClick={handleNewsletterSubmit}
                       >
@@ -676,10 +677,10 @@ const HomePage: React.FC = () => {
                 <div className="w-full flex flex-col gap-10 sm:gap-11 md:gap-12 lg:gap-[48px] justify-start items-center">
                   <div className="w-full h-[1px] bg-global-text4"></div>
                   <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
                       © 2025 Orbit | All Rights Reserved.
                     </p>
-                    <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline font-space-grotesk self-end">
+                    <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end" style={{ fontFamily: 'Inter, sans-serif' }}>
                       Privacy Policy
                     </button>
                   </div>
