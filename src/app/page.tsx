@@ -254,7 +254,7 @@ const HomePage: React.FC = () => {
                   What we offer
                 </h2>
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%] font-space-grotesk">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque viverra tincidunt mauris.
+                  From finding your next class to finding your next project team—we've got everything to help you settle in, grow, and thrive.
                 </p>
               </div>
               {/* Features Grid */}
@@ -366,7 +366,7 @@ const HomePage: React.FC = () => {
                     Meet the team
                   </h2>
                   <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Meet the skilled and experienced team behind our successful digital marketing strategies
+                    Meet the students who’ve lived it, struggled through it, and now want to fix it.
                   </p>
                 </div>
                 {/* Team Grid */}
@@ -374,7 +374,7 @@ const HomePage: React.FC = () => {
                   {teamMembers.map((member, index) => (
                     <div
                       key={member.id}
-                      className={`w-full flex flex-col gap-6 sm:gap-7 md:gap-8 lg:gap-[28px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[44px] p-6 sm:p-7 md:p-8 lg:p-[34px] pt-8 sm:pt-9 md:pt-10 lg:pt-[40px] shadow-[0px_5px_1px_#191a23] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                      className={`w-full flex flex-col gap-6 sm:gap-7 md:gap-8 lg:gap-[28px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-7 md:p-8 lg:p-[34px] pt-8 sm:pt-9 md:pt-10 lg:pt-[40px] shadow-[0px_5px_1px_#191a23] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                       style={{ transitionDelay: visibleSections.has('meet-the-team') ? `${index * 100}ms` : '0ms' }}
                     >
                       {/* Member Info Row */}
@@ -454,7 +454,7 @@ const HomePage: React.FC = () => {
                   <Button
                     variant="secondary"
                     className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white hover:scale-105 transition-all duration-300"
-                    style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '14px' }}
+                    style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '30px' }}
                     onClick={() => console.log('See all team clicked')}
                   >
                     See all team
@@ -531,6 +531,7 @@ const HomePage: React.FC = () => {
                           onChange={handleNameChange}
                           disabled={!!session?.user}
                           className={`w-full ${session?.user ? 'opacity-75 cursor-not-allowed' : ''}`}
+                          style={{ borderRadius: '30px' }}
                         />
                       </div>
                       {/* Email Field */}
@@ -546,6 +547,7 @@ const HomePage: React.FC = () => {
                           disabled={!!session?.user}
                           required
                           className={`w-full ${session?.user ? 'opacity-75 cursor-not-allowed' : ''}`}
+                          style={{ borderRadius: '30px' }}
                         />
                       </div>
                       {/* Message Field */}
@@ -560,13 +562,14 @@ const HomePage: React.FC = () => {
                           required
                           rows={6}
                           className="w-full"
+                          style={{ borderRadius: '30px' }}
                         />
                       </div>
                       {/* Submit Button */}
                       <Button
                         variant="secondary"
                         className="w-full px-6 sm:px-7 md:px-8 lg:px-[34px] py-4 sm:py-5 md:py-6 lg:py-[20px] text-lg sm:text-xl md:text-2xl lg:text-[20px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-center text-white font-space-grotesk mt-4 sm:mt-5 md:mt-6 lg:mt-[20px] hover:scale-105 hover:shadow-lg transition-all duration-300"
-                        style={{ backgroundColor: '#262626', borderRadius: '14px' }}
+                        style={{ backgroundColor: '#262626', borderRadius: '30px' }}
                         onClick={handleContactSubmit}
                       >
                         Send Message
@@ -623,7 +626,7 @@ const HomePage: React.FC = () => {
                     {/* Contact Info */}
                     <div className="w-full lg:w-2/5 flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-start">
                       <div className="bg-[#f45b6a] rounded-lg px-3 sm:px-4 md:px-5 lg:px-[16px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] inline-block">
-                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white font-space-grotesk">
+                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white font-space-grotesk" style={{ borderRadius: '30px'  }}>
                           Contact us:
                         </span>
                       </div>
@@ -650,7 +653,8 @@ const HomePage: React.FC = () => {
                         style={{ 
                           backgroundColor: 'transparent',
                           borderColor: 'white',
-                          color: 'white'
+                          color: 'white',
+                          borderRadius: '30px'
                         }}
                       />
                       <Button
@@ -658,7 +662,7 @@ const HomePage: React.FC = () => {
                         className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-3 sm:py-3.5 md:py-4 lg:py-[12px] text-lg sm:text-xl md:text-2xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] text-center text-black font-space-grotesk hover:scale-105 hover:shadow-lg transition-all duration-300"
                         style={{ 
                           backgroundColor: '#f45b6a', 
-                          borderRadius: '8px',
+                          borderRadius: '30px',
                           border: 'none'
                         }}
                         onClick={handleNewsletterSubmit}
