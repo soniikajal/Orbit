@@ -677,7 +677,7 @@ const HomePage: React.FC = () => {
                   <div className="w-full h-[1px] bg-global-text4"></div>
                   <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
                     <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 font-space-grotesk">
-                      © 2025 Orbit.  All Rights Reserved.
+                      © 2025 Orbit | All Rights Reserved.
                     </p>
                     <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline font-space-grotesk self-end">
                       Privacy Policy
