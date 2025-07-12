@@ -1,0 +1,57 @@
+/* Full Map Page Specific Styles */
+
+.fullmap-page-container {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.fullmap-loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f3f4f6;
+}
+
+.fullmap-loading-content {
+  text-align: center;
+}
+
+.fullmap-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  animation: spin 1s linear infinite;
+}
+
+.fullmap-loading-text {
+  color: #6b7280;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.fullmap-content-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.fullmap-map-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Override any container styling for full map */
+.fullmap-page-container .leaflet-container {
+  border-radius: 0;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

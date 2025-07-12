@@ -8,6 +8,18 @@
 @import 'leaflet/dist/leaflet.css';
 @import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
+/* Page-specific styles */
+@import './pages/navigation.css';
+@import './pages/home.css';
+@import './pages/survival-kit.css';
+@import './pages/full-map.css';
+
+/* Component-specific styles */
+@import './components/quick-tip.css';
+@import './components/header.css';
+@import './components/search-bar.css';
+@import './components/map.css';
+
 body {
   font-family: 'Space Grotesk', 'Inter', sans-serif;
   margin: 0;

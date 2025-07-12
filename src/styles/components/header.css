@@ -1,0 +1,279 @@
+/* Header Component Styles */
+
+.header-container {
+  width: 100%;
+  background-color: var(--header-background1, #ffffff);
+  border-radius: 30px;
+  padding: 16px;
+  margin-top: 32px;
+  transition: all 1s ease-out;
+}
+
+@media (min-width: 640px) {
+  .header-container {
+    padding: 24px;
+    margin-top: 48px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-container {
+    margin-top: 64px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-container {
+    padding: 32px;
+  }
+}
+
+.header-content {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .header-flex-container {
+    flex-direction: row;
+    gap: 0;
+  }
+}
+
+/* Logo Styling */
+.header-logo {
+  flex-shrink: 0;
+  transition: all 0.8s ease-out;
+  transition-delay: 0.2s;
+}
+
+.header-logo img {
+  width: 120px;
+  height: 73px;
+  transition: transform 0.3s ease;
+}
+
+.header-logo img:hover {
+  transform: scale(1.05);
+}
+
+@media (min-width: 640px) {
+  .header-logo img {
+    width: 150px;
+    height: 91px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-logo img {
+    width: 180px;
+    height: 109px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-logo img {
+    width: 200px;
+    height: 122px;
+  }
+}
+
+/* Navigation Menu */
+.header-nav {
+  flex: 1;
+  transition: all 0.8s ease-out;
+  transition-delay: 0.4s;
+}
+
+@media (min-width: 1024px) {
+  .header-nav {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.header-nav-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .header-nav-items {
+    flex-direction: row;
+    gap: 32px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .header-nav-items {
+    gap: 40px;
+  }
+}
+
+/* Menu Items */
+.header-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-menu-button {
+  font-size: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: normal;
+  color: var(--global-text2, #374151);
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-menu-button:hover {
+  color: var(--global-text3, #1f2937);
+  transform: scale(1.05);
+}
+
+@media (min-width: 640px) {
+  .header-menu-button {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-menu-button {
+    font-size: 20px;
+  }
+}
+
+/* Active State Underline */
+.header-menu-underline {
+  height: 1px;
+  background-color: #facc6b;
+  margin-top: 4px;
+  transition: all 0.3s ease;
+}
+
+/* Dropdown Menus */
+.header-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  width: 192px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.header-dropdown-content {
+  padding: 8px 0;
+}
+
+.header-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--global-text2, #374151);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-dropdown-item:hover {
+  background-color: #f3f4f6;
+  color: var(--global-text3, #1f2937);
+  transform: translateX(4px);
+}
+
+/* Auth Section */
+.header-auth-section {
+  flex-shrink: 0;
+  margin-top: 16px;
+}
+
+@media (min-width: 1024px) {
+  .header-auth-section {
+    margin-top: 0;
+  }
+}
+
+/* Mobile Menu Toggle */
+.header-mobile-toggle {
+  display: block;
+  padding: 12px;
+  color: var(--global-text2, #374151);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .header-mobile-toggle {
+    display: none;
+  }
+}
+
+/* Animation Classes */
+.header-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-loading {
+  opacity: 0;
+  transform: translateY(-32px);
+}
+
+.header-logo-loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.header-logo-loading {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.header-nav-loaded {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.header-nav-loading {
+  opacity: 0;
+  transform: translateX(32px);
+}

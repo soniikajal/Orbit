@@ -1,0 +1,185 @@
+/* Survival Kit Page Specific Styles */
+
+.survival-kit-page-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.survival-kit-header {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.survival-kit-title {
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+  color: var(--global-text2, #1f2937);
+}
+
+.survival-kit-subtitle {
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: normal;
+  line-height: 1.5;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--global-text3, #6b7280);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.survival-kit-content {
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.survival-kit-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.survival-kit-card {
+  background-color: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.survival-kit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  border-color: var(--global-accent1, #3b82f6);
+}
+
+.survival-kit-card-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: var(--global-accent1, #3b82f6);
+}
+
+.survival-kit-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--global-text2, #1f2937);
+}
+
+.survival-kit-card-description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--global-text3, #6b7280);
+}
+
+.survival-kit-card-button {
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--global-accent1, #3b82f6);
+  background-color: transparent;
+  border: 2px solid var(--global-accent1, #3b82f6);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.survival-kit-card-button:hover {
+  color: white;
+  background-color: var(--global-accent1, #3b82f6);
+}
+
+/* Study Hub Specific */
+.study-hub-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.study-hub-card .survival-kit-card-title,
+.study-hub-card .survival-kit-card-description {
+  color: white;
+}
+
+.study-hub-card .survival-kit-card-button {
+  color: white;
+  border-color: white;
+}
+
+.study-hub-card .survival-kit-card-button:hover {
+  color: #667eea;
+  background-color: white;
+}
+
+/* Event Board Specific */
+.event-board-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.event-board-card .survival-kit-card-title,
+.event-board-card .survival-kit-card-description {
+  color: white;
+}
+
+.event-board-card .survival-kit-card-button {
+  color: white;
+  border-color: white;
+}
+
+.event-board-card .survival-kit-card-button:hover {
+  color: #f093fb;
+  background-color: white;
+}
+
+/* Launchpad Specific */
+.launchpad-card {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.launchpad-card .survival-kit-card-title,
+.launchpad-card .survival-kit-card-description {
+  color: white;
+}
+
+.launchpad-card .survival-kit-card-button {
+  color: white;
+  border-color: white;
+}
+
+.launchpad-card .survival-kit-card-button:hover {
+  color: #4facfe;
+  background-color: white;
+}
+
+/* Phonebook Specific */
+.phonebook-card {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: white;
+}
+
+.phonebook-card .survival-kit-card-title,
+.phonebook-card .survival-kit-card-description {
+  color: white;
+}
+
+.phonebook-card .survival-kit-card-button {
+  color: white;
+  border-color: white;
+}
+
+.phonebook-card .survival-kit-card-button:hover {
+  color: #43e97b;
+  background-color: white;
+}

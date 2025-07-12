@@ -1,0 +1,175 @@
+/* Navigation Page Specific Styles */
+
+/* Search Bar Styling */
+.navigation-search-bar {
+  width: 100%;
+  height: 56px;
+  padding: 0 56px 0 24px;
+  font-size: 16px;
+  border-radius: 30px;
+  outline: none;
+  border: 1px solid #9ca3af;
+  background-color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.navigation-search-bar:focus {
+  box-shadow: 0 0 0 2px #f4c430;
+  border-color: transparent;
+}
+
+/* Popular Search Buttons */
+.popular-search-button {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 30px;
+  color: #374151;
+  background-color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.popular-search-button:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+}
+
+/* Navigation Page Title */
+.navigation-title {
+  font-size: clamp(32px, 8vw, 80px);
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: left;
+  margin-bottom: 32px;
+  font-family: 'Playfair Display', serif;
+  color: var(--global-text2, #1f2937);
+}
+
+/* Map Container */
+.navigation-map-container {
+  width: 100%;
+  max-width: 1240px;
+  height: 650px;
+  background-color: #f3f4f6;
+  border-radius: 30px;
+  border: 1px solid #e5e7eb;
+  position: relative;
+}
+
+/* View Full Map Button */
+.view-full-map-button {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  padding: 8px 16px;
+  background-color: rgba(31, 41, 55, 0.9);
+  color: white;
+  border-radius: 30px;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.view-full-map-button:hover {
+  background-color: rgba(55, 65, 81, 0.9);
+}
+
+/* Page Layout */
+.navigation-page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.navigation-content-wrapper {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .navigation-content-wrapper {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navigation-content-wrapper {
+    padding: 0 32px;
+  }
+}
+
+.navigation-main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .navigation-main-content {
+    margin-top: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .navigation-main-content {
+    margin-top: 16px;
+  }
+}
+
+.navigation-main-section {
+  width: 100%;
+  padding: 8px 0;
+}
+
+/* Popular Searches Section */
+.popular-searches-section {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.popular-searches-title {
+  color: #6b7280;
+  margin-bottom: 16px;
+  font-size: 14px;
+  padding-left: 32px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.popular-searches-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Map Section */
+.map-section {
+  width: 100%;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: center;
+}
