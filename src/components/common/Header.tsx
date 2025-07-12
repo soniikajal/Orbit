@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import SignInButton from '../auth/SignInButton';
 import SignOutButton from '../auth/SignOutButton';
@@ -13,6 +13,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   const { data: session, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
@@ -133,7 +134,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                         className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                         onClick={() => {
                           setSurvivalKitOpen(false);
-                          window.location.href = '/Launchpad';
+                          router.push('/Launchpad');
                         }}
                       >
                         Launchpad
