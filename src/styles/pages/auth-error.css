@@ -1,0 +1,119 @@
+/* Auth Error Page Specific Styles */
+
+.auth-error-container {
+  min-height: 100vh !important;
+  background-color: #fffcf9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.auth-error-content {
+  max-width: 448px !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+  margin: 0 auto !important;
+}
+
+.auth-error-header {
+  text-align: center;
+}
+
+.auth-error-icon {
+  margin: 0 auto 16px;
+  height: 64px;
+  width: 64px;
+  color: #ef4444;
+}
+
+.auth-error-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 8px;
+  font-family: 'Playfair Display', serif;
+}
+
+.auth-error-message {
+  color: #6b7280;
+  margin-bottom: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-error-detail {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 32px;
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-error-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  border: 1px solid #e5e7eb;
+}
+
+.auth-error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-error-button-primary {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+  background-color: #f4c430;
+  color: black;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.auth-error-button-primary:hover {
+  background-color: #e6b52a;
+}
+
+.auth-error-button-secondary {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.auth-error-button-secondary:hover {
+  background-color: #f9fafb;
+}
+
+.auth-error-footer {
+  text-align: center;
+  font-size: 14px;
+  color: #9ca3af;
+  font-family: 'Inter', sans-serif;
+}
+
+.auth-error-footer a {
+  color: #F45B69;
+  text-decoration: none;
+}
+
+.auth-error-footer a:hover {
+  text-decoration: underline;
+}

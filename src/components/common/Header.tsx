@@ -232,10 +232,10 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
               </div>
             ) : session ? (
               <div className="flex items-center gap-4">
-                <SignOutButton className="px-4 py-2 text-sm" />
+                <SignOutButton className="px-6 py-4 text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[30px]" />
               </div>
             ) : (
-              <SignInButton className="px-6 py-4 text-base bg-transparent text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105" />
+              <SignInButton className="px-6 py-4 text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[30px]" />
             )}
           </div>
 
