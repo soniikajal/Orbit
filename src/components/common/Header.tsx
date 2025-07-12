@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                     Navigation
                   </button>
                 </Link>
-                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px] ${pathname === '/navigation' ? 'w-[60px]' : 'w-0'}`}></div>
+                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[100px] ${pathname === '/navigation' ? 'w-[100px]' : 'w-0'}`}></div>
               </div>
 
               {/* Survival Kit Dropdown */}
