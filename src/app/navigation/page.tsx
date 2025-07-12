@@ -7,6 +7,7 @@ const NavigationPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [showQuickTip, setShowQuickTip] = useState(true);
 
   const popularSearches = [
     'Computer Centre (CC)',
@@ -106,10 +107,10 @@ const NavigationPage: React.FC = () => {
             </div>
 
             {/* Map Container */}
-            <div className="w-full mb-0">
-              <div className="w-full max-w-[1240px] mx-auto h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative overflow-hidden">
+            <div className="w-full mb-0 flex justify-center">
+              <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative">
                 {/* Dummy Map Placeholder */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center rounded-[30px] overflow-hidden">
                   <div className="text-center text-white">
                     <div className="mb-4">
                       <svg className="w-16 h-16 mx-auto mb-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +154,7 @@ const NavigationPage: React.FC = () => {
                 </div>
                 
                 {/* Map Controls Placeholder */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
+                <div className="absolute bottom-4 right-4 flex flex-col gap-2">
                   <button className="w-10 h-10 bg-white rounded-[30px] shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
                     <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -172,19 +173,36 @@ const NavigationPage: React.FC = () => {
                 </div>
                 
                 {/* Quick Tips Overlay */}
-                <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-[30px] p-3 max-w-xs">
-                  <div className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></div>
-                    <div>
-                      <p className="text-xs text-gray-700 font-medium mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                        Quick Tip
+                {showQuickTip && (
+                  <div className="absolute top-6 right-6 w-[301px] h-[62px] bg-white/20 backdrop-blur-sm rounded-[30px] flex items-center px-4 py-3 relative z-10">
+                    {/* Bulb Icon */}
+                    <div className="flex-shrink-0 mr-3 flex items-center justify-center h-full">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1 text-white pr-6">
+                      <p className="text-sm font-medium mb-1" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 'normal' }}>
+                        Quick Tip!
                       </p>
-                      <p className="text-xs text-gray-600" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                        Click on exact directions to get step-by-step directions
+                      <p className="text-xs leading-tight" style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 'normal' }}>
+                        Room codes are easy! For example, 6312 means Block 6, Floor 3, Room 12.
                       </p>
                     </div>
+                    
+                    {/* Close Button - Top Right */}
+                    <button 
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors z-20"
+                      onClick={() => setShowQuickTip(false)}
+                    >
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </main>
