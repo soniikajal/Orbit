@@ -12,7 +12,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     <div className="w-full bg-[#fffcf9] min-h-screen">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header />
-        {children}
+        <div className="w-full">
+          {children}
+        </div>
       </div>
     </div>
   );

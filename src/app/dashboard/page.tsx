@@ -2,7 +2,6 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import Header from '@/components/common/Header'
 
 export default function Dashboard() {
   const { data: session, status } = useSession()
@@ -35,9 +34,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="w-full bg-[#fffcf9] min-h-screen">
+    <div className="w-full min-h-screen">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Header />
         <div className="py-12">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">

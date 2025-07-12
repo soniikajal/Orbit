@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, memo } from 'react';
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SignInButton from '../auth/SignInButton';
 import SignOutButton from '../auth/SignOutButton';
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
@@ -71,15 +73,21 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                     Home
                   </button>
                 </Link>
-                <div className="h-[1px] w-[54px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px]"></div>
+                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px] ${pathname === '/' ? 'w-[60px]' : 'w-0'}`}></div>
               </div>
 
-              <button 
-                role="menuitem"
-                className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
-              >
-                Navigation
-              </button>
+              {/* Navigation Menu Item with Active State */}
+              <div className="flex flex-col items-center group">
+                <Link href="/navigation">
+                  <button 
+                    role="menuitem"
+                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
+                  >
+                    Navigation
+                  </button>
+                </Link>
+                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px] ${pathname === '/navigation' ? 'w-[60px]' : 'w-0'}`}></div>
+              </div>
 
               {/* Survival Kit Dropdown */}
               <div className="relative" ref={survivalKitRef}>

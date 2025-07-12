@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Header from '@/components/common/Header';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import TextArea from '@/components/ui/TextArea';
@@ -183,10 +182,8 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-[#fffcf9] flex flex-col justify-start items-end">
+    <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
-        {/* Header */}
-        <Header />
         {/* Hero Section */}
         <div className={`w-full flex flex-col justify-start items-start mt-8 sm:mt-12 md:mt-16 transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="w-full flex flex-col justify-start items-start">

@@ -2,7 +2,6 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import Header from '@/components/common/Header'
 import Button from '@/components/ui/Button'
 import { getMockUsers, getMockSubmissions } from '@/lib/admin'
 
@@ -82,9 +81,8 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="w-full bg-[#fffcf9] min-h-screen">
+    <div className="w-full min-h-screen">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Header />
         <div className="py-12">
           <div className="max-w-6xl mx-auto">
             {/* Admin Header */}
