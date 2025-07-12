@@ -42,6 +42,19 @@ const LaunchpadPage: React.FC = () => {
                 </div>
               </form>
             </div>
+
+            {/* Add Project Button */}
+            <div className="w-full flex justify-center items-center mt-[15px]">
+              <button
+                className="w-[278px] h-[54px] bg-[#F45B6A] text-white font-bold text-[20px] rounded-[30px] hover:opacity-90 transition-opacity duration-200"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                onClick={() => {
+                  console.log('Add project clicked');
+                }}
+              >
+                + ADD YOUR PROJECT
+              </button>
+            </div>
           </main>
         </div>
       </div>
