@@ -4,6 +4,10 @@
 @import url('https://fonts.cdnfonts.com/css/lost-in-south');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
+/* Leaflet CSS - Import only if not already imported in component */
+@import 'leaflet/dist/leaflet.css';
+@import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+
 body {
   font-family: 'Space Grotesk', 'Inter', sans-serif;
   margin: 0;
@@ -14,4 +18,64 @@ body {
 
 *, *::before, *::after {
   box-sizing: inherit;
+}
+
+/* Custom Leaflet Map Styling */
+.leaflet-container {
+  border-radius: 30px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.leaflet-popup-content {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+}
+
+.leaflet-control-zoom {
+  border-radius: 15px !important;
+  overflow: hidden;
+  z-index: 500;
+}
+
+.leaflet-control-zoom a {
+  border-radius: 0 !important;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Hide default routing control container to use our custom controls */
+.leaflet-routing-container {
+  display: none;
+}
+
+/* Ensure overlays appear above the map */
+.leaflet-overlay-pane {
+  z-index: 1;
+}
+
+.leaflet-marker-pane {
+  z-index: 600;
+}
+
+/* Quick Tip overlay styling */
+.quick-tip-overlay {
+  z-index: 1000 !important;
+  position: absolute;
+  pointer-events: auto;
+  background-color: rgba(31, 41, 55, 0.6) !important; /* More translucent */
+  backdrop-filter: blur(12px) !important; /* More blur */
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+}
+
+.quick-tip-overlay button {
+  background-color: rgba(55, 65, 81, 0.6) !important; /* More translucent */
+  backdrop-filter: blur(12px) !important; /* More blur */
+  border: 1px solid rgba(75, 85, 99, 0.2);
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
 }

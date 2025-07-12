@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
+import InteractiveMap from '@/components/map/InteractiveMap';
 
 const NavigationPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,13 +20,13 @@ const NavigationPage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle search logic here
+    // The map component will automatically handle the search via the searchQuery prop
     console.log('Searching for:', searchQuery);
   };
 
   const handlePopularSearch = (searchTerm: string) => {
     setSearchQuery(searchTerm);
-    // Trigger search or map focus
+    // The map will automatically focus on the location via the searchQuery prop
     console.log('Popular search:', searchTerm);
   };
 
@@ -43,8 +44,8 @@ const NavigationPage: React.FC = () => {
   return (
     <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
-        <div className="w-full flex flex-col justify-start items-start mt-8 sm:mt-12 md:mt-16">
-          <main className="w-full py-8">
+        <div className="w-full flex flex-col justify-start items-start mt-2 sm:mt-3 md:mt-4">
+          <main className="w-full py-2">
             {/* Page Title */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
               Navigate through the campus
@@ -61,22 +62,14 @@ const NavigationPage: React.FC = () => {
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
                     placeholder="Search for classrooms, labs, blocks..."
-                    className="w-full h-[56px] px-4 pl-12 pr-12 text-base rounded-[30px] focus:outline-none focus:ring-2 focus:ring-[#f4c430] focus:border-transparent transition-all duration-200"
-                    style={{ fontFamily: 'Space Grotesk, sans-serif', backgroundColor: '#f7f5f2', borderColor: '#bab9b6', borderWidth: '1px' }}
+                    className="w-full h-[56px] px-4 pl-6 pr-14 text-base rounded-[30px] focus:outline-none focus:ring-2 focus:ring-[#f4c430] focus:border-transparent transition-all duration-200"
+                    style={{ fontFamily: 'Space Grotesk, sans-serif', backgroundColor: 'white', borderColor: '#9ca3af', borderWidth: '1px' }}
                   />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
                     <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  <button
-                    type="submit"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                  >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </button>
                 </div>
               </form>
             </div>
@@ -96,8 +89,8 @@ const NavigationPage: React.FC = () => {
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
                       fontWeight: 'normal',
-                      backgroundColor: '#f7f5f2',
-                      borderColor: '#bab9b6'
+                      backgroundColor: 'white',
+                      borderColor: '#e5e7eb'
                     }}
                   >
                     {search}
@@ -109,72 +102,21 @@ const NavigationPage: React.FC = () => {
             {/* Map Container */}
             <div className="w-full mb-0 flex justify-center">
               <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative">
-                {/* Dummy Map Placeholder */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center rounded-[30px] overflow-hidden">
-                  <div className="text-center text-white">
-                    <div className="mb-4">
-                      <svg className="w-16 h-16 mx-auto mb-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                      Interactive Campus Map
-                    </h3>
-                    <p className="text-white/80 text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                      Leaflet.js map will be integrated here
-                    </p>
-                  </div>
-                  
-                  {/* Dummy Map Points */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="relative w-80 h-60">
-                      {/* Dummy location markers */}
-                      <div className="absolute top-4 left-8 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                      <div className="absolute top-4 left-6 text-xs text-white bg-red-500 px-2 py-1 rounded">
-                        Shanti Prasad
-                      </div>
-                      
-                      <div className="absolute top-16 right-12 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <div className="absolute top-16 right-8 text-xs text-white bg-green-500 px-2 py-1 rounded">
-                        NSUT Ground
-                      </div>
-                      
-                      <div className="absolute bottom-16 left-16 w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                      <div className="absolute bottom-16 left-12 text-xs text-white bg-yellow-500 px-2 py-1 rounded">
-                        Delhi School
-                      </div>
-                      
-                      <div className="absolute bottom-8 right-20 w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                      <div className="absolute bottom-8 right-16 text-xs text-white bg-blue-500 px-2 py-1 rounded">
-                        Matiyala
-                      </div>
-                    </div>
-                  </div>
+                {/* Interactive Map */}
+                <div className="absolute inset-0 rounded-[30px] overflow-hidden">
+                  <InteractiveMap 
+                    searchQuery={searchQuery}
+                    onLocationSelect={(location: string) => {
+                      console.log('Selected location:', location);
+                      // You can add additional handling here
+                    }}
+                    className="w-full h-full"
+                  />
                 </div>
                 
-                {/* Map Controls Placeholder */}
-                <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-                  <button className="w-10 h-10 bg-white rounded-[30px] shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 bg-white rounded-[30px] shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 bg-white rounded-[30px] shadow-md flex items-center justify-center hover:shadow-lg transition-shadow">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    </svg>
-                  </button>
-                </div>
-                
-                {/* Quick Tips Overlay */}
+                {/* Quick Tips Overlay - Translucent and blurred */}
                 {showQuickTip && (
-                  <div className="absolute top-6 right-6 w-[301px] h-[62px] bg-white/20 backdrop-blur-sm rounded-[30px] flex items-center px-4 py-3 relative z-10">
+                  <div className="quick-tip-overlay absolute top-6 right-6 w-[301px] h-[62px] bg-gray-800/60 backdrop-blur-md rounded-[30px] flex items-center px-4 py-3 z-[1000]">
                     {/* Bulb Icon */}
                     <div className="flex-shrink-0 mr-3 flex items-center justify-center h-full">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,9 +134,9 @@ const NavigationPage: React.FC = () => {
                       </p>
                     </div>
                     
-                    {/* Close Button - Top Right */}
+                    {/* Close Button - Top Right - Translucent and blurred */}
                     <button 
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-colors z-20"
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-gray-700/60 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-gray-600/70 transition-colors z-[1001]"
                       onClick={() => setShowQuickTip(false)}
                     >
                       <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,6 +145,20 @@ const NavigationPage: React.FC = () => {
                     </button>
                   </div>
                 )}
+                
+                {/* View Full Map Button */}
+                <div className="absolute bottom-4 right-4 z-[999]">
+                  <button 
+                    onClick={() => window.open('/navigation/fullmap', '_blank')}
+                    className="px-4 py-2 bg-gray-800/90 hover:bg-gray-700/90 text-white rounded-[30px] backdrop-blur-sm transition-colors duration-200 flex items-center gap-2 shadow-lg"
+                    style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', fontWeight: 'normal' }}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    View Full Map
+                  </button>
+                </div>
               </div>
             </div>
           </main>
