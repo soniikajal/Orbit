@@ -1,12 +1,38 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
+import TextArea from '@/components/ui/TextArea';
 
 const LaunchpadPage: React.FC = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [showAddProjectForm, setShowAddProjectForm] = useState(false);
+  const [projectForm, setProjectForm] = useState({
+    projectName: '',
+    category: '',
+    description: '',
+    requiredSkills: '',
+    lookingFor: '',
+    teamMembers: '',
+    contactEmail: '',
+    additionalInfo: ''
+  });
+
+  // Prefill email when session loads
+  useEffect(() => {
+    if (session?.user?.email) {
+      setProjectForm(prev => ({
+        ...prev,
+        contactEmail: session.user?.email || ''
+      }));
+    }
+  }, [session]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +47,44 @@ const LaunchpadPage: React.FC = () => {
   const handleNewsletterSubmit = () => {
     console.log('Newsletter subscription:', newsletterEmail);
     setNewsletterEmail('');
+  };
+
+  const handleAddProjectClick = () => {
+    if (!session) {
+      // Redirect to signin with callbackUrl to return to launchpad
+      router.push('/auth/signin?callbackUrl=' + encodeURIComponent('/Launchpad'));
+      return;
+    }
+    setShowAddProjectForm(true);
+  };
+
+  const handleProjectFormChange = (field: string, value: string) => {
+    setProjectForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleProjectFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Project submitted:', projectForm);
+    // Here you would typically send the data to your backend
+    alert('Project submitted successfully!');
+    setShowAddProjectForm(false);
+    setProjectForm({
+      projectName: '',
+      category: '',
+      description: '',
+      requiredSkills: '',
+      lookingFor: '',
+      teamMembers: '',
+      contactEmail: '',
+      additionalInfo: ''
+    });
+  };
+
+  const handleCloseForm = () => {
+    setShowAddProjectForm(false);
   };
 
   return (
@@ -61,9 +125,7 @@ const LaunchpadPage: React.FC = () => {
               <button
                 className="w-[278px] h-[54px] bg-[#F45B6A] text-white font-bold text-[20px] rounded-[30px] hover:opacity-90 transition-opacity duration-200"
                 style={{ fontFamily: 'Inter, sans-serif' }}
-                onClick={() => {
-                  console.log('Add project clicked');
-                }}
+                onClick={handleAddProjectClick}
               >
                 + ADD YOUR PROJECT
               </button>
@@ -299,6 +361,197 @@ const LaunchpadPage: React.FC = () => {
               </button>
             </div>
           </main>
+
+          {/* Add Project Form Modal */}
+          {showAddProjectForm && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-[30px] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div className="p-8">
+                  {/* Form Header */}
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-[32px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      Add Your Project
+                    </h2>
+                    <button 
+                      onClick={handleCloseForm}
+                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleProjectFormSubmit} className="space-y-6">
+                    {/* Project Name */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Project Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={projectForm.projectName}
+                        onChange={(e) => handleProjectFormChange('projectName', e.target.value)}
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        placeholder="Enter your project name"
+                      />
+                    </div>
+
+                    {/* Category */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Category *
+                      </label>
+                      <select
+                        required
+                        value={projectForm.category}
+                        onChange={(e) => handleProjectFormChange('category', e.target.value)}
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        <option value="">Select a category</option>
+                        <option value="Technology & Software">Technology & Software</option>
+                        <option value="Business & Entrepreneurship">Business & Entrepreneurship</option>
+                        <option value="Creative & Design">Creative & Design</option>
+                        <option value="Research & Innovation">Research & Innovation</option>
+                        <option value="Social Impact & NGO">Social Impact & NGO</option>
+                        <option value="Education & Learning">Education & Learning</option>
+                        <option value="Health & Wellness">Health & Wellness</option>
+                        <option value="Finance & Investment">Finance & Investment</option>
+                        <option value="Marketing & Sales">Marketing & Sales</option>
+                        <option value="Content & Media">Content & Media</option>
+                        <option value="Events & Community">Events & Community</option>
+                        <option value="Sports & Fitness">Sports & Fitness</option>
+                        <option value="Environment & Sustainability">Environment & Sustainability</option>
+                        <option value="Food & Hospitality">Food & Hospitality</option>
+                        <option value="Fashion & Lifestyle">Fashion & Lifestyle</option>
+                        <option value="Travel & Tourism">Travel & Tourism</option>
+                        <option value="Arts & Entertainment">Arts & Entertainment</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Project Description *
+                      </label>
+                      <textarea
+                        required
+                        value={projectForm.description}
+                        onChange={(e) => handleProjectFormChange('description', e.target.value)}
+                        rows={4}
+                        className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        placeholder="Describe your project, its goals, and what you're trying to achieve..."
+                      />
+                    </div>
+
+                    {/* Looking For */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Looking For *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={projectForm.lookingFor}
+                        onChange={(e) => handleProjectFormChange('lookingFor', e.target.value)}
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        placeholder="What role are you looking for? (e.g., Frontend Developer, Designer, etc.)"
+                      />
+                    </div>
+
+                    {/* Required Skills and Team Members */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          Required Skills *
+                        </label>
+                        <textarea
+                          required
+                          value={projectForm.requiredSkills}
+                          onChange={(e) => handleProjectFormChange('requiredSkills', e.target.value)}
+                          rows={3}
+                          className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                          placeholder="List the skills required for this project (e.g., React, Node.js, Python, etc.)"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          Team Members
+                        </label>
+                        <textarea
+                          value={projectForm.teamMembers}
+                          onChange={(e) => handleProjectFormChange('teamMembers', e.target.value)}
+                          rows={3}
+                          className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                          placeholder="List current team members and their roles (e.g., John - Frontend Developer, Sarah - UI Designer)"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Contact Email */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Contact Email *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={projectForm.contactEmail}
+                        onChange={(e) => handleProjectFormChange('contactEmail', e.target.value)}
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+
+                    {/* Additional Info */}
+                    <div>
+                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Additional Information (Optional)
+                      </label>
+                      <textarea
+                        value={projectForm.additionalInfo}
+                        onChange={(e) => handleProjectFormChange('additionalInfo', e.target.value)}
+                        rows={3}
+                        className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        placeholder="Any additional details about your project..."
+                      />
+                    </div>
+
+                    {/* Form Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                      <button
+                        type="button"
+                        onClick={handleCloseForm}
+                        className="w-full sm:w-auto px-8 py-3 text-[16px] font-medium text-black border-2 border-black rounded-[30px] hover:bg-gray-50 transition-colors duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="w-full sm:w-auto px-8 py-3 text-[16px] font-medium text-white bg-[#F45B6A] rounded-[30px] hover:opacity-90 transition-opacity duration-200"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        Submit Project
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Footer */}
           <div className="w-full flex flex-row justify-center items-center mt-28 sm:mt-32 md:mt-36 lg:mt-[140px]">

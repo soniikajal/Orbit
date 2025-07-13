@@ -1,23 +1,25 @@
 'use client'
 import { signIn, getSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import Image from 'next/image'
 
 export default function SignIn() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
 
   useEffect(() => {
     // Check if user is already signed in
     getSession().then((session) => {
       if (session) {
-        router.push('/')
+        router.push(callbackUrl)
       }
     })
-  }, [router])
+  }, [router, callbackUrl])
 
   const handleSignIn = () => {
-    signIn('google', { callbackUrl: '/' })
+    signIn('google', { callbackUrl })
   }
 
   return (
