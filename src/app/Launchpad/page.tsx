@@ -132,7 +132,7 @@ const LaunchpadPage: React.FC = () => {
             </div>
 
             {/* Add Filter Button */}
-            <div className="w-full flex justify-start items-center -mt-4">
+            {/* <div className="w-full flex justify-start items-center -mt-4">
               <button
                 className="w-[99px] h-[26px] bg-white text-black font-bold text-[14px] border border-black rounded-[30px] hover:bg-gray-50 transition-colors duration-200"
                 style={{ fontFamily: 'Inter, sans-serif' }}
@@ -142,7 +142,7 @@ const LaunchpadPage: React.FC = () => {
               >
                 Add filter
               </button>
-            </div>
+            </div> */}
 
             {/* Project Cards */}
             <div className="w-full mt-8">
