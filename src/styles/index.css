@@ -14,6 +14,7 @@
 @import './pages/survival-kit.css';
 @import './pages/full-map.css';
 @import './pages/auth-error.css';
+@import './pages/phonebook.css';
 
 /* Component-specific styles */
 @import './components/quick-tip.css';
