@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  osrm:
+    image: osrm/osrm-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/data
+    working_dir: /data
+    command: osrm-routed cleaned_nsut_map.osrm
