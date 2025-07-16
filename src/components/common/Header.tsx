@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                         className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
                         onClick={() => {
                           setSurvivalKitOpen(false);
-                          // Add navigation logic here
+                          router.push('/event-board');
                         }}
                       >
                         Event Board
