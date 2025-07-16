@@ -40,7 +40,8 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   return (
     <div className={`w-full h-full ${className}`}>
       <CampusMap 
-        {...{ searchQuery, onLocationSelect } as any}
+        searchQuery={searchQuery}
+        onLocationSelect={onLocationSelect}
       />
     </div>
   );

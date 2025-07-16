@@ -8,19 +8,13 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 import Fuse from 'fuse.js';
 
-const MOST_SEARCHED = [
-  "APJ Lecture Theatre",
-  "Admin Block/Main Audi",
-  "Connecting Block (CBT)/Mini Audi",
-  "Central Computer Centre/CC/CCW",
-  "Fountain"
-];
-
 interface RoutingMapProps {
   className?: string;
+  searchQuery?: string;
+  onLocationSelect?: (location: string) => void;
 }
 
-export default function RoutingMap({ className = "" }: RoutingMapProps) {
+export default function RoutingMap({ className = "", searchQuery, onLocationSelect }: RoutingMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const routingControl = useRef<any>(null);
@@ -34,6 +28,19 @@ export default function RoutingMap({ className = "" }: RoutingMapProps) {
   const endLatLng = useRef<L.LatLng | null>(null);
   const userLocation = useRef<L.LatLng | null>(null);
   const locationAddedToFuse = useRef<boolean>(false);
+
+  // Handle search query from navigation page
+  useEffect(() => {
+    if (searchQuery && searchQuery.trim() !== '') {
+      setEndInput(searchQuery);
+      // Auto-trigger search if there's a match
+      const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      if (building) {
+        endLatLng.current = building.latlng;
+        tryRoute();
+      }
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     const initMap = async () => {
@@ -156,14 +163,8 @@ export default function RoutingMap({ className = "" }: RoutingMapProps) {
       },
       show: true,
       addWaypoints: false,
-      routeWhileDragging: false,
-      createMarker: () => null
+      routeWhileDragging: false
     }).addTo(mapInstance.current!);
-  };
-
-  const handleQuickTagClick = (tag: string) => {
-    handleSearchChange(tag, 'end');
-    setTimeout(() => handleSuggestionClick(tag), 200);
   };
 
   return (
@@ -197,17 +198,7 @@ export default function RoutingMap({ className = "" }: RoutingMapProps) {
       </div>
 
       {/* Most searched */}
-      <div className="absolute top-[120px] left-1/2 transform -translate-x-1/2 flex gap-2 justify-center z-[998] bg-white/70 rounded-xl px-3 py-2 shadow-md whitespace-nowrap overflow-x-auto max-w-[95%]">
-        {MOST_SEARCHED.map((tag, i) => (
-          <button
-            key={i}
-            onClick={() => handleQuickTagClick(tag)}
-            className="px-3 py-1 bg-white border border-gray-300 hover:bg-gray-100 text-sm rounded-full"
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
+      {/* Location cards removed - functionality moved to navigation page */}
 
       <div ref={mapRef} className="w-full h-full min-h-[650px] rounded-[30px] overflow-hidden" />
     </div>

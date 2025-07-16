@@ -25,6 +25,12 @@ const NavigationPage: React.FC = () => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
   };
+
+  const handleLocationCardClick = (location: string) => {
+    setSearchQuery(location);
+    // You can add additional logic here to trigger search or update the map
+    console.log('Location card clicked:', location);
+  };
   return (
     <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
@@ -68,27 +74,42 @@ const NavigationPage: React.FC = () => {
             {/* Location Cards */}
             <div className="w-full mb-[8px] pl-[20px] pr-[20px]">
               <div className="flex flex-wrap gap-4 justify-center">
-                <button className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center">
+                <button 
+                  onClick={() => handleLocationCardClick('Computer Centre (CC)')}
+                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Computer Centre (CC)
                   </span>
                 </button>
-                <button className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center">
+                <button 
+                  onClick={() => handleLocationCardClick('Student Activity Centre (SAC)')}
+                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Student Activity Centre (SAC)
                   </span>
                 </button>
-                <button className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center">
+                <button 
+                  onClick={() => handleLocationCardClick('Main Auditorium')}
+                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Main Auditorium
                   </span>
                 </button>
-                <button className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center">
+                <button 
+                  onClick={() => handleLocationCardClick('Training & Placement Cell (TNP)')}
+                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Training & Placement Cell (TNP)
                   </span>
                 </button>
-                <button className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center">
+                <button 
+                  onClick={() => handleLocationCardClick('Connecting Block')}
+                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Connecting Block
                   </span>
@@ -101,7 +122,11 @@ const NavigationPage: React.FC = () => {
               <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative">
                 {/* Interactive Map */}
                 <div className="absolute inset-0 rounded-[30px] overflow-hidden">
-                  <InteractiveMap className="w-full h-full" />
+                  <InteractiveMap 
+                    className="w-full h-full" 
+                    searchQuery={searchQuery}
+                    onLocationSelect={(location) => setSearchQuery(location)}
+                  />
                 </div>
 
                 {/* View Full Map Button */}
