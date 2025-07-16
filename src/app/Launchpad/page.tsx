@@ -16,6 +16,8 @@ const LaunchpadPage: React.FC = () => {
   const [showAddProjectForm, setShowAddProjectForm] = useState(false);
   const [projects, setProjects] = useState<LaunchpadProject[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProjects, setTotalProjects] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [projectForm, setProjectForm] = useState({
     projectName: '',
@@ -42,8 +44,18 @@ const LaunchpadPage: React.FC = () => {
   useEffect(() => {
     const initialData = getProjects(1, 12);
     setProjects(initialData.projects);
+    setTotalProjects(initialData.totalProjects);
+    setTotalPages(Math.ceil(initialData.totalProjects / 12));
     setHasMore(initialData.hasMore);
   }, []);
+
+  // Load projects for specific page
+  const loadPage = (page: number) => {
+    const data = getProjects(page, 12);
+    setProjects(data.projects);
+    setCurrentPage(page);
+    setHasMore(data.hasMore);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +109,11 @@ const LaunchpadPage: React.FC = () => {
     // Add to local state
     setProjects(prev => [newProject, ...prev]);
     
+    // Recalculate pagination
+    const updatedTotal = totalProjects + 1;
+    setTotalProjects(updatedTotal);
+    setTotalPages(Math.ceil(updatedTotal / 12));
+    
     console.log('Project submitted:', newProject);
     alert('Project submitted successfully!');
     setShowAddProjectForm(false);
@@ -122,6 +139,53 @@ const LaunchpadPage: React.FC = () => {
     setProjects(prev => [...prev, ...moreData.projects]);
     setCurrentPage(nextPage);
     setHasMore(moreData.hasMore);
+  };
+
+  // Pagination helper functions
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      loadPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Smart pagination with ellipsis
+      if (currentPage <= 3) {
+        // Show first 3 pages + ellipsis + last page
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        // Show first page + ellipsis + last 3 pages
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        // Show first + ellipsis + current-1, current, current+1 + ellipsis + last
+        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+      }
+    }
+    
+    return pages;
   };
 
   const getCategoryColor = (category: string) => {
@@ -352,18 +416,105 @@ const LaunchpadPage: React.FC = () => {
               </div>
             </div>
 
-              {/* Show More Button */}
-              {hasMore && (
-                <div className="w-full flex justify-center items-center mt-5">
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="w-full flex flex-col items-center mt-8 space-y-4">
+                {/* Page Info */}
+                <div className="text-[14px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Showing page {currentPage} of {totalPages} ({totalProjects} total projects)
+                </div>
+
+                {/* Pagination Buttons */}
+                <div className="flex items-center space-x-2">
+                  {/* Previous Button */}
                   <button
-                    className="w-[158.24px] h-[40px] bg-[#262626] text-white font-normal text-[14px] rounded-[30px] hover:opacity-90 transition-opacity duration-200"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-2 text-[14px] rounded-lg border transition-all duration-200 ${
+                      currentPage === 1
+                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                    }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
-                    onClick={loadMoreProjects}
                   >
-                    Show more results
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center space-x-1">
+                    {getPageNumbers().map((page, index) => {
+                      if (page === '...') {
+                        return (
+                          <span
+                            key={`ellipsis-${index}`}
+                            className="px-2 py-2 text-[14px] text-gray-500"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+
+                      const pageNum = page as number;
+                      const isCurrentPage = pageNum === currentPage;
+
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => goToPage(pageNum)}
+                          className={`w-10 h-10 text-[14px] rounded-lg border transition-all duration-200 ${
+                            isCurrentPage
+                              ? 'bg-[#F45B6A] text-white border-[#F45B6A] font-medium'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          }`}
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-2 text-[14px] rounded-lg border transition-all duration-200 ${
+                      currentPage === totalPages
+                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                    }`}
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  >
+                    Next
                   </button>
                 </div>
-              )}
+
+                {/* Quick Jump Input */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-[14px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Go to page:
+                  </span>
+                  <input
+                    type="number"
+                    min="1"
+                    max={totalPages}
+                    className="w-16 px-2 py-1 text-[14px] border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const page = parseInt((e.target as HTMLInputElement).value);
+                        if (page >= 1 && page <= totalPages) {
+                          goToPage(page);
+                          (e.target as HTMLInputElement).value = '';
+                        }
+                      }
+                    }}
+                    placeholder={currentPage.toString()}
+                  />
+                </div>
+              </div>
+            )}
             </main>
 
             {/* Add Project Form Modal */}
