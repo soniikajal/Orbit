@@ -222,7 +222,7 @@ const NavigationPage: React.FC = () => {
             <div className="w-full mb-[8px] pl-[20px] pr-[20px]">
               <div className="flex flex-wrap gap-4 justify-center">
                 <button 
-                  onClick={() => handleLocationCardClick('Computer Centre (CC)')}
+                  onClick={() => handleLocationCardClick('Central Computer Centre/CC/CCW')}
                   className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -230,7 +230,7 @@ const NavigationPage: React.FC = () => {
                   </span>
                 </button>
                 <button 
-                  onClick={() => handleLocationCardClick('Student Activity Centre (SAC)')}
+                  onClick={() => handleLocationCardClick('SAC (Student Activity Centre)')}
                   className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -238,7 +238,7 @@ const NavigationPage: React.FC = () => {
                   </span>
                 </button>
                 <button 
-                  onClick={() => handleLocationCardClick('Main Auditorium')}
+                  onClick={() => handleLocationCardClick('Admin Block/Main Audi')}
                   className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -246,7 +246,7 @@ const NavigationPage: React.FC = () => {
                   </span>
                 </button>
                 <button 
-                  onClick={() => handleLocationCardClick('Training & Placement Cell (TNP)')}
+                  onClick={() => handleLocationCardClick('Training & Placement (TNP)')}
                   className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -254,7 +254,7 @@ const NavigationPage: React.FC = () => {
                   </span>
                 </button>
                 <button 
-                  onClick={() => handleLocationCardClick('Connecting Block')}
+                  onClick={() => handleLocationCardClick('Connecting Block (CBT)/Mini Audi')}
                   className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
