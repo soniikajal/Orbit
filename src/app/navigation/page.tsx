@@ -9,10 +9,12 @@ import EditText from '@/components/ui/EditText';
 const NavigationPage: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [startLocation, setStartLocation] = useState('Your Location');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [buildings, setBuildings] = useState<any[]>([]);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [routeQuery, setRouteQuery] = useState('');
 
   // Load buildings data for suggestions
   useEffect(() => {
@@ -44,7 +46,11 @@ const NavigationPage: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    if (searchQuery.trim() !== '') {
+      // Set route query to trigger routing on the map
+      setRouteQuery(searchQuery);
+      console.log('Searching for route from', startLocation, 'to', searchQuery);
+    }
     setSuggestions([]);
   };
 
@@ -111,6 +117,8 @@ const NavigationPage: React.FC = () => {
     setSuggestions([]);
     setIsSearchFocused(false);
     setSelectedSuggestionIndex(-1);
+    // Trigger routing
+    setRouteQuery(suggestion);
   };
 
   const handleLocationCardClick = (location: string) => {
@@ -118,7 +126,8 @@ const NavigationPage: React.FC = () => {
     setSuggestions([]);
     setIsSearchFocused(false);
     setSelectedSuggestionIndex(-1);
-    // You can add additional logic here to trigger search or update the map
+    // Trigger routing
+    setRouteQuery(location);
     console.log('Location card clicked:', location);
   };
   return (
@@ -133,6 +142,11 @@ const NavigationPage: React.FC = () => {
 
             {/* Search Bar */}
             <div className="w-full mb-[15px] relative">
+              {/* Default starting point indicator */}
+              <div className="mb-2 text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                From: <span className="font-medium text-blue-600">{startLocation}</span>
+              </div>
+              
               <form onSubmit={handleSearch} className="relative">
                 <div className="relative">
                   <input
@@ -152,11 +166,14 @@ const NavigationPage: React.FC = () => {
                     className="w-full h-[56px] px-4 pl-6 pr-14 text-base rounded-[30px] focus:outline-none focus:ring-2 focus:ring-[#f4c430] focus:border-transparent transition-all duration-200"
                     style={{ fontFamily: 'Space Grotesk, sans-serif', backgroundColor: 'white', borderColor: '#9ca3af', borderWidth: '1px' }}
                   />
-                  <div className="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <button
+                    type="submit"
+                    className="absolute inset-y-0 right-0 pr-5 flex items-center cursor-pointer hover:scale-110 transition-transform duration-200"
+                  >
+                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                  </div>
+                  </button>
                 </div>
               </form>
               
@@ -247,9 +264,16 @@ const NavigationPage: React.FC = () => {
                 {/* Interactive Map */}
                 <div className="absolute inset-0 rounded-[30px] overflow-hidden">
                   <InteractiveMap 
-                    className="w-full h-full" 
-                    searchQuery={searchQuery}
-                    onLocationSelect={(location) => setSearchQuery(location)}
+                    className="w-full h-full"
+                    searchQuery={routeQuery}
+                    onLocationSelect={(location) => {
+                      if (location === "Your Location") {
+                        setStartLocation("Your Location");
+                      } else {
+                        setSearchQuery(location);
+                      }
+                    }}
+                    showSearchBar={false}
                   />
                 </div>
 

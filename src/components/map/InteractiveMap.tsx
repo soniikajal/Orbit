@@ -30,18 +30,21 @@ interface InteractiveMapProps {
   searchQuery?: string;
   onLocationSelect?: (location: string) => void;
   className?: string;
+  showSearchBar?: boolean;
 }
 
 const InteractiveMap: React.FC<InteractiveMapProps> = ({ 
   searchQuery, 
   onLocationSelect, 
-  className = "" 
+  className = "",
+  showSearchBar = true
 }) => {
   return (
     <div className={`w-full h-full ${className}`}>
       <CampusMap 
         searchQuery={searchQuery}
         onLocationSelect={onLocationSelect}
+        showSearchBar={showSearchBar}
       />
     </div>
   );

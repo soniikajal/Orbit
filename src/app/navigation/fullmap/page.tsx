@@ -6,7 +6,7 @@ import InteractiveMap from '@/components/map/InteractiveMap';
 export default function FullMapPage() {
   return (
     <div className="h-screen w-full">
-      <InteractiveMap className="w-full h-full" />
+      <InteractiveMap className="w-full h-full" showSearchBar={true} />
     </div>
   );
 }

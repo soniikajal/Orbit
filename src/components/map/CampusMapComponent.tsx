@@ -28,8 +28,9 @@ const RoutingMap = dynamic(() => import('./RoutingMap'), {
 interface CampusMapComponentProps {
   searchQuery?: string;
   onLocationSelect?: (location: string) => void;
+  showSearchBar?: boolean;
 }
 
-export default function CampusMapComponent({ searchQuery, onLocationSelect }: CampusMapComponentProps) {
-  return <RoutingMap className="w-full h-full" searchQuery={searchQuery} onLocationSelect={onLocationSelect} />;
+export default function CampusMapComponent({ searchQuery, onLocationSelect, showSearchBar }: CampusMapComponentProps) {
+  return <RoutingMap className="w-full h-full" searchQuery={searchQuery} onLocationSelect={onLocationSelect} showSearchBar={showSearchBar} />;
 }

@@ -12,9 +12,10 @@ interface RoutingMapProps {
   className?: string;
   searchQuery?: string;
   onLocationSelect?: (location: string) => void;
+  showSearchBar?: boolean;
 }
 
-export default function RoutingMap({ className = "", searchQuery, onLocationSelect }: RoutingMapProps) {
+export default function RoutingMap({ className = "", searchQuery, onLocationSelect, showSearchBar = true }: RoutingMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const routingControl = useRef<any>(null);
@@ -37,6 +38,11 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
       const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
       if (building) {
         endLatLng.current = building.latlng;
+        // Set start location to user location if available
+        if (userLocation.current) {
+          startLatLng.current = userLocation.current;
+          setStartInput("Your Location");
+        }
         tryRoute();
       }
     }
@@ -64,6 +70,11 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
             buildings.current.unshift({ name: "Your Location", latlng: e.latlng });
             fuse.current = new Fuse(buildings.current, { keys: ['name'], threshold: 0.3 });
             locationAddedToFuse.current = true;
+          }
+
+          // Call onLocationSelect to update parent component
+          if (onLocationSelect) {
+            onLocationSelect("Your Location");
           }
 
           L.marker(e.latlng, {
@@ -169,33 +180,35 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
 
   return (
     <div className={`relative ${className}`}>
-      <div className="flex flex-col sm:flex-row gap-2 items-center justify-center p-2 z-[999] bg-white rounded-xl shadow-lg absolute top-4 left-1/2 transform -translate-x-1/2 w-[95%] sm:w-[700px]">
-        <input
-          value={startInput}
-          onChange={(e) => handleSearchChange(e.target.value, 'start')}
-          placeholder="Start Location (default: your location)"
-          className="w-full px-4 py-2 border rounded-md text-sm"
-        />
-        <input
-          value={endInput}
-          onChange={(e) => handleSearchChange(e.target.value, 'end')}
-          placeholder="Destination"
-          className="w-full px-4 py-2 border rounded-md text-sm"
-        />
-        {suggestions.length > 0 && (
-          <div className="absolute top-[70px] left-1/2 transform -translate-x-1/2 bg-white border rounded-md shadow z-[1000] w-[90%] sm:w-[700px] max-h-48 overflow-y-auto">
-            {suggestions.map((s, i) => (
-              <div
-                key={i}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleSuggestionClick(s)}
-              >
-                {s}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {showSearchBar && (
+        <div className="flex flex-col sm:flex-row gap-2 items-center justify-center p-2 z-[999] bg-white rounded-xl shadow-lg absolute top-4 left-1/2 transform -translate-x-1/2 w-[95%] sm:w-[700px]">
+          <input
+            value={startInput}
+            onChange={(e) => handleSearchChange(e.target.value, 'start')}
+            placeholder="Start Location (default: your location)"
+            className="w-full px-4 py-2 border rounded-md text-sm"
+          />
+          <input
+            value={endInput}
+            onChange={(e) => handleSearchChange(e.target.value, 'end')}
+            placeholder="Destination"
+            className="w-full px-4 py-2 border rounded-md text-sm"
+          />
+          {suggestions.length > 0 && (
+            <div className="absolute top-[70px] left-1/2 transform -translate-x-1/2 bg-white border rounded-md shadow z-[1000] w-[90%] sm:w-[700px] max-h-48 overflow-y-auto">
+              {suggestions.map((s, i) => (
+                <div
+                  key={i}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleSuggestionClick(s)}
+                >
+                  {s}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Most searched */}
       {/* Location cards removed - functionality moved to navigation page */}
