@@ -168,7 +168,7 @@ function LeafletMap() {
           waypoints: [startLatLng, endLatLng],
           router: L.Routing.osrmv1({
             profile: 'foot',
-            serviceUrl: 'http://localhost:5000/route/v1'
+            serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
           }),
           lineOptions: { styles: [{ color: '#007bff', weight: 5 }] },
           show: true,
