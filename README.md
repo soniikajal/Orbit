@@ -1,4 +1,9 @@
-# Orbit - NSUT Campus Platform
+Set-Location : Cannot find path 'D:\[01] Kushagra\[02] University\[00] Projects\NSUTOrbit\Orbit' because it does not exist.
+At line:1 char:1
++ Set-Location 'D:\[01] Kushagra\[02] University\[00] Projects\NSUTOrbi ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\[01] Kushagr...NSUTOrbit\Orbit:String) [Set-Location], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetLocationCommand# Orbit - NSUT Campus Platform
 
 A comprehensive web platform for NSUT students to navigate campus life, connect with peers, and collaborate on projects.
 

@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   }, []);
 
   return (
-    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 transition-all duration-1000 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'} ${className}`}>
+    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 transition-all duration-1000 ease-out relative z-50 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'} ${className}`}>
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0">
           {/* Logo */}
@@ -110,7 +110,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                 
                 {/* Dropdown Menu */}
                 {survivalKitOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-[100] animate-in fade-in-0 zoom-in-95 duration-200">
                     <div className="py-2">
                       <button
                         className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
@@ -173,7 +173,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                 
                 {/* Dropdown Menu */}
                 {quickLinksOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-[100] animate-in fade-in-0 zoom-in-95 duration-200">
                     <div className="py-2">
                       <button
                         className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200 hover:translate-x-1"
