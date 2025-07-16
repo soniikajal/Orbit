@@ -93,3 +93,113 @@ body {
   border: 1px solid rgba(75, 85, 99, 0.2);
   -webkit-backdrop-filter: blur(12px); /* Safari support */
 }
+
+/* Custom text truncation utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Project card fixed heights */
+.project-card-description {
+  height: 64px; /* Fixed height for 4 lines of text */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f9fafb;
+}
+
+.project-card-skills {
+  height: 56px; /* Fixed height for skills section */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f9fafb;
+}
+
+/* Smooth scrolling behavior */
+.project-card-description,
+.project-card-skills {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+}
+
+/* Visual indicator for scrollable content */
+.project-card-description::after,
+.project-card-skills::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.8));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.project-card-description:hover::after,
+.project-card-skills:hover::after {
+  opacity: 1;
+}
+
+/* Hide the gradient when scrolled to bottom */
+.project-card-description.scrolled-to-bottom::after,
+.project-card-skills.scrolled-to-bottom::after {
+  opacity: 0;
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.project-card-description::-webkit-scrollbar,
+.project-card-skills::-webkit-scrollbar {
+  width: 4px;
+}
+
+.project-card-description::-webkit-scrollbar-track,
+.project-card-skills::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 2px;
+}
+
+.project-card-description::-webkit-scrollbar-thumb,
+.project-card-skills::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.project-card-description::-webkit-scrollbar-thumb:hover,
+.project-card-skills::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Hide scrollbar when not needed */
+.project-card-description::-webkit-scrollbar,
+.project-card-skills::-webkit-scrollbar {
+  width: 0px;
+  transition: width 0.2s ease;
+}
+
+.project-card-description:hover::-webkit-scrollbar,
+.project-card-skills:hover::-webkit-scrollbar {
+  width: 4px;
+}
