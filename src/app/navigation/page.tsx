@@ -1,7 +1,7 @@
 // src/app/navigation/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InteractiveMap from '@/components/map/InteractiveMap';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
@@ -10,6 +10,27 @@ const NavigationPage: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [buildings, setBuildings] = useState<any[]>([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+
+  // Load buildings data for suggestions
+  useEffect(() => {
+    const loadBuildings = async () => {
+      try {
+        const response = await fetch('/markers.json');
+        const data = await response.json();
+        const buildingList = data.features.map((f: any) => ({
+          name: f.properties.name,
+          latlng: [f.geometry.coordinates[1], f.geometry.coordinates[0]]
+        }));
+        setBuildings(buildingList);
+      } catch (error) {
+        console.error('Error loading buildings:', error);
+      }
+    };
+    loadBuildings();
+  }, []);
 
   const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
@@ -24,10 +45,79 @@ const NavigationPage: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Searching for:', searchQuery);
+    setSuggestions([]);
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setSelectedSuggestionIndex(-1); // Reset selection when typing
+    
+    // Generate suggestions based on input
+    if (value.trim() !== '' && buildings.length > 0) {
+      const filteredSuggestions = buildings
+        .filter(building => 
+          building.name.toLowerCase().includes(value.toLowerCase())
+        )
+        .map(building => building.name);
+      
+      // Add "Your Location" if it matches the search
+      const allSuggestions = [];
+      if ("Your Location".toLowerCase().includes(value.toLowerCase())) {
+        allSuggestions.push("Your Location");
+      }
+      allSuggestions.push(...filteredSuggestions);
+      
+      setSuggestions(allSuggestions.slice(0, 6)); // Show max 6 suggestions
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (suggestions.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        );
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+        } else {
+          handleSearch(e);
+        }
+        break;
+      case 'Escape':
+        setSuggestions([]);
+        setIsSearchFocused(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setSuggestions([]);
+    setIsSearchFocused(false);
+    setSelectedSuggestionIndex(-1);
   };
 
   const handleLocationCardClick = (location: string) => {
     setSearchQuery(location);
+    setSuggestions([]);
+    setIsSearchFocused(false);
+    setSelectedSuggestionIndex(-1);
     // You can add additional logic here to trigger search or update the map
     console.log('Location card clicked:', location);
   };
@@ -42,15 +132,22 @@ const NavigationPage: React.FC = () => {
             </h1>
 
             {/* Search Bar */}
-            <div className="w-full mb-[15px]">
+            <div className="w-full mb-[15px] relative">
               <form onSubmit={handleSearch} className="relative">
                 <div className="relative">
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchInputChange}
+                    onKeyDown={handleKeyDown}
                     onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
+                    onBlur={() => {
+                      // Delay hiding suggestions to allow clicks
+                      setTimeout(() => {
+                        setIsSearchFocused(false);
+                        setSelectedSuggestionIndex(-1);
+                      }, 200);
+                    }}
                     placeholder="Search for classrooms, labs or blocks..."
                     className="w-full h-[56px] px-4 pl-6 pr-14 text-base rounded-[30px] focus:outline-none focus:ring-2 focus:ring-[#f4c430] focus:border-transparent transition-all duration-200"
                     style={{ fontFamily: 'Space Grotesk, sans-serif', backgroundColor: 'white', borderColor: '#9ca3af', borderWidth: '1px' }}
@@ -62,6 +159,33 @@ const NavigationPage: React.FC = () => {
                   </div>
                 </div>
               </form>
+              
+              {/* Suggestions Dropdown */}
+              {isSearchFocused && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-[20px] shadow-lg z-[1000] mt-2 max-h-48 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className={`px-6 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150 first:rounded-t-[20px] last:rounded-b-[20px] ${
+                        index === selectedSuggestionIndex 
+                          ? 'bg-blue-50 border-blue-200' 
+                          : 'hover:bg-gray-50'
+                      }`}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      <div className="flex items-center gap-3">
+                        <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="text-[14px] font-normal text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {suggestion}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Most searched for */}
