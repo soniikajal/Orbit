@@ -14,7 +14,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   // Auth pages should render without the header and container layout
   const isAuthPage = pathname?.startsWith('/auth/');
   
-  if (isAuthPage) {
+  // Full map page should render without the header and container layout
+  const isFullMapPage = pathname === '/navigation/fullmap';
+  
+  if (isAuthPage || isFullMapPage) {
     return <>{children}</>;
   }
 
