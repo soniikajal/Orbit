@@ -59,21 +59,6 @@ const LaunchpadPage: React.FC = () => {
   };
 
   const handleProjectFormChange = (field: string, value: string) => {
-    // Character limits for different fields
-    const limits = {
-      projectName: 50,
-      description: 300,
-      lookingFor: 80,
-      requiredSkills: 200,
-      teamMembers: 100,
-      additionalInfo: 250
-    };
-
-    // Apply character limit if field has one
-    if (field in limits && value.length > limits[field as keyof typeof limits]) {
-      return; // Don't update if over limit
-    }
-
     setProjectForm(prev => ({
       ...prev,
       [field]: value
@@ -163,37 +148,8 @@ const LaunchpadPage: React.FC = () => {
             <div className="w-full mt-8">
               {/* Row 1 */}
               <div className="flex justify-between mb-6 gap-4">
-              {[
-                {
-                  category: "Web Development",
-                  title: "ECOTrack NSUT",
-                  description: "A comprehensive environmental tracking system for NSUT campus. Monitor energy consumption, waste management, and carbon footprint with real-time analytics and reporting features. This project aims to make the campus more sustainable.",
-                  skills: "React.js\nNode.js\nMongoDB\nTypeScript",
-                  lookingFor: "Backend Developer"
-                },
-                {
-                  category: "Mobile App",
-                  title: "StudyBuddy",
-                  description: "Connect with study partners.",
-                  skills: "Flutter\nFirebase\nDart\nFigma",
-                  lookingFor: "UI/UX Designer"
-                },
-                {
-                  category: "AI/ML",
-                  title: "SmartAttendance",
-                  description: "AI-powered attendance system using facial recognition technology for automated classroom attendance tracking. Built with modern machine learning algorithms and computer vision techniques for high accuracy and real-time processing. Includes features like anti-spoofing, batch processing, and detailed analytics dashboard.",
-                  skills: "Python\nOpenCV\nTensorFlow\nFlask\nNumPy\nPandas\nScikit-learn\nKeras\nDockers\nAWS\nPostgreSQL\nRedis",
-                  lookingFor: "ML Engineer"
-                },
-                {
-                  category: "IoT",
-                  title: "CampusSmart",
-                  description: "IoT-based campus automation system for smart lighting, security monitoring, and resource optimization across NSUT facilities. Features include motion sensors, automated lighting, security cameras with AI detection, and energy management systems.",
-                  skills: "Arduino\nRaspberry Pi\nC++\nMQTT",
-                  lookingFor: "Hardware Engineer"
-                }
-              ].map((project, cardIndex) => (
-                <div key={`row1-${cardIndex}`} className="w-[280px] h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col justify-between relative">
+              {[...Array(4)].map((_, cardIndex) => (
+                <div key={`row1-${cardIndex}`} className="w-[280px] h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col justify-center items-start relative">
                   {/* Date - Top Right */}
                   <div className="absolute top-5 right-4">
                     <span className="text-[12px] font-normal text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -201,102 +157,66 @@ const LaunchpadPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="flex flex-col">
-                    {/* Category Tag */}
-                    <div className="bg-[#FACC68] rounded-[30px] px-3 py-1 inline-block mb-2 self-start">
-                      <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Project Name */}
-                    <h2 className="text-[24px] font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      {project.title}
-                    </h2>
-
-                    {/* Project Description - Fixed height with scrolling */}
-                    <div className="project-card-description mb-3">
-                      <p className="text-[14px] font-normal text-black leading-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Team Members */}
-                    <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Team Members
-                    </h3>
-                    <div className="flex gap-2 mb-3">
-                      {[...Array(4)].map((_, i) => (
-                        <div key={i} className="w-[24.97px] h-[24.97px] bg-gray-300 rounded-full"></div>
-                      ))}
-                    </div>
-
-                    {/* Required Skills - Fixed height with scrolling */}
-                    <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Required Skills
-                    </h3>
-                    <div className="project-card-skills mb-3">
-                      <div className="text-[14px] font-normal text-black leading-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.skills.split('\n').map((skill, index) => (
-                          <div key={index}>{skill}</div>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Category Tag */}
+                  <div className="bg-[#FACC68] rounded-[30px] px-3 py-1 inline-block mb-1">
+                    <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Web Development
+                    </span>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    {/* Looking For */}
-                    <div className="w-full border border-black rounded-[30px] flex items-center justify-center py-2 px-3">
-                      <span className="text-[12px] font-bold text-black text-center line-clamp-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        Looking for: {project.lookingFor}
-                      </span>
-                    </div>
+                  {/* Project Name */}
+                  <h2 className="text-[24px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    ECOTrack NSUT
+                  </h2>
 
-                    {/* Contact Button */}
-                    <button className="w-full h-[39.95px] bg-[#F45B6A] rounded-[30px] text-white text-[14px] font-normal hover:opacity-90 transition-opacity duration-200"
-                      style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => console.log('Contact team clicked')}
-                    >
-                      Contact the team
-                    </button>
+                  {/* Project Description */}
+                  <p className="text-[14px] font-normal text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics.
+                  </p>
+
+                  {/* Team Members */}
+                  <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Team Members
+                  </h3>
+                  <div className="flex gap-2 mb-2">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-[24.97px] h-[24.97px] bg-gray-300 rounded-full"></div>
+                    ))}
                   </div>
+
+                  {/* Required Skills */}
+                  <h3 className="text-[14px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Required Skills
+                  </h3>
+                  <div className="text-[14px] font-normal text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Java/CSS<br />
+                    Product Designing<br />
+                    Motion Graphics<br />
+                    Adobe Creative Suite
+                  </div>
+
+                  {/* Looking For */}
+                  <div className="w-[248px] h-[25.94px] border border-black rounded-[30px] flex items-center justify-center mb-2 mx-auto">
+                    <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Looking for: Backend Developer
+                    </span>
+                  </div>
+
+                  {/* Contact Button */}
+                  <button className="w-[158.06px] h-[39.95px] bg-[#F45B6A] rounded-[30px] text-white text-[14px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onClick={() => console.log('Contact team clicked')}
+                  >
+                    Contact the team
+                  </button>
                 </div>
               ))}
               </div>
 
               {/* Row 2 */}
               <div className="flex justify-between mb-6 gap-4">
-              {[
-                {
-                  category: "Blockchain",
-                  title: "CryptoLearn",
-                  description: "Learn blockchain.",
-                  skills: "Solidity\nWeb3.js\nReact\nNode.js",
-                  lookingFor: "Blockchain Developer"
-                },
-                {
-                  category: "Game Dev",
-                  title: "NSUTQuest",
-                  description: "Interactive campus exploration game where students can discover hidden locations, complete challenges, and learn about university history. Features include augmented reality elements, achievement systems, leaderboards, social sharing, and multiplayer challenges. Built with Unity 3D engine and cross-platform compatibility for mobile and desktop devices.",
-                  skills: "Unity\nC#\nBlender\nPhotoshop\nMaya\n3ds Max\nSubstance Painter\nGit\nJira\nAgile\nGame Design\nUI/UX\nAnimation\nShader Programming",
-                  lookingFor: "3D Artist"
-                },
-                {
-                  category: "Data Science",
-                  title: "GradePredictor",
-                  description: "Machine learning model to predict student performance and provide personalized study recommendations based on past academic data. Uses advanced algorithms.",
-                  skills: "Python\nScikit-learn\nPandas\nJupyter",
-                  lookingFor: "Data Scientist"
-                },
-                {
-                  category: "Cybersecurity",
-                  title: "SecureNet",
-                  description: "Network security monitoring tool for detecting and preventing cyber threats in educational institutions with real-time alerts and comprehensive threat analysis.",
-                  skills: "Python\nWireshark\nKali Linux\nNetworking",
-                  lookingFor: "Security Analyst"
-                }
-              ].map((project, cardIndex) => (
-                <div key={`row2-${cardIndex}`} className="w-[280px] h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col justify-between relative">
+              {[...Array(4)].map((_, cardIndex) => (
+                <div key={`row2-${cardIndex}`} className="w-[280px] h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col justify-center items-start relative">
                   {/* Date - Top Right */}
                   <div className="absolute top-5 right-4">
                     <span className="text-[12px] font-normal text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -304,65 +224,58 @@ const LaunchpadPage: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="flex flex-col">
-                    {/* Category Tag */}
-                    <div className="bg-[#FACC68] rounded-[30px] px-3 py-1 inline-block mb-2 self-start">
-                      <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Project Name */}
-                    <h2 className="text-[24px] font-bold text-black mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      {project.title}
-                    </h2>
-
-                    {/* Project Description - Fixed height with scrolling */}
-                    <div className="project-card-description mb-3">
-                      <p className="text-[14px] font-normal text-black leading-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Team Members */}
-                    <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Team Members
-                    </h3>
-                    <div className="flex gap-2 mb-3">
-                      {[...Array(4)].map((_, i) => (
-                        <div key={i} className="w-[24.97px] h-[24.97px] bg-gray-300 rounded-full"></div>
-                      ))}
-                    </div>
-
-                    {/* Required Skills - Fixed height with scrolling */}
-                    <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Required Skills
-                    </h3>
-                    <div className="project-card-skills mb-3">
-                      <div className="text-[14px] font-normal text-black leading-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {project.skills.split('\n').map((skill, index) => (
-                          <div key={index}>{skill}</div>
-                        ))}
-                      </div>
-                    </div>
+                  {/* Category Tag */}
+                  <div className="bg-[#FACC68] rounded-[30px] px-3 py-1 inline-block mb-1">
+                    <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Web Development
+                    </span>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    {/* Looking For */}
-                    <div className="w-full border border-black rounded-[30px] flex items-center justify-center py-2 px-3">
-                      <span className="text-[12px] font-bold text-black text-center line-clamp-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        Looking for: {project.lookingFor}
-                      </span>
-                    </div>
+                  {/* Project Name */}
+                  <h2 className="text-[24px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    ECOTrack NSUT
+                  </h2>
 
-                    {/* Contact Button */}
-                    <button className="w-full h-[39.95px] bg-[#F45B6A] rounded-[30px] text-white text-[14px] font-normal hover:opacity-90 transition-opacity duration-200"
-                      style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() => console.log('Contact team clicked')}
-                    >
-                      Contact the team
-                    </button>
+                  {/* Project Description */}
+                  <p className="text-[14px] font-normal text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics.
+                  </p>
+
+                  {/* Team Members */}
+                  <h3 className="text-[14px] font-bold text-black mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Team Members
+                  </h3>
+                  <div className="flex gap-2 mb-2">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="w-[24.97px] h-[24.97px] bg-gray-300 rounded-full"></div>
+                    ))}
                   </div>
+
+                  {/* Required Skills */}
+                  <h3 className="text-[14px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Required Skills
+                  </h3>
+                  <div className="text-[14px] font-normal text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Java/CSS<br />
+                    Product Designing<br />
+                    Motion Graphics<br />
+                    Adobe Creative Suite
+                  </div>
+
+                  {/* Looking For */}
+                  <div className="w-[248px] h-[25.94px] border border-black rounded-[30px] flex items-center justify-center mb-2 mx-auto">
+                    <span className="text-[14px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Looking for: Backend Developer
+                    </span>
+                  </div>
+
+                  {/* Contact Button */}
+                  <button className="w-[158.06px] h-[39.95px] bg-[#F45B6A] rounded-[30px] text-white text-[14px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onClick={() => console.log('Contact team clicked')}
+                  >
+                    Contact the team
+                  </button>
                 </div>
               ))}
               </div>
@@ -484,12 +397,8 @@ const LaunchpadPage: React.FC = () => {
                         onChange={(e) => handleProjectFormChange('projectName', e.target.value)}
                         className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
                         style={{ fontFamily: 'Inter, sans-serif' }}
-                        placeholder="Enter your project name (max 50 characters)"
-                        maxLength={50}
+                        placeholder="Enter your project name"
                       />
-                      <div className="text-right text-xs text-gray-500 mt-1">
-                        {projectForm.projectName.length}/50
-                      </div>
                     </div>
 
                     {/* Category */}
@@ -538,12 +447,8 @@ const LaunchpadPage: React.FC = () => {
                         rows={4}
                         className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
                         style={{ fontFamily: 'Inter, sans-serif' }}
-                        placeholder="Describe your project in detail. What problem does it solve? What are its key features? What technology stack are you using? (max 300 characters)"
-                        maxLength={300}
+                        placeholder="Describe your project, its goals, and what you're trying to achieve..."
                       />
-                      <div className="text-right text-xs text-gray-500 mt-1">
-                        {projectForm.description.length}/300
-                      </div>
                     </div>
 
                     {/* Looking For */}
@@ -558,12 +463,8 @@ const LaunchpadPage: React.FC = () => {
                         onChange={(e) => handleProjectFormChange('lookingFor', e.target.value)}
                         className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
                         style={{ fontFamily: 'Inter, sans-serif' }}
-                        placeholder="What role are you looking for? (e.g., Frontend Developer, UI/UX Designer) (max 80 chars)"
-                        maxLength={80}
+                        placeholder="What role are you looking for? (e.g., Frontend Developer, Designer, etc.)"
                       />
-                      <div className="text-right text-xs text-gray-500 mt-1">
-                        {projectForm.lookingFor.length}/80
-                      </div>
                     </div>
 
                     {/* Required Skills and Team Members */}
@@ -579,16 +480,12 @@ const LaunchpadPage: React.FC = () => {
                           rows={3}
                           className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
                           style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="List required skills (e.g., React.js, Node.js, Python, UI/UX Design). One per line. (max 200 chars)"
-                          maxLength={200}
+                          placeholder="List the skills required for this project (e.g., React, Node.js, Python, etc.)"
                         />
-                        <div className="text-right text-xs text-gray-500 mt-1">
-                          {projectForm.requiredSkills.length}/200
-                        </div>
                       </div>
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Current Team Members
+                          Team Members
                         </label>
                         <textarea
                           value={projectForm.teamMembers}
@@ -596,12 +493,8 @@ const LaunchpadPage: React.FC = () => {
                           rows={3}
                           className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
                           style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="List current team members with their roles (e.g., John - Frontend, Sarah - Designer). (max 100 chars)"
-                          maxLength={100}
+                          placeholder="List current team members and their roles (e.g., John - Frontend Developer, Sarah - UI Designer)"
                         />
-                        <div className="text-right text-xs text-gray-500 mt-1">
-                          {projectForm.teamMembers.length}/100
-                        </div>
                       </div>
                     </div>
 
@@ -632,12 +525,8 @@ const LaunchpadPage: React.FC = () => {
                         rows={3}
                         className="w-full px-4 py-3 text-[14px] rounded-[20px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 resize-none"
                         style={{ fontFamily: 'Inter, sans-serif' }}
-                        placeholder="Any additional details, project timeline, or special requirements. (max 250 chars)"
-                        maxLength={250}
+                        placeholder="Any additional details about your project..."
                       />
-                      <div className="text-right text-xs text-gray-500 mt-1">
-                        {projectForm.additionalInfo.length}/250
-                      </div>
                     </div>
 
                     {/* Form Buttons */}
