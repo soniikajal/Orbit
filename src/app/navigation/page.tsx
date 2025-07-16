@@ -203,20 +203,9 @@ const NavigationPage: React.FC = () => {
 
             {/* Most searched for */}
             <div className="w-full mb-[10px]">
-              <div className="flex justify-between items-center pl-[20px] pr-[20px]">
-                <p className="text-black font-medium text-[14px] text-left" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Most searched for
-                </p>
-                <p className="text-[14px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  To set different start location, view{' '}
-                  <button 
-                    onClick={() => window.open('/navigation/fullmap', '_blank')}
-                    className="text-blue-600 hover:text-blue-800 underline transition-colors duration-200 font-medium"
-                  >
-                    full map
-                  </button>
-                </p>
-              </div>
+              <p className="text-black font-medium text-[14px] text-left pl-[20px]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Most searched for
+              </p>
             </div>
 
             {/* Location Cards */}

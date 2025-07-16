@@ -29,6 +29,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   const endLatLng = useRef<L.LatLng | null>(null);
   const userLocation = useRef<L.LatLng | null>(null);
   const locationAddedToFuse = useRef<boolean>(false);
+  const [zoomLevel, setZoomLevel] = useState(17);
 
   // Handle search query from navigation page
   useEffect(() => {
@@ -51,11 +52,14 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   useEffect(() => {
     const initMap = async () => {
       if (mapRef.current && !mapInstance.current) {
-        const map = L.map(mapRef.current).setView([28.6103, 77.0370], 17);
+        const map = L.map(mapRef.current, {
+          attributionControl: false,
+          zoomControl: false
+        }).setView([28.6103, 77.0370], 17);
         mapInstance.current = map;
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap contributors'
+          attribution: ''
         }).addTo(mapInstance.current);
 
         mapInstance.current.locate({ setView: false, enableHighAccuracy: true });
@@ -178,6 +182,20 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
     }).addTo(mapInstance.current!);
   };
 
+  const handleZoomIn = () => {
+    if (mapInstance.current) {
+      mapInstance.current.zoomIn();
+      setZoomLevel(mapInstance.current.getZoom());
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapInstance.current) {
+      mapInstance.current.zoomOut();
+      setZoomLevel(mapInstance.current.getZoom());
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
       {showSearchBar && (
@@ -212,6 +230,31 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
 
       {/* Most searched */}
       {/* Location cards removed - functionality moved to navigation page */}
+
+      {/* Custom Zoom Controls */}
+      <div className="absolute bottom-4 right-4 z-[999] flex flex-col gap-2">
+        {/* Zoom In Button */}
+        <button
+          onClick={handleZoomIn}
+          className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
+          aria-label="Zoom In"
+        >
+          <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
+        
+        {/* Zoom Out Button */}
+        <button
+          onClick={handleZoomOut}
+          className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
+          aria-label="Zoom Out"
+        >
+          <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+          </svg>
+        </button>
+      </div>
 
       <div ref={mapRef} className="w-full h-full min-h-[650px] rounded-[30px] overflow-hidden" />
     </div>
