@@ -189,21 +189,8 @@ const LaunchpadPage: React.FC = () => {
   };
 
   const getCategoryColor = (category: string) => {
-    const colors = {
-      'Web Development': '#FACC68',
-      'Technology & Software': '#FACC68',
-      'Business & Entrepreneurship': '#68CCFA',
-      'Creative & Design': '#FA68CC',
-      'Research & Innovation': '#68FACC',
-      'Social Impact & NGO': '#CC68FA',
-      'Education & Learning': '#FA8668',
-      'Health & Wellness': '#86FA68',
-      'Environment & Sustainability': '#68FA86',
-      'Events & Community': '#F45B6A',
-      'Food & Hospitality': '#FFB347',
-      'Arts & Entertainment': '#DDA0DD',
-    };
-    return colors[category as keyof typeof colors] || '#FACC68';
+    // Use yellowish color for all categories
+    return '#FACC68';
   };
 
   return (
@@ -418,22 +405,22 @@ const LaunchpadPage: React.FC = () => {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="w-full flex flex-col items-center mt-8 space-y-4">
+              <div className="w-full flex flex-col items-center mt-12 space-y-6">
                 {/* Page Info */}
-                <div className="text-[14px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="text-[16px] text-global-text2 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Showing page {currentPage} of {totalPages} ({totalProjects} total projects)
                 </div>
 
                 {/* Pagination Buttons */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   {/* Previous Button */}
                   <button
                     onClick={goToPreviousPage}
                     disabled={currentPage === 1}
-                    className={`px-3 py-2 text-[14px] rounded-lg border transition-all duration-200 ${
+                    className={`px-6 py-3 text-[16px] font-medium rounded-[25px] transition-all duration-200 ${
                       currentPage === 1
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-global-background5 text-global-text2 border border-gray-300 hover:bg-gray-50 hover:shadow-md'
                     }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
@@ -441,13 +428,13 @@ const LaunchpadPage: React.FC = () => {
                   </button>
 
                   {/* Page Numbers */}
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-2">
                     {getPageNumbers().map((page, index) => {
                       if (page === '...') {
                         return (
                           <span
                             key={`ellipsis-${index}`}
-                            className="px-2 py-2 text-[14px] text-gray-500"
+                            className="px-3 py-3 text-[16px] text-gray-500 font-medium"
                             style={{ fontFamily: 'Inter, sans-serif' }}
                           >
                             ...
@@ -462,10 +449,10 @@ const LaunchpadPage: React.FC = () => {
                         <button
                           key={pageNum}
                           onClick={() => goToPage(pageNum)}
-                          className={`w-10 h-10 text-[14px] rounded-lg border transition-all duration-200 ${
+                          className={`min-w-[48px] h-[48px] text-[16px] font-medium rounded-[25px] transition-all duration-200 ${
                             isCurrentPage
-                              ? 'bg-[#F45B6A] text-white border-[#F45B6A] font-medium'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                              ? 'bg-global-background3 text-global-text4 shadow-md'
+                              : 'bg-global-background5 text-global-text2 border border-gray-300 hover:bg-gray-50 hover:shadow-md'
                           }`}
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         >
@@ -479,10 +466,10 @@ const LaunchpadPage: React.FC = () => {
                   <button
                     onClick={goToNextPage}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-2 text-[14px] rounded-lg border transition-all duration-200 ${
+                    className={`px-6 py-3 text-[16px] font-medium rounded-[25px] transition-all duration-200 ${
                       currentPage === totalPages
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-global-background5 text-global-text2 border border-gray-300 hover:bg-gray-50 hover:shadow-md'
                     }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
@@ -491,15 +478,15 @@ const LaunchpadPage: React.FC = () => {
                 </div>
 
                 {/* Quick Jump Input */}
-                <div className="flex items-center space-x-2">
-                  <span className="text-[14px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="flex items-center space-x-3">
+                  <span className="text-[16px] text-global-text2 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Go to page:
                   </span>
                   <input
                     type="number"
                     min="1"
                     max={totalPages}
-                    className="w-16 px-2 py-1 text-[14px] border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent"
+                    className="w-20 px-3 py-2 text-[16px] border-2 border-gray-300 rounded-[20px] text-center focus:outline-none focus:ring-2 focus:ring-global-background3 focus:border-transparent transition-all duration-200"
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
