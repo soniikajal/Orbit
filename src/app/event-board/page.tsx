@@ -308,7 +308,7 @@ const EventBoardPage: React.FC = () => {
                     </div>
 
                     {/* Event Content */}
-                    <div className="flex flex-col mt-4 pt-8">
+                    <div className="flex flex-col mt-4 pt-2">
                       {/* Title */}
                       <h3 className="text-[28px] font-bold mb-3 text-white leading-tight pr-16" style={{ fontFamily: 'Playfair Display, serif' }}>
                         {event.title}
