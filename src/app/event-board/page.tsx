@@ -194,16 +194,15 @@ const EventBoardPage: React.FC = () => {
               {/* Scrollable Cards Container */}
               <div 
                 id="event-cards-container"
-                className="flex gap-3 overflow-x-auto scrollbar-hide pb-4"
+                className="flex gap-2 overflow-x-auto scrollbar-hide pb-4 items-start"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="bg-[#262626] rounded-[25px] p-6 text-white relative flex flex-col flex-shrink-0"
+                    className="bg-[#262626] rounded-[25px] p-6 text-white relative flex flex-col flex-shrink-0 self-start"
                     style={{ 
-                      minHeight: 'auto',
-                      width: 'calc(25% - 9px)',
+                      width: 'calc(25% - 6px)',
                       minWidth: '280px'
                     }}
                   >
@@ -263,7 +262,7 @@ const EventBoardPage: React.FC = () => {
                             <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
                           </svg>
                         </div>
-                        <span className="text-white text-[14px] font-medium">Add to calendar</span>
+                        <span className="text-white text-[14px] font-bold">Add to calendar</span>
                       </button>
                     </div>
                   </div>
