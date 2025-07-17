@@ -5,6 +5,8 @@ export const ADMIN_EMAILS = [
   'parkhi.mudgal@nsut.ac.in',
   'aastha.pandey@nsut.ac.in',
   'kushagra.kataria@nsut.ac.in',
+  'darshdeep.singh.ug24@nsut.ac.in',
+  'bhavya.goel.ug24@nsut.ac.in',
   // Add more admin emails as needed
 ]
 
