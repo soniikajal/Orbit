@@ -579,7 +579,7 @@ const EventBoardPage: React.FC = () => {
                       <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Contact Email *
                         {session?.user?.email && (
-                          <span className="ml-2 text-[12px] font-normal text-green-600">(Auto-filled from your account)</span>
+                          <span className="ml-2 text-[12px] font-normal text-blue-600">(Default: {session.user.email})</span>
                         )}
                       </label>
                       <input
@@ -587,13 +587,15 @@ const EventBoardPage: React.FC = () => {
                         required
                         value={eventForm.contactEmail}
                         onChange={(e) => handleEventFormChange('contactEmail', e.target.value)}
-                        className={`w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200 ${
-                          session?.user?.email ? 'bg-gray-50' : ''
-                        }`}
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                         placeholder="your.email@example.com"
-                        readOnly={!!session?.user?.email}
                       />
+                      {session?.user?.email && eventForm.contactEmail !== session.user.email && (
+                        <p className="mt-1 text-[12px] text-orange-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          Using different email than your account
+                        </p>
+                      )}
                     </div>
 
                     {/* Registration Required */}
