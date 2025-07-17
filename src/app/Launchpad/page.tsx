@@ -77,9 +77,19 @@ const LaunchpadPage: React.FC = () => {
     }
   }
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+
+    const res = await fetch(`/api/launchpad?search=${encodeURIComponent(searchQuery.trim())}&limit=100`);
+    const data = await res.json();
+
+    if (data.success) {
+      setProjects(data.projects);
+      setCurrentPage(1);
+      setHasMore(false); // Since it’s a search result
+      setTotalProjects(data.projects.length);
+      setTotalPages(1);
+    }
   };
 
   const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
@@ -408,13 +418,15 @@ const LaunchpadPage: React.FC = () => {
                       </div>
 
                       {/* Contact Button */}
-                      <button 
-                        className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto"
+                      <a 
+                        href={`mailto:${project.contactEmail}?subject=Interested in your project on Launchpad&body=Hi, I saw your project on Launchpad and I'm interested in collaborating.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto flex items-center justify-center"
                         style={{ fontFamily: 'Inter, sans-serif' }}
-                        onClick={() => console.log('Contact team clicked', project.contactEmail)}
                       >
                         Contact the team
-                      </button>
+                      </a>
                     </div>
                   </div>
                 ))}

@@ -9,10 +9,25 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '12')
     const skip = (page - 1) * limit
+    const query = searchParams.get('search')?.toLowerCase() || ''
+
+    const searchFilter = query
+      ? {
+          approved: true,
+          $or: [
+            { projectName: { $regex: query, $options: 'i' } },
+            { category: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' } },
+            { lookingFor: { $regex: query, $options: 'i' } },
+            { requiredSkills: { $elemMatch: { $regex: query, $options: 'i' } } },
+            { teamMembers: { $elemMatch: { $regex: query, $options: 'i' } } }
+          ]
+        }
+      : { approved: true }
 
     const [projects, total] = await Promise.all([
-      LaunchpadProject.find({ approved: true }).sort({ _id: -1 }).skip(skip).limit(limit),
-      LaunchpadProject.countDocuments({ approved: true })
+      LaunchpadProject.find(searchFilter).sort({ _id: -1 }).skip(skip).limit(limit),
+      LaunchpadProject.countDocuments(searchFilter)
     ])
 
     return NextResponse.json({ success: true, projects, total })
@@ -36,7 +51,7 @@ export async function POST(req: NextRequest) {
     const project = await LaunchpadProject.create({
       ...data,
       dateCreated: date,
-      approved: false // wait for admin approval
+      approved: false
     })
 
     return NextResponse.json({ success: true, project })
