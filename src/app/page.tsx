@@ -443,7 +443,7 @@ const HomePage: React.FC = () => {
                                 'Manik Bhushan': 'https://www.instagram.com/iammvnik/',
                                 'Parkhi Mudgal': 'https://www.instagram.com/p_mudgal26/',
                                 'Aastha Pandey': 'https://www.instagram.com/aastha.pandey/',
-                                'Kushagra Kataria': 'https://www.instagram.com/kushagra.kataria/',
+                                'Kushagra Kataria': 'https://www.instagram.com/katariakuxh/',
                                 'Sarah Kim': 'https://www.instagram.com/sarah.kim/'
                               };
                               const url = instagramUrls[member.name];
