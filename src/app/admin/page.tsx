@@ -48,19 +48,46 @@ export default function AdminDashboard() {
     loadMockData()
   }, [session, status, router])
 
-  const loadMockData = () => {
-    // Load mock data from admin utility
+  const loadMockData = async () => {
     const mockUsers = getMockUsers()
-    const mockSubmissions = getMockSubmissions()
+
+    try {
+      const res = await fetch('/api/contact')
+      const data = await res.json()
+      if (data.success) {
+        setSubmissions(data.contacts)
+      } else {
+        setSubmissions([])
+      }
+    } catch (err) {
+      console.error('Failed to fetch contact data')
+      setSubmissions([])
+    }
 
     setUsers(mockUsers)
-    setSubmissions(mockSubmissions)
   }
 
-  const updateSubmissionStatus = (id: string, status: 'pending' | 'resolved' | 'in-progress') => {
-    setSubmissions(prev => prev.map(sub => 
-      sub.id === id ? { ...sub, status } : sub
-    ))
+
+  const updateSubmissionStatus = async (id: string, status: 'pending' | 'resolved' | 'in-progress') => {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      })
+
+      const data = await res.json()
+      if (data.success) {
+        setSubmissions(prev => prev.map(sub => 
+          sub.id === id ? { ...sub, status } : sub
+        ))
+      } else {
+        alert('Failed to update status')
+      }
+    } catch (err) {
+      console.error('Update error:', err)
+      alert('Error updating submission')
+    }
   }
 
   if (status === 'loading') {

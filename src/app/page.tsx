@@ -139,11 +139,31 @@ const HomePage: React.FC = () => {
     }));
   };
 
-  const handleContactSubmit = () => {
-    console.log('Contact form submitted:', contactForm);
-    // Reset form
-    setContactForm({ name: '', email: '', message: '' });
+  const handleContactSubmit = async () => {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...contactForm,
+          type: feedbackType === 'askQuery' ? 'askQuery' :
+                feedbackType === 'leaveFeedback' ? 'leaveFeedback' :
+                'reportBug'
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Your message has been sent!');
+        setContactForm({ name: '', email: '', message: '' });
+      } else {
+        alert('Something went wrong.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Network error.');
+    }
   };
+
 
   const handleNameChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
