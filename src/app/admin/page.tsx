@@ -26,45 +26,74 @@ interface ContactSubmission {
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics'>('users')
+  const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics' | 'launchpad'>('users')
   const [users, setUsers] = useState<UserData[]>([])
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
+  const [launchpadSubmissions, setLaunchpadSubmissions] = useState<any[]>([])
 
   useEffect(() => {
-    if (status === 'loading') return // Still loading
-    
-    if (!session) {
-      router.push('/auth/signin')
-      return
+    if (status !== 'authenticated') return;
+
+    // Wait until role is available
+    if (!session?.user?.role) return;
+
+    if (session.user.role !== 'admin') {
+      router.push('/dashboard');
+      return;
     }
 
-    // Check if user is admin
-    if (session.user?.role !== 'admin') {
-      router.push('/dashboard') // Redirect to regular dashboard
-      return
-    }
+    loadMockData(); // ✅ Safe to load only after role is ready
+  }, [session, status, router]);
 
-    // Load mock data (in real app, this would come from API)
-    loadMockData()
-  }, [session, status, router])
+
 
   const loadMockData = async () => {
     const mockUsers = getMockUsers()
 
     try {
-      const res = await fetch('/api/contact')
-      const data = await res.json()
-      if (data.success) {
-        setSubmissions(data.contacts)
+      const contactRes = await fetch('/api/contact')
+      const contactData = await contactRes.json()
+      if (contactData.success) {
+        setSubmissions(contactData.contacts)
       } else {
         setSubmissions([])
       }
+
+      const launchpadRes = await fetch('/api/admin/launchpad')
+      const launchpadData = await launchpadRes.json()
+      if (launchpadData.success) {
+        setLaunchpadSubmissions(launchpadData.projects)
+      } else {
+        setLaunchpadSubmissions([])
+      }
     } catch (err) {
-      console.error('Failed to fetch contact data')
+      console.error('Failed to fetch data', err)
       setSubmissions([])
+      setLaunchpadSubmissions([])
     }
 
     setUsers(mockUsers)
+  }
+
+  const handleApproval = async (id: string, approve: boolean) => {
+    try {
+      const res = await fetch('/api/admin/launchpad', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, approve })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setLaunchpadSubmissions(prev =>
+          prev.filter(project => project._id !== id)
+        )
+      } else {
+        alert('Failed to update project status')
+      }
+    } catch (err) {
+      console.error('Approval error:', err)
+      alert('Error approving/rejecting project')
+    }
   }
 
 
@@ -157,6 +186,17 @@ export default function AdminDashboard() {
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   Analytics
+                </button>
+                <button
+                  onClick={() => setActiveTab('launchpad')}
+                  className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                    activeTab === 'launchpad'
+                      ? 'bg-[#f45b6a] text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Launchpad Applications
                 </button>
               </div>
             </div>
@@ -335,6 +375,46 @@ export default function AdminDashboard() {
                     ))}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Launchpad Tab */}
+            {activeTab === 'launchpad' && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Pending Launchpad Applications
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {launchpadSubmissions.map((project) => (
+                    <div key={project._id} className="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-black mb-1">{project.projectName}</h3>
+                        <p className="text-sm text-gray-600 mb-2">{project.category}</p>
+                        <p className="text-sm text-gray-700 mb-3">{project.description}</p>
+                        <p className="text-sm text-gray-600"><b>Skills:</b> {project.requiredSkills.join(', ')}</p>
+                        <p className="text-sm text-gray-600"><b>Looking for:</b> {project.lookingFor}</p>
+                        <p className="text-sm text-gray-600"><b>Team:</b> {project.teamMembers.join(', ')}</p>
+                        <p className="text-sm text-gray-600"><b>Contact:</b> {project.contactEmail}</p>
+                        {project.additionalInfo && (
+                          <p className="text-sm text-gray-600"><b>More:</b> {project.additionalInfo}</p>
+                        )}
+                      </div>
+                      <div className="flex space-x-3 mt-4">
+                        <Button onClick={() => handleApproval(project._id, true)} variant="success">
+                          Approve
+                        </Button>
+                        <Button onClick={() => handleApproval(project._id, false)} variant="danger">
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {launchpadSubmissions.length === 0 && (
+                  <p className="text-gray-600 mt-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    No pending applications.
+                  </p>
+                )}
               </div>
             )}
           </div>

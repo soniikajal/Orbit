@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import TextArea from '@/components/ui/TextArea';
-import { launchpadProjects, addProject, getProjects, LaunchpadProject } from './launchpad_projects';
+import { LaunchpadProject } from './launchpad_projects';
+
 
 const LaunchpadPage: React.FC = () => {
   const { data: session } = useSession();
@@ -42,20 +43,39 @@ const LaunchpadPage: React.FC = () => {
 
   // Load initial projects
   useEffect(() => {
-    const initialData = getProjects(1, 12);
-    setProjects(initialData.projects);
-    setTotalProjects(initialData.totalProjects);
-    setTotalPages(Math.ceil(initialData.totalProjects / 12));
-    setHasMore(initialData.hasMore);
-  }, []);
+    fetch(`/api/launchpad?page=1&limit=12`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setProjects(data.projects)
+          setTotalProjects(data.total)
+          setTotalPages(Math.ceil(data.total / 12))
+          setHasMore(data.total > 12)
+        }
+      })
+  }, [])
 
   // Load projects for specific page
-  const loadPage = (page: number) => {
-    const data = getProjects(page, 12);
-    setProjects(data.projects);
-    setCurrentPage(page);
-    setHasMore(data.hasMore);
-  };
+  const loadPage = async (page: number) => {
+    const res = await fetch(`/api/launchpad?page=${page}&limit=12`)
+    const data = await res.json()
+    if (data.success) {
+      setProjects(data.projects)
+      setCurrentPage(page)
+      setHasMore(page * 12 < data.total)
+    }
+  }
+
+  const loadMoreProjects = async () => {
+    const nextPage = currentPage + 1
+    const res = await fetch(`/api/launchpad?page=${nextPage}&limit=12`)
+    const data = await res.json()
+    if (data.success) {
+      setProjects(prev => [...prev, ...data.projects])
+      setCurrentPage(nextPage)
+      setHasMore(nextPage * 12 < data.total)
+    }
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,14 +108,13 @@ const LaunchpadPage: React.FC = () => {
     }));
   };
 
-  const handleProjectFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Convert skills and team members from strings to arrays
-    const skillsArray = projectForm.requiredSkills.split(',').map(skill => skill.trim()).filter(skill => skill);
-    const teamArray = projectForm.teamMembers.split(',').map(member => member.trim()).filter(member => member);
-    
-    const newProject = addProject({
+  const handleProjectFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const skillsArray = projectForm.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
+    const teamArray = projectForm.teamMembers.split(',').map(m => m.trim()).filter(Boolean)
+
+    const newProjectData = {
       projectName: projectForm.projectName,
       category: projectForm.category,
       description: projectForm.description,
@@ -104,42 +123,41 @@ const LaunchpadPage: React.FC = () => {
       teamMembers: teamArray,
       contactEmail: projectForm.contactEmail,
       additionalInfo: projectForm.additionalInfo
-    });
-    
-    // Add to local state
-    setProjects(prev => [newProject, ...prev]);
-    
-    // Recalculate pagination
-    const updatedTotal = totalProjects + 1;
-    setTotalProjects(updatedTotal);
-    setTotalPages(Math.ceil(updatedTotal / 12));
-    
-    console.log('Project submitted:', newProject);
-    alert('Project submitted successfully!');
-    setShowAddProjectForm(false);
-    setProjectForm({
-      projectName: '',
-      category: '',
-      description: '',
-      requiredSkills: '',
-      lookingFor: '',
-      teamMembers: '',
-      contactEmail: session?.user?.email || '',
-      additionalInfo: ''
-    });
-  };
+    }
+
+    const res = await fetch('/api/launchpad', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProjectData)
+    })
+
+    const data = await res.json()
+
+    if (data.success) {
+      alert('Project submitted for review and will be visible once approved.')
+      setShowAddProjectForm(false)
+      setProjectForm({
+        projectName: '',
+        category: '',
+        description: '',
+        requiredSkills: '',
+        lookingFor: '',
+        teamMembers: '',
+        contactEmail: session?.user?.email || '',
+        additionalInfo: ''
+      })
+    } else {
+      alert('Failed to submit project.')
+    }
+  }
+
 
   const handleCloseForm = () => {
     setShowAddProjectForm(false);
   };
 
-  const loadMoreProjects = () => {
-    const nextPage = currentPage + 1;
-    const moreData = getProjects(nextPage, 12);
-    setProjects(prev => [...prev, ...moreData.projects]);
-    setCurrentPage(nextPage);
-    setHasMore(moreData.hasMore);
-  };
+
+
 
   // Pagination helper functions
   const goToPage = (page: number) => {
@@ -573,6 +591,7 @@ const LaunchpadPage: React.FC = () => {
                           <option value="Fashion & Lifestyle">Fashion & Lifestyle</option>
                           <option value="Travel & Tourism">Travel & Tourism</option>
                           <option value="Arts & Entertainment">Arts & Entertainment</option>
+                          <option value = "Web Development">Web Development</option>
                           <option value="Other">Other</option>
                         </select>
                       </div>
