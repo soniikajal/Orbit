@@ -236,6 +236,32 @@ const LaunchpadPage: React.FC = () => {
           overflow: hidden;
         }
         
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .modal-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #e5e7eb #f9fafb;
+        }
+        .modal-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .modal-scroll::-webkit-scrollbar-track {
+          background: #f9fafb;
+          border-radius: 3px;
+        }
+        .modal-scroll::-webkit-scrollbar-thumb {
+          background: #e5e7eb;
+          border-radius: 3px;
+        }
+        .modal-scroll::-webkit-scrollbar-thumb:hover {
+          background: #d1d5db;
+        }
+        
         /* Custom Scrollbar Styles - Only show when needed */
         .scrollbar-thin {
           scrollbar-width: thin;
@@ -542,8 +568,9 @@ const LaunchpadPage: React.FC = () => {
             {/* Add Project Form Modal */}
             {showAddProjectForm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-[30px] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                  <div className="p-8">
+                <div className="bg-white rounded-[30px] w-full max-w-2xl max-h-[90vh] overflow-hidden">
+                  <div className="max-h-[90vh] overflow-y-auto modal-scroll">
+                    <div className="p-8">
                     {/* Form Header */}
                     <div className="flex justify-between items-center mb-6">
                       <h2 className="text-[32px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
@@ -736,11 +763,10 @@ const LaunchpadPage: React.FC = () => {
                       </div>
                     </form>
                   </div>
+                  </div>
                 </div>
               </div>
-            )}
-
-            {/* Footer */}
+            )}            {/* Footer */}
             <div className="w-full flex flex-row justify-center items-center mt-28 sm:mt-32 md:mt-36 lg:mt-[140px]">
               <div className="w-full flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-[50px] justify-center items-center bg-global-background1 rounded-t-[44px] p-10 sm:p-12 md:p-14 lg:p-[50px] mt-1 sm:mt-2 md:mt-3 lg:mt-[4px]">
                 {/* Footer Content */}

@@ -67,7 +67,7 @@ const PhonebookPage: React.FC = () => {
     <div className={phonebookStyles.container}>
       <div className={phonebookStyles.innerContainer}>
         <div className={phonebookStyles.contentWrapper}>
-          <main className={phonebookStyles.mainContent}>
+            <main className={phonebookStyles.mainContent}>
             {/* Page Title */}
             <h1 className={phonebookStyles.pageTitle} style={{ fontFamily: fonts.heading }}>
               PhoneBook
