@@ -112,6 +112,11 @@ const LaunchpadPage: React.FC = () => {
   };
 
   const handleProjectFormChange = (field: string, value: string) => {
+    // Prevent changing the contact email if it's already set from session
+    if (field === 'contactEmail' && session?.user?.email) {
+      return; // Don't update the email field if user is logged in
+    }
+    
     setProjectForm(prev => ({
       ...prev,
       [field]: value
@@ -681,10 +686,19 @@ const LaunchpadPage: React.FC = () => {
                           required
                           value={projectForm.contactEmail}
                           onChange={(e) => handleProjectFormChange('contactEmail', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200"
+                          disabled={!!session?.user?.email}
+                          readOnly={!!session?.user?.email}
+                          className={`w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B6A] focus:border-transparent transition-all duration-200 ${
+                            session?.user?.email ? 'bg-gray-100 cursor-not-allowed' : ''
+                          }`}
                           style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="your.email@example.com"
+                          placeholder={session?.user?.email ? "Email locked to your account" : "your.email@example.com"}
                         />
+                        {session?.user?.email && (
+                          <p className="text-sm text-gray-600 mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Email is automatically set to your logged-in account
+                          </p>
+                        )}
                       </div>
 
                       {/* Additional Info */}
