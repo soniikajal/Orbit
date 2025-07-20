@@ -120,6 +120,10 @@ const EventBoardPage: React.FC = () => {
   };
 
   const handleEventFormChange = (field: string, value: string | boolean) => {
+    // Prevent changes to contactEmail field - it should remain locked to user's session email
+    if (field === 'contactEmail') {
+      return;
+    }
     setEventForm(prev => ({
       ...prev,
       [field]: value
@@ -159,6 +163,19 @@ const EventBoardPage: React.FC = () => {
 
   const handleCloseEventForm = () => {
     setShowEventForm(false);
+    // Reset form to default values with locked email
+    setEventForm({
+      eventName: '',
+      category: '',
+      description: '',
+      venue: '',
+      date: '',
+      time: '',
+      organizer: '',
+      contactEmail: session?.user?.email || '',
+      registrationRequired: false,
+      additionalInfo: ''
+    });
   };
 
   const handleAddEventClick = () => {
@@ -578,24 +595,21 @@ const EventBoardPage: React.FC = () => {
                     <div>
                       <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Contact Email *
-                        {session?.user?.email && (
-                          <span className="ml-2 text-[12px] font-normal text-blue-600">(Default: {session.user.email})</span>
-                        )}
+                        <span className="ml-2 text-[12px] font-normal text-gray-600">(Locked to your account email)</span>
                       </label>
                       <input
                         type="email"
                         required
                         value={eventForm.contactEmail}
-                        onChange={(e) => handleEventFormChange('contactEmail', e.target.value)}
-                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                        readOnly
+                        disabled
+                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 bg-gray-100 text-gray-700 cursor-not-allowed"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                         placeholder="your.email@example.com"
                       />
-                      {session?.user?.email && eventForm.contactEmail !== session.user.email && (
-                        <p className="mt-1 text-[12px] text-orange-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Using different email than your account
-                        </p>
-                      )}
+                      <p className="mt-1 text-[12px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Contact email is automatically set to your logged-in account email
+                      </p>
                     </div>
 
                     {/* Registration Required */}
