@@ -350,7 +350,13 @@ const EventBoardPage: React.FC = () => {
                 onClick={() => {
                   const container = document.getElementById('event-cards-container');
                   if (container) {
-                    container.scrollBy({ left: -300, behavior: 'smooth' });
+                    const isAtStart = container.scrollLeft <= 10; // 10px tolerance
+
+                    if (isAtStart) {
+                      navigateMonth('prev');
+                    } else {
+                      container.scrollBy({ left: -300, behavior: 'smooth' });
+                    }
                   }
                 }}
               >
@@ -364,7 +370,14 @@ const EventBoardPage: React.FC = () => {
                 onClick={() => {
                   const container = document.getElementById('event-cards-container');
                   if (container) {
-                    container.scrollBy({ left: 300, behavior: 'smooth' });
+                    const isAtEnd =
+                      container.scrollLeft + container.offsetWidth >= container.scrollWidth - 10; // 10px tolerance
+
+                    if (isAtEnd) {
+                      navigateMonth('next');
+                    } else {
+                      container.scrollBy({ left: 300, behavior: 'smooth' });
+                    }
                   }
                 }}
               >
