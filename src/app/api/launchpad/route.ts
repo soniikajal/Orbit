@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { connectToDB } from '@/lib/mongoose'
 import LaunchpadProject from '@/models/LaunchpadProject'
 
@@ -58,5 +60,36 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('POST /api/launchpad error:', err)
     return NextResponse.json({ success: false, message: 'Failed to submit project' }, { status: 500 })
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user?.email) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { id } = await req.json()
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Project ID is required' }, { status: 400 })
+    }
+
+    await connectToDB()
+    const project = await LaunchpadProject.findById(id)
+    if (!project) {
+      return NextResponse.json({ success: false, message: 'Project not found' }, { status: 404 })
+    }
+
+    // Only allow if user owns the project
+    if (project.contactEmail !== session.user.email) {
+      return NextResponse.json({ success: false, message: 'You are not authorized to delete this project' }, { status: 403 })
+    }
+
+    await project.deleteOne()
+    return NextResponse.json({ success: true, message: 'Project deleted' })
+  } catch (err) {
+    console.error('DELETE /api/launchpad error:', err)
+    return NextResponse.json({ success: false, message: 'Failed to delete project' }, { status: 500 })
   }
 }

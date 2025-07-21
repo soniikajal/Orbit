@@ -54,7 +54,28 @@ const LaunchpadPage: React.FC = () => {
         }
       })
   }, [])
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchQuery.trim()) {
+        handleSearch();  // Your existing function
+      } else {
+        // If cleared, reload first page normally
+        fetch(`/api/launchpad?page=1&limit=12`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              setProjects(data.projects)
+              setTotalProjects(data.total)
+              setTotalPages(Math.ceil(data.total / 12))
+              setHasMore(data.total > 12)
+              setCurrentPage(1)
+            }
+          });
+      }
+    }, 400); // Adjust debounce delay as needed (ms)
 
+  return () => clearTimeout(delayDebounce);
+}, [searchQuery])
   // Load projects for specific page
   const loadPage = async (page: number) => {
     const res = await fetch(`/api/launchpad?page=${page}&limit=12`)
@@ -77,8 +98,8 @@ const LaunchpadPage: React.FC = () => {
     }
   }
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     const res = await fetch(`/api/launchpad?search=${encodeURIComponent(searchQuery.trim())}&limit=100`);
     const data = await res.json();
@@ -86,9 +107,30 @@ const LaunchpadPage: React.FC = () => {
     if (data.success) {
       setProjects(data.projects);
       setCurrentPage(1);
-      setHasMore(false); // Since it’s a search result
+      setHasMore(false); // Search disables pagination
       setTotalProjects(data.projects.length);
       setTotalPages(1);
+    }
+  };
+
+  const handleDelete = async (projectId: string) => {
+    const confirmed = window.confirm('Are you sure you want to delete this project?');
+
+    if (!confirmed) return;
+
+    const res = await fetch('/api/launchpad', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: projectId })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert('Project deleted successfully.');
+      setProjects(prev => prev.filter(p => p._id !== projectId));
+    } else {
+      alert(data.message || 'Failed to delete project.');
     }
   };
 
@@ -458,6 +500,15 @@ const LaunchpadPage: React.FC = () => {
                       >
                         Contact the team
                       </a>
+                      {session?.user?.email === project.contactEmail && (
+                        <button
+                          onClick={() => handleDelete(project._id)}
+                          className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto flex items-center justify-center"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                        >
+                          Delete Project
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
