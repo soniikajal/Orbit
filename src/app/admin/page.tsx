@@ -24,6 +24,7 @@ interface ContactSubmission {
 }
 
 export default function AdminDashboard() {
+  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in-progress' | 'resolved'>('all');
   const { data: session, status } = useSession()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics' | 'launchpad' | 'events'>('users')
@@ -290,8 +291,26 @@ export default function AdminDashboard() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Contact Form Submissions
                 </h2>
+                {/* Filter Dropdown */}
+                <div className="mb-6 flex items-center gap-3">
+                  <label htmlFor="submission-filter" className="text-sm text-gray-700 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>Filter by status:</label>
+                  <select
+                    id="submission-filter"
+                    value={filterStatus}
+                    onChange={e => setFilterStatus(e.target.value as any)}
+                    className="border border-gray-300 rounded-md px-2 py-1 text-sm"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  >
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                  </select>
+                </div>
                 <div className="space-y-4">
-                  {submissions.map((submission) => (
+                  {submissions
+                    .filter(sub => filterStatus === 'all' ? true : sub.status === filterStatus)
+                    .map((submission) => (
                     <div key={submission.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex justify-between items-start mb-3">
                         <div>
