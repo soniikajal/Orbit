@@ -26,10 +26,11 @@ interface ContactSubmission {
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics' | 'launchpad'>('users')
+  const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics' | 'launchpad' | 'events'>('users')
   const [users, setUsers] = useState<UserData[]>([])
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [launchpadSubmissions, setLaunchpadSubmissions] = useState<any[]>([])
+  const [eventSubmissions, setEventSubmissions] = useState<any[]>([])
 
   useEffect(() => {
     if (status !== 'authenticated') return;
@@ -53,27 +54,25 @@ export default function AdminDashboard() {
     try {
       const contactRes = await fetch('/api/contact')
       const contactData = await contactRes.json()
-      if (contactData.success) {
-        setSubmissions(contactData.contacts)
-      } else {
-        setSubmissions([])
-      }
+      setSubmissions(contactData.success ? contactData.contacts : [])
 
       const launchpadRes = await fetch('/api/admin/launchpad')
       const launchpadData = await launchpadRes.json()
-      if (launchpadData.success) {
-        setLaunchpadSubmissions(launchpadData.projects)
-      } else {
-        setLaunchpadSubmissions([])
-      }
+      setLaunchpadSubmissions(launchpadData.success ? launchpadData.projects : [])
+
+      const eventRes = await fetch('/api/admin/event-board')
+      const eventData = await eventRes.json()
+      setEventSubmissions(eventData.success ? eventData.events : [])
     } catch (err) {
       console.error('Failed to fetch data', err)
       setSubmissions([])
       setLaunchpadSubmissions([])
+      setEventSubmissions([])
     }
 
     setUsers(mockUsers)
   }
+
 
   const handleApproval = async (id: string, approve: boolean) => {
     try {
@@ -96,6 +95,26 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleEventApproval = async (id: string, approve: boolean) => {
+    try {
+      const res = await fetch('/api/admin/event-board', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, approve })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setEventSubmissions(prev =>
+          prev.filter(event => event._id !== id)
+        )
+      } else {
+        alert('Failed to update event status')
+      }
+    } catch (err) {
+      console.error('Event approval error:', err)
+      alert('Error approving/rejecting event')
+    }
+  }
 
   const updateSubmissionStatus = async (id: string, status: 'pending' | 'resolved' | 'in-progress') => {
     try {
@@ -197,6 +216,17 @@ export default function AdminDashboard() {
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   Launchpad Applications
+                </button>
+                <button
+                  onClick={() => setActiveTab('events')}
+                  className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+                    activeTab === 'events'
+                      ? 'bg-[#f45b6a] text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Event Submissions
                 </button>
               </div>
             </div>
@@ -413,6 +443,42 @@ export default function AdminDashboard() {
                 {launchpadSubmissions.length === 0 && (
                   <p className="text-gray-600 mt-6" style={{ fontFamily: 'Inter, sans-serif' }}>
                     No pending applications.
+                  </p>
+                )}
+              </div>
+            )}
+            {/* Event Submissions Tab */}
+            {activeTab === 'events' && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Pending Event Submissions
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {eventSubmissions.map((event) => (
+                    <div key={event._id} className="border border-gray-200 rounded-lg p-4 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-black mb-1">{event.title}</h3>
+                        <p className="text-sm text-gray-600 mb-2">{event.organizer}</p>
+                        <p className="text-sm text-gray-700 mb-2">{event.description}</p>
+                        <p className="text-sm text-gray-600"><b>Venue:</b> {event.venue}</p>
+                        <p className="text-sm text-gray-600"><b>Date:</b> {event.date}</p>
+                        <p className="text-sm text-gray-600"><b>Time:</b> {event.time}</p>
+                        <p className="text-sm text-gray-600"><b>Contact:</b> {event.contactEmail}</p>
+                      </div>
+                      <div className="flex space-x-3 mt-4">
+                        <Button onClick={() => handleEventApproval(event._id, true)} variant="success">
+                          Approve
+                        </Button>
+                        <Button onClick={() => handleEventApproval(event._id, false)} variant="danger">
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {eventSubmissions.length === 0 && (
+                  <p className="text-gray-600 mt-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    No pending event submissions.
                   </p>
                 )}
               </div>

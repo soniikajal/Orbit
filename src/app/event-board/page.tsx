@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
-import { getEvents, getEventsByMonth, EventBoardEvent } from './event_data';
+import { EventBoardEvent } from './event_data';
 
 interface Event {
   id: string;
@@ -59,11 +59,16 @@ const EventBoardPage: React.FC = () => {
     loadEvents();
   }, [selectedMonth, selectedYear, currentPage]);
 
-  const loadEvents = () => {
-    const result = getEvents(currentPage, eventsPerPage, undefined, selectedMonth, selectedYear);
-    setEvents(result.events);
-    setTotalEvents(result.totalEvents);
-    setTotalPages(result.totalPages);
+  const loadEvents = async () => {
+    try {
+      const res = await fetch(`/api/event-board?page=${currentPage}&limit=${eventsPerPage}&month=${selectedMonth}&year=${selectedYear}`);
+      const data = await res.json();
+      setEvents(data.events);
+      setTotalEvents(data.totalEvents);
+      setTotalPages(data.totalPages);
+    } catch (err) {
+      console.error('Failed to load events:', err);
+    }
   };
 
   const monthNames = [
@@ -104,10 +109,55 @@ const EventBoardPage: React.FC = () => {
   };
 
   const addToCalendar = (event: EventBoardEvent) => {
-    // This would typically integrate with calendar apps
-    console.log('Adding to calendar:', event);
-    alert(`Event "${event.title}" added to calendar!`);
+    const date = new Date(event.date);
+    const endDate = new Date(date);
+    endDate.setHours(date.getHours() + 1); // Default 1 hour event
+
+    const formatDate = (d: Date) =>
+      d.toISOString().replace(/-|:|\.\d\d\d/g, '').slice(0, 15) + 'Z';
+
+    const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      event.title
+    )}&dates=${formatDate(date)}/${formatDate(
+      endDate
+    )}&details=${encodeURIComponent(
+      event.description
+    )}&location=${encodeURIComponent(event.venue || '')}`;
+
+    window.open(calendarUrl, '_blank');
   };
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm('Are you sure you want to delete this event?');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch('/api/event-board', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+          email: session?.user?.email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert('Event deleted successfully!');
+        setEvents(prev => prev.filter(e => e._id !== id));
+      } else {
+        alert(data.message || 'Failed to delete event.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error deleting event.');
+    }
+  };
+
+
 
   const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
@@ -130,36 +180,57 @@ const EventBoardPage: React.FC = () => {
     }));
   };
 
-  const handleEventFormSubmit = (e: React.FormEvent) => {
+  const handleEventFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Event submission:', eventForm);
-    
-    // Here you would typically send the data to your backend
+
     const eventData = {
-      ...eventForm,
-      submittedBy: session?.user?.email || eventForm.contactEmail,
-      submittedAt: new Date().toISOString(),
-      status: 'pending'
-    };
-    
-    console.log('Event data to be submitted:', eventData);
-    alert('Event submitted successfully! It will be reviewed and added to the board.');
-    setShowEventForm(false);
-    
-    // Reset form
-    setEventForm({
-      eventName: '',
-      category: '',
-      description: '',
-      venue: '',
-      date: '',
-      time: '',
-      organizer: '',
+      title: eventForm.eventName,
+      category: eventForm.category,
+      description: eventForm.description,
+      venue: eventForm.venue,
+      date: eventForm.date,
+      time: eventForm.time,
+      organizer: eventForm.organizer,
       contactEmail: session?.user?.email || '',
-      registrationRequired: false,
-      additionalInfo: ''
-    });
+      registrationRequired: eventForm.registrationRequired,
+      additionalInfo: eventForm.additionalInfo,
+    };
+
+    try {
+      const res = await fetch('/api/event-board', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert('Event submitted successfully!');
+        setShowEventForm(false);
+        loadEvents();
+        // Reset form
+        setEventForm({
+          eventName: '',
+          category: '',
+          description: '',
+          venue: '',
+          date: '',
+          time: '',
+          organizer: '',
+          contactEmail: session?.user?.email || '',
+          registrationRequired: false,
+          additionalInfo: '',
+        });
+      } else {
+        alert(data.message || 'Submission failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error submitting event');
+    }
   };
+
 
   const handleCloseEventForm = () => {
     setShowEventForm(false);
@@ -375,6 +446,15 @@ const EventBoardPage: React.FC = () => {
                         </div>
                         <span className="text-white text-[14px] font-bold">Add to calendar</span>
                       </button>
+                      {session?.user?.email === event.contactEmail && (
+                      <button
+                        onClick={() => handleDelete(event._id)}
+                        className="text-red-400 mt-2 text-sm hover:underline"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        Delete Event
+                      </button>
+                    )}
                     </div>
                   </div>
                 ))}
