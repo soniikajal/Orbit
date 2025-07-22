@@ -25,6 +25,7 @@ const StudyHubPage: React.FC = () => {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState<number | null>(1);
   const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -66,6 +67,19 @@ const StudyHubPage: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.semester-dropdown')) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const semesterOptions: SemesterOption[] = [
@@ -139,150 +153,189 @@ const StudyHubPage: React.FC = () => {
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
                   Study Hub
                 </h1>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] font-normal leading-8 sm:leading-9 md:leading-10 lg:leading-[58px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  Your <span className="text-[#F45B69]">academic companion</span> for success
-                </h2>
-                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics, organized by semester and subject.
-                </p>
               </div>
             </div>
 
-            {/* Semester Selection Section */}
+            {/* Study Materials Section with Semester Selection */}
             <div 
-              id="semester-selection"
+              id="study-materials"
               data-animate-on-scroll
-              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] justify-start items-start mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('semester-selection') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] justify-start items-start mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('study-materials') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
             >
-              {/* Section Header */}
-              <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
-                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold leading-8 sm:leading-10 md:leading-12 lg:leading-[73px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                  Select Your <span className="text-[#F45B69]">Semester</span>
-                </h3>
-                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Choose your current semester to access relevant study materials and resources.
-                </p>
-              </div>
-
-              {/* Semester Grid */}
-              <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[24px]">
-                {semesterOptions.map((semester, index) => (
-                  <div
-                    key={semester.id}
-                    className={`w-full flex flex-col justify-center items-center border rounded-[20px] p-4 sm:p-6 md:p-8 lg:p-[32px] cursor-pointer transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-                      selectedSemester === semester.value 
-                        ? 'bg-[#F45B69] border-[#F45B69] text-white shadow-lg' 
-                        : 'bg-global-background5 border-global-text2 hover:border-[#F45B69] hover:bg-white'
-                    } ${visibleSections.has('semester-selection') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                    style={{ transitionDelay: visibleSections.has('semester-selection') ? `${index * 100}ms` : '0ms' }}
-                    onClick={() => handleSemesterSelect(semester.value)}
-                  >
-                    <h4 className={`text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-bold leading-6 sm:leading-7 md:leading-8 lg:leading-[34px] text-center mb-2 ${
-                      selectedSemester === semester.value ? 'text-white' : 'text-global-text2'
-                    }`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {semester.value}
-                    </h4>
-                    <p className={`text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center ${
-                      selectedSemester === semester.value ? 'text-white' : 'text-global-text2'
-                    }`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Semester
-                    </p>
-                    {!semester.available && (
-                      <span className={`text-xs sm:text-sm md:text-base lg:text-[12px] font-normal leading-3 sm:leading-4 md:leading-5 lg:leading-[15px] text-center mt-2 ${
-                        selectedSemester === semester.value ? 'text-white/80' : 'text-gray-500'
-                      }`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                        Coming Soon
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Study Materials Section */}
-            {selectedSemester && (
-              <div 
-                id="study-materials"
-                data-animate-on-scroll
-                className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] justify-start items-start mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('study-materials') ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'}`}
-              >
-                {/* Section Header */}
-                <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
+              {/* Semester Selection Header */}
+              <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
+                <div className="flex-1">
                   <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold leading-8 sm:leading-10 md:leading-12 lg:leading-[73px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                    Semester {selectedSemester} <span className="text-[#F45B69]">Materials</span>
+                    Select Your <span className="text-[#F45B69]">Semester</span>
                   </h3>
+                  <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2 mt-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Choose your current semester to access relevant study materials and resources.
+                  </p>
                 </div>
-
-                {/* Materials Content */}
-                {selectedSemester === 1 || selectedSemester === 2 ? (
-                  /* Semester 1 & 2 Materials */
-                  <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-[32px]">
-                    {studyMaterials.map((material, index) => (
-                      <div
-                        key={material.id}
-                        className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-[40px] cursor-pointer transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl hover:border-[#F45B69] opacity-100 translate-y-0`}
-                        style={{ transitionDelay: visibleSections.has('study-materials') ? `${index * 200}ms` : '0ms' }}
-                        onClick={() => handleMaterialClick(material)}
-                      >
-                        {/* Material Icon */}
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-[#F45B69] rounded-full flex items-center justify-center">
-                          <span className="text-2xl sm:text-3xl md:text-4xl lg:text-[32px]">
-                            {material.icon}
+                
+                {/* Semester Dropdown */}
+                <div className="relative w-full sm:w-auto min-w-[280px] semester-dropdown">
+                  <div 
+                    className="bg-global-background5 border border-global-text2 rounded-[20px] p-4 sm:p-5 md:p-6 lg:p-[24px] cursor-pointer transition-all duration-300 hover:border-[#F45B69] hover:shadow-lg"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
+                          <span className="text-lg sm:text-xl font-bold text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            {selectedSemester || 1}
                           </span>
                         </div>
-                        
-                        {/* Material Info */}
-                        <div className="w-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-[12px]">
-                          <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-bold leading-6 sm:leading-7 md:leading-8 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {material.name}
-                          </h4>
-                          <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {material.description}
+                        <div>
+                          <p className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-bold text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Semester {selectedSemester || 1}
+                          </p>
+                          <p className="text-sm sm:text-base md:text-lg lg:text-[14px] font-normal text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            {semesterOptions.find(s => s.value === (selectedSemester || 1))?.available ? 'Materials Available' : 'Coming Soon'}
                           </p>
                         </div>
-
-                        {/* Access Button */}
-                        <div className="w-full flex justify-start items-center mt-2">
-                          <Button
-                            variant="secondary"
-                            className="px-4 sm:px-5 md:px-6 lg:px-[24px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-white hover:scale-105 transition-all duration-300"
-                            style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#F45B69', borderRadius: '20px', border: 'none' }}
-                          >
-                            Download PDF →
-                          </Button>
-                        </div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  /* Coming Soon for Semesters 3-8 */
-                  <div className={`w-full flex flex-col justify-center items-center bg-global-background5 border border-global-text2 rounded-[20px] p-8 sm:p-10 md:p-12 lg:p-[60px] transition-all duration-700 ease-out opacity-100 translate-y-0`}>
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-[80px] lg:h-[80px] bg-[#FACC6B] rounded-full flex items-center justify-center mb-6">
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12,6 12,12 16,14"></polyline>
+                      <svg 
+                        className={`w-5 h-5 text-global-text2 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
-                    <h4 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold leading-7 sm:leading-8 md:leading-9 lg:leading-[44px] text-center text-global-text2 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Coming Soon!
-                    </h4>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-center text-global-text2 max-w-lg mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      We're working hard to bring you comprehensive study materials for Semester {selectedSemester}. Stay tuned for updates!
-                    </p>
-                    <div className="mt-4">
-                      <Button
-                        variant="secondary"
-                        className="px-6 sm:px-7 md:px-8 lg:px-[32px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-black hover:scale-105 transition-all duration-300"
-                        style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#FACC6B', borderRadius: '20px', border: 'none' }}
-                        onClick={() => setSelectedSemester(1)}
-                      >
-                        View Available Materials
-                      </Button>
-                    </div>
                   </div>
-                )}
+                  
+                  {/* Dropdown Menu */}
+                  {dropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-2xl z-50 overflow-hidden">
+                      <div className="max-h-[300px] overflow-y-auto">
+                        {semesterOptions.map((semester, index) => (
+                          <div
+                            key={semester.id}
+                            className={`p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 ${
+                              selectedSemester === semester.value ? 'bg-[#F45B69]/10' : ''
+                            }`}
+                            onClick={() => {
+                              handleSemesterSelect(semester.value);
+                              setDropdownOpen(false);
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                  selectedSemester === semester.value 
+                                    ? 'bg-[#F45B69] text-white' 
+                                    : 'bg-gray-100 text-gray-600'
+                                }`}>
+                                  <span className="text-sm font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    {semester.value}
+                                  </span>
+                                </div>
+                                <div>
+                                  <p className="text-base font-medium text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    Semester {semester.value}
+                                  </p>
+                                  <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    {semester.available ? 'Materials Available' : 'Coming Soon'}
+                                  </p>
+                                </div>
+                              </div>
+                              {selectedSemester === semester.value && (
+                                <svg className="w-4 h-4 text-[#F45B69]" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+
+              {/* Materials Content */}
+              {selectedSemester && (
+                <>
+                  {/* Materials Section Header */}
+                  <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
+                    <h4 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold leading-8 sm:leading-10 md:leading-12 lg:leading-[58px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
+                      Semester {selectedSemester} <span className="text-[#F45B69]">Materials</span>
+                    </h4>
+                  </div>
+
+                  {/* Materials Grid/Content */}
+                  {selectedSemester === 1 || selectedSemester === 2 ? (
+                    /* Semester 1 & 2 Materials */
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-[32px]">
+                      {studyMaterials.map((material, index) => (
+                        <div
+                          key={material.id}
+                          className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-[40px] cursor-pointer transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl hover:border-[#F45B69] opacity-100 translate-y-0`}
+                          style={{ transitionDelay: `${index * 200}ms` }}
+                          onClick={() => handleMaterialClick(material)}
+                        >
+                          {/* Material Icon */}
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-[#F45B69] rounded-full flex items-center justify-center">
+                            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-[32px]">
+                              {material.icon}
+                            </span>
+                          </div>
+                          
+                          {/* Material Info */}
+                          <div className="w-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-[12px]">
+                            <h5 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-bold leading-6 sm:leading-7 md:leading-8 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {material.name}
+                            </h5>
+                            <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {material.description}
+                            </p>
+                          </div>
+
+                          {/* Access Button */}
+                          <div className="w-full flex justify-start items-center mt-2">
+                            <Button
+                              variant="secondary"
+                              className="px-4 sm:px-5 md:px-6 lg:px-[24px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-white hover:scale-105 transition-all duration-300"
+                              style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#F45B69', borderRadius: '20px', border: 'none' }}
+                            >
+                              Download PDF →
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Coming Soon for Semesters 3-8 */
+                    <div className={`w-full flex flex-col justify-center items-center bg-global-background5 border border-global-text2 rounded-[20px] p-8 sm:p-10 md:p-12 lg:p-[60px] transition-all duration-700 ease-out opacity-100 translate-y-0`}>
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-[80px] lg:h-[80px] bg-[#FACC6B] rounded-full flex items-center justify-center mb-6">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12,6 12,12 16,14"></polyline>
+                        </svg>
+                      </div>
+                      <h5 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold leading-7 sm:leading-8 md:leading-9 lg:leading-[44px] text-center text-global-text2 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        Coming Soon!
+                      </h5>
+                      <p className="text-base sm:text-lg md:text-xl lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-center text-global-text2 max-w-lg mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        We're working hard to bring you comprehensive study materials for Semester {selectedSemester}. Stay tuned for updates!
+                      </p>
+                      <div className="mt-4">
+                        <Button
+                          variant="secondary"
+                          className="px-6 sm:px-7 md:px-8 lg:px-[32px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-black hover:scale-105 transition-all duration-300"
+                          style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#FACC6B', borderRadius: '20px', border: 'none' }}
+                          onClick={() => setSelectedSemester(1)}
+                        >
+                          View Available Materials
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
 
             {/* Features Section */}
             <div 
