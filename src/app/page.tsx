@@ -386,37 +386,47 @@ const HomePage: React.FC = () => {
                     Meet the students who’ve lived it, struggled through it, and now want to fix it.
                   </p>
                 </div>
-                {/* Team Grid */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 lg:gap-[42px]">
-                  {teamMembers.map((member, index) => (
+                {/* Team Grid - Show only first 5 members */}
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
+                  {teamMembers.slice(0, 5).map((member, index) => (
                     <div
                       key={member.id}
-                      className={`w-full flex flex-col gap-6 sm:gap-7 md:gap-8 lg:gap-[28px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-7 md:p-8 lg:p-[34px] pt-8 sm:pt-9 md:pt-10 lg:pt-[40px] shadow-[0px_5px_1px_#191a23] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                      className={`w-full flex flex-col justify-start items-center bg-white border border-gray-300 rounded-[20px] p-6 transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                       style={{ transitionDelay: visibleSections.has('meet-the-team') ? `${index * 100}ms` : '0ms' }}
                     >
-                      {/* Member Info Row */}
-                      <div className="w-full flex flex-row justify-center items-start gap-4 sm:gap-5 md:gap-6 lg:gap-[20px]">
-                        <Image
-                          src={member.image}
-                          alt={member.name}
-                          width={102}
-                          height={102}
-                          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-[102px] lg:h-[102px] self-center"
-                        />
-                        <div className="flex flex-col justify-start items-start flex-1 self-end">
-                          <h3 className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {member.name}
-                          </h3>
-                          <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {member.position}
-                          </p>
-                        </div>
-                        <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3 lg:gap-[8px] items-center">
-                          <button
-                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center hover:scale-110 transition-transform duration-200"
-                            aria-label={`View ${member.name} LinkedIn profile`}
-                            onClick={() => {
-                              // Add LinkedIn URLs for each team member
+                      {/* Member Image */}
+                      <div className="w-full aspect-square bg-gray-200 rounded-[15px] mb-4 overflow-hidden">
+                        {member.image ? (
+                          <Image
+                            src={member.image}
+                            alt={member.name}
+                            width={200}
+                            height={200}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                              <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Member Info */}
+                      <div className="w-full text-center">
+                        <h4 className="text-lg font-bold text-black mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {member.name}
+                        </h4>
+                        <p className="text-sm text-gray-700 mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {member.position}
+                        </p>
+                        
+                        {/* Social Media Links - LinkedIn and Instagram only */}
+                        <div className="flex justify-center gap-3">
+                          <a
+                            href={(() => {
                               const linkedinUrls: { [key: string]: string } = {
                                 'Kajal Soni': 'https://www.linkedin.com/in/kajalsoni2006/',
                                 'Manik Bhushan': 'https://www.linkedin.com/in/manik-bhushan/',
@@ -425,19 +435,18 @@ const HomePage: React.FC = () => {
                                 'Kushagra Kataria': 'https://www.linkedin.com/in/kushagra-kataria/',
                                 'Sarah Kim': 'https://www.linkedin.com/in/sarah-kim/'
                               };
-                              const url = linkedinUrls[member.name];
-                              if (url) {
-                                window.open(url, '_blank');
-                              }
-                            }}
+                              return linkedinUrls[member.name] || '#';
+                            })()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
                           >
-                            <i className="fa-brands fa-linkedin-in text-[#F45B6A] text-[16px]"></i>
-                          </button>
-                          <button
-                            className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[34px] lg:h-[34px] bg-global-background1 rounded-2xl p-1.5 sm:p-2 md:p-2.5 lg:p-[8px] flex items-center justify-center hover:scale-110 transition-transform duration-200"
-                            aria-label={`View ${member.name} Instagram profile`}
-                            onClick={() => {
-                              // Add Instagram URLs for each team member
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                          </a>
+                          <a
+                            href={(() => {
                               const instagramUrls: { [key: string]: string } = {
                                 'Kajal Soni': 'https://www.instagram.com/rustic.reverie_/',
                                 'Manik Bhushan': 'https://www.instagram.com/iammvnik/',
@@ -446,36 +455,32 @@ const HomePage: React.FC = () => {
                                 'Kushagra Kataria': 'https://www.instagram.com/katariakuxh/',
                                 'Sarah Kim': 'https://www.instagram.com/sarah.kim/'
                               };
-                              const url = instagramUrls[member.name];
-                              if (url) {
-                                window.open(url, '_blank');
-                              }
-                            }}
+                              return instagramUrls[member.name] || '#';
+                            })()}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
                           >
-                            <i className="fa-brands fa-instagram text-[#F45B6A] text-[16px]"></i>
-                          </button>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                          </a>
                         </div>
-                      </div>
-                      {/* Divider and Experience */}
-                      <div className="w-full flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-center mb-5 sm:mb-6 md:mb-7 lg:mb-[26px]">
-                        <div className="w-full h-[1px] bg-global-text2"></div>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          {member.experience}
-                        </p>
                       </div>
                     </div>
                   ))}
                 </div>
-                {/* See All Team Button */}
+                {/* See All Team Button - Links to About Page */}
                 <div className={`w-full flex justify-end transition-all duration-700 ease-out ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-x-0 delay-600' : 'opacity-0 translate-x-8'}`}>
-                  <Button
-                    variant="secondary"
-                    className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white hover:scale-105 transition-all duration-300"
-                    style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '30px' }}
-                    onClick={() => console.log('See all team clicked')}
-                  >
-                    See all team
-                  </Button>
+                  <Link href="/about#meet-the-team">
+                    <Button
+                      variant="secondary"
+                      className="px-6 sm:px-7 md:px-8 lg:px-[34px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-normal leading-4 sm:leading-5 md:leading-6 lg:leading-[17px] text-center text-white hover:scale-105 transition-all duration-300"
+                      style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#262626', borderRadius: '30px' }}
+                    >
+                      See all team
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
