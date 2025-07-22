@@ -628,17 +628,6 @@ export const facultyData: FacultyMember[] = [
     office: '{empty}'
   },
   {
-    id: '11',
-    name: 'Suresh Kumar',
-    designation: 'Associate Professor',
-    department: 'Computer Science & Engineering',
-    email: 'drsureshpoonia@gmail.com',
-    phone: '9811714004',
-    qualification: 'M.Tech (CSE), Ph.D',
-    specialization: 'Biomedical Engineering, Control systems',
-    office: '{empty}'
-  },
-  {
     id: '12',
     name: 'Dr. Poonam Rani',
     designation: 'Associate Professor',
@@ -1274,15 +1263,15 @@ export const facultyData: FacultyMember[] = [
 
   // Electronics and Communication Engineering Faculty - URL 35 (Real Data from NSUT)
   {
-    id: '69',
+    id: 'ece_east_001',
     name: 'Prof. Rashmi Gupta',
     designation: 'Professor and HOD',
-    department: 'Electronics and Communication Engineering',
+    department: 'Electronics and Communication Engineering (East Campus)',
     email: 'rashmi.gupta@nsut.ac.in',
     phone: '{empty}',
     qualification: 'Ph.D.',
     specialization: 'Signal and Image processing, Artificial Intelligence and Machine Learning',
-    office: '{empty}'
+    office: 'East Campus'
   },
   {
     id: '70',
@@ -1646,17 +1635,6 @@ export const facultyData: FacultyMember[] = [
     phone: '{empty}',
     qualification: '{empty}',
     specialization: 'Computer Science & Engineering',
-    office: 'East Campus'
-  },
-  {
-    id: 'ece_east_001',
-    name: 'Prof. Rashmi Gupta',
-    designation: 'Professor',
-    department: 'Electronics & Communication Engineering',
-    email: 'rashmi.gupta@nsut.ac.in',
-    phone: '{empty}',
-    qualification: '{empty}',
-    specialization: 'Electronics & Communication Engineering',
     office: 'East Campus'
   },
   {
