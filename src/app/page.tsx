@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import TextArea from '@/components/ui/TextArea';
+import Footer from '@/components/layout/Footer';
 
 interface TeamMember {
   id: string;
@@ -29,7 +30,6 @@ const HomePage: React.FC = () => {
     message: ''
   });
   const [feedbackType, setFeedbackType] = useState<'askQuery' | 'leaveFeedback' | 'reportBug'>('askQuery');
-  const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [showScrollToTop, setShowScrollToTop] = useState(false);
@@ -171,16 +171,6 @@ const HomePage: React.FC = () => {
   const handleMessageChange = (value: string | React.ChangeEvent<HTMLTextAreaElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
     handleContactFormChange('message', stringValue);
-  };
-
-  const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
-    const stringValue = typeof value === 'string' ? value : value.target.value;
-    setNewsletterEmail(stringValue);
-  };
-
-  const handleNewsletterSubmit = () => {
-    console.log('Newsletter subscription:', newsletterEmail);
-    setNewsletterEmail('');
   };
 
   const scrollToTop = () => {
@@ -380,26 +370,26 @@ const HomePage: React.FC = () => {
                   </p>
                 </div>
                 {/* Team Grid - Show only first 5 members */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-[20px]">
                   {teamMembers.slice(0, 5).map((member, index) => (
                     <div
                       key={member.id}
-                      className={`w-full flex flex-col justify-start items-center bg-white border border-gray-300 rounded-[20px] p-6 transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                      className={`w-full flex flex-col justify-start items-center bg-white border border-gray-300 rounded-[15px] p-4 transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                       style={{ transitionDelay: visibleSections.has('meet-the-team') ? `${index * 100}ms` : '0ms' }}
                     >
                       {/* Member Image */}
-                      <div className="w-full aspect-square bg-gray-200 rounded-[15px] mb-4 overflow-hidden">
+                      <div className="w-full aspect-square bg-gray-200 rounded-[12px] mb-3 overflow-hidden">
                         {member.image ? (
                           <Image
                             src={member.image}
                             alt={member.name}
-                            width={200}
-                            height={200}
+                            width={150}
+                            height={150}
                             className="w-full h-full object-cover"
                           />
                         ) : (
                           <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                               <circle cx="12" cy="7" r="4"></circle>
                             </svg>
@@ -409,15 +399,15 @@ const HomePage: React.FC = () => {
                       
                       {/* Member Info */}
                       <div className="w-full text-center">
-                        <h4 className="text-lg font-bold text-black mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <h4 className="text-base font-bold text-black mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                           {member.name}
                         </h4>
-                        <p className="text-sm text-gray-700 mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <p className="text-xs text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                           {member.position}
                         </p>
                         
                         {/* Social Media Links - LinkedIn and Instagram only */}
-                        <div className="flex justify-center gap-3">
+                        <div className="flex justify-center gap-2">
                           <a
                             href={(() => {
                               const linkedinUrls: { [key: string]: string } = {
@@ -432,9 +422,9 @@ const HomePage: React.FC = () => {
                             })()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
+                            className="w-6 h-6 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
                               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                           </a>
@@ -452,9 +442,9 @@ const HomePage: React.FC = () => {
                             })()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
+                            className="w-6 h-6 bg-black rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
                               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                             </svg>
                           </a>
@@ -605,103 +595,7 @@ const HomePage: React.FC = () => {
               </div>
             </div>
             {/* Footer */}
-            <div 
-              id="footer"
-              data-animate-on-scroll
-              className={`w-full flex flex-row justify-center items-center mt-28 sm:mt-32 md:mt-36 lg:mt-[140px] transition-all duration-1000 ease-out ${visibleSections.has('footer') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-            >
-              <div className="w-full flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-[50px] justify-center items-center bg-global-background1 rounded-t-[44px] p-10 sm:p-12 md:p-14 lg:p-[50px] mt-1 sm:mt-2 md:mt-3 lg:mt-[4px]">
-                {/* Footer Content */}
-                <div className="w-full flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-[66px] justify-start items-center">
-                  {/* Social Icons */}
-                  <div className={`w-full flex flex-row justify-start items-center transition-all duration-800 ease-out delay-200 ${visibleSections.has('footer') ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
-                    <div className="w-full flex flex-row justify-start items-center gap-4 sm:gap-5 md:gap-6 lg:gap-[20px]">
-                      {/* Instagram Button */}
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300">
-                        <button
-                          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
-                          aria-label="Instagram"
-                        >
-                          <i className="fa-brands fa-instagram text-black text-[30px]"></i>
-                        </button>
-                      </div>
-                      {/* LinkedIn Button */}
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300">
-                        <button
-                          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
-                          aria-label="LinkedIn"
-                        >
-                          <i className="fa-brands fa-linkedin-in text-black text-[30px]"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Contact Info and Newsletter */}
-                  <div className="w-full flex flex-col lg:flex-row justify-start items-center gap-8 sm:gap-10 md:gap-12 lg:gap-0">
-                    {/* Contact Info */}
-                    <div className="w-full lg:w-2/5 flex flex-col gap-5 sm:gap-6 md:gap-7 lg:gap-[26px] justify-start items-start">
-                      <div className="bg-[#f45b6a] rounded-lg px-3 sm:px-4 md:px-5 lg:px-[16px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] inline-block">
-                        <span className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[26px] text-left text-white" style={{ borderRadius: '30px', fontFamily: 'Inter, sans-serif' }}>
-                          Contact us:
-                        </span>
-                      </div>
-                      <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start">
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Email: nsutorbit@gmail.com
-                        </p>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Phone: 7827044075
-                        </p>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
-                          NSUT, Sector 3, Dwarka,<br />New Delhi - 110078
-                        </p>
-                      </div>
-                    </div>
-                    {/* Newsletter Signup */}
-                    <div className="w-full lg:flex-1 flex flex-col sm:flex-row gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-center items-center p-8 sm:p-10 md:p-12 lg:p-[40px]">
-                      <EditText
-                        type="email"
-                        placeholder="Email"
-                        value={newsletterEmail}
-                        onChange={handleNewsletterEmailChange}
-                        className="w-full bg-transparent border-2 border-white text-white placeholder:text-white/70 rounded-lg px-4 py-3"
-                        style={{ 
-                          backgroundColor: 'transparent',
-                          borderColor: 'white',
-                          color: 'white',
-                          borderRadius: '30px'
-                        }}
-                      />
-                      <Button
-                        variant="danger"
-                        className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-[34px] py-3 sm:py-3.5 md:py-4 lg:py-[12px] text-lg sm:text-xl md:text-2xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] text-center text-black hover:scale-105 hover:shadow-lg transition-all duration-300"
-                        style={{ 
-                          backgroundColor: '#f45b6a', 
-                          borderRadius: '30px',
-                          border: 'none',
-                          fontFamily: 'Inter, sans-serif'
-                        }}
-                        onClick={handleNewsletterSubmit}
-                      >
-                        Subscribe to news
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                {/* Footer Bottom */}
-                <div className="w-full flex flex-col gap-10 sm:gap-11 md:gap-12 lg:gap-[48px] justify-start items-center">
-                  <div className="w-full h-[1px] bg-global-text4"></div>
-                  <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[40px]">
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      © 2025 Orbit | All Rights Reserved.
-                    </p>
-                    <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Privacy Policy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Footer />
           </div>
         </div>
 
