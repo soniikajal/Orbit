@@ -140,7 +140,7 @@ const StudyHubPage: React.FC = () => {
     <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
         {/* Hero Section */}
-        <div className={`w-full flex flex-col justify-start items-start mt-8 sm:mt-12 md:mt-16 transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0 transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="w-full flex flex-col justify-start items-start">
             {/* Header Section */}
             <div 

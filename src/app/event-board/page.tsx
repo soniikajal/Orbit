@@ -147,7 +147,7 @@ const EventBoardPage: React.FC = () => {
 
       if (data.success) {
         alert('Event deleted successfully!');
-        setEvents(prev => prev.filter(e => e._id !== id));
+        setEvents(prev => prev.filter(e => e.id !== id));
       } else {
         alert(data.message || 'Failed to delete event.');
       }
@@ -450,7 +450,7 @@ const EventBoardPage: React.FC = () => {
                       </button>
                       {session?.user?.email === event.contactEmail && (
                       <button
-                        onClick={() => handleDelete(event._id)}
+                        onClick={() => handleDelete(event.id)}
                         className="text-red-400 mt-2 text-sm hover:underline"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                       >

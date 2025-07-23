@@ -128,7 +128,7 @@ const LaunchpadPage: React.FC = () => {
 
     if (data.success) {
       alert('Project deleted successfully.');
-      setProjects(prev => prev.filter(p => p._id !== projectId));
+      setProjects(prev => prev.filter(p => p.id !== projectId));
     } else {
       alert(data.message || 'Failed to delete project.');
     }
@@ -329,7 +329,7 @@ const LaunchpadPage: React.FC = () => {
       `}</style>
       <div className="w-full flex flex-col justify-start items-end">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
-          <div className="w-full flex flex-col justify-start items-start mt-2 sm:mt-3 md:mt-4">
+          <div className="w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0">
             <main className="w-full py-2">
               {/* Page Title */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
@@ -492,7 +492,7 @@ const LaunchpadPage: React.FC = () => {
                       </a>
                       {session?.user?.email === project.contactEmail && (
                         <button
-                          onClick={() => handleDelete(project._id)}
+                          onClick={() => handleDelete(project.id)}
                           className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto flex items-center justify-center"
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         >

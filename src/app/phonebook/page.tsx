@@ -177,7 +177,7 @@ const PhonebookPage: React.FC = () => {
   return (
     <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
-        <div className={`w-full flex flex-col justify-start items-start mt-8 sm:mt-12 md:mt-16 transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0 transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Page Header */}
           <div 
@@ -185,7 +185,7 @@ const PhonebookPage: React.FC = () => {
             data-animate-on-scroll
             className={`w-full flex flex-col gap-6 justify-start items-start transition-all duration-1000 ease-out ${visibleSections.has('phonebook-header') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
               Faculty Directory
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2 max-w-2xl" style={{ fontFamily: 'Inter, sans-serif' }}>
