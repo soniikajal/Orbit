@@ -260,97 +260,105 @@ const HomePage: React.FC = () => {
               {/* Features Grid */}
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-[40px]">
                 {/* Event Board */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Event Board
-                    </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Stay updated with campus events, workshops, seminars, and competitions. Never miss an opportunity to grow and network.
-                    </p>
+                <Link href="/event-board" className="block">
+                  <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}>
+                    <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-start">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Event Board
+                      </h3>
+                      <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Stay updated with campus events, workshops, seminars, and competitions. Never miss an opportunity to grow and network.
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mb-2 sm:mb-3 md:mb-4 lg:mb-[10px]">
+                      <Image
+                        src="/images/img_icon.svg"
+                        alt="View Events Icon"
+                        width={40}
+                        height={40}
+                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
+                      />
+                      <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        View Events
+                      </span>
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mb-2 sm:mb-3 md:mb-4 lg:mb-[10px]">
-                    <Image
-                      src="/images/img_icon.svg"
-                      alt="View Events Icon"
-                      width={40}
-                      height={40}
-                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
-                    />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      View Events
-                    </span>
-                  </div>
-                </div>
+                </Link>
                 {/* Launch Pad */}
-                <div className={`w-full flex flex-col justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Launch Pad
-                    </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text4 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Connect with seniors, join study groups, and get help from the NSUT community. We&apos;re here to support your journey.
-                    </p>
+                <Link href="/Launchpad" className="block">
+                  <div className={`w-full flex flex-col justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
+                    <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Launch Pad
+                      </h3>
+                      <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text4 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Connect with seniors, join study groups, and get help from the NSUT community. We&apos;re here to support your journey.
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
+                      <Image
+                        src="/images/img_icon_orange_200.svg"
+                        alt="Explore Projects Icon"
+                        width={40}
+                        height={40}
+                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
+                      />
+                      <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Explore Projects
+                      </span>
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
-                    <Image
-                      src="/images/img_icon_orange_200.svg"
-                      alt="Explore Projects Icon"
-                      width={40}
-                      height={40}
-                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
-                    />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Explore Projects
-                    </span>
-                  </div>
-                </div>
+                </Link>
                 {/* Campus Navigation */}
-                <div className={`w-full flex flex-col justify-start items-center bg-[#f45b6a] border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Campus Navigation
-                    </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Navigate the campus with ease using our interactive maps. Find classrooms, labs, hostels and important buildings quickly.
-                    </p>
+                <Link href="/navigation" className="block">
+                  <div className={`w-full flex flex-col justify-start items-center bg-[#f45b6a] border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'}`}>
+                    <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Campus Navigation
+                      </h3>
+                      <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Navigate the campus with ease using our interactive maps. Find classrooms, labs, hostels and important buildings quickly.
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
+                      <Image
+                        src="/images/img_icon.svg"
+                        alt="Explore Campus Icon"
+                        width={40}
+                        height={40}
+                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
+                      />
+                      <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Explore Campus
+                      </span>
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
-                    <Image
-                      src="/images/img_icon.svg"
-                      alt="Explore Campus Icon"
-                      width={40}
-                      height={40}
-                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
-                    />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Explore Campus
-                    </span>
-                  </div>
-                </div>
+                </Link>
                 {/* Study Hub */}
-                <div className={`w-full flex flex-col justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Study Hub
-                    </h3>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[64%]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics.
-                    </p>
+                <Link href="/study-hub" className="block">
+                  <div className={`w-full flex flex-col justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[46px] shadow-[0px_5px_1px_#000000] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${visibleSections.has('what-we-offer') ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-8'}`}>
+                    <div className="w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
+                      <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-semibold leading-10 sm:leading-12 md:leading-14 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Study Hub
+                      </h3>
+                      <p className="text-base sm:text-lg md:text-xl lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[64%]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Access curated study materials, notes, and resources from seniors and faculty. Find everything you need to excel in your academics.
+                      </p>
+                    </div>
+                    <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
+                      <Image
+                        src="/images/img_icon.svg"
+                        alt="Explore Resources Icon"
+                        width={40}
+                        height={40}
+                        className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
+                      />
+                      <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Explore Resources
+                      </span>
+                    </div>
                   </div>
-                  <div className="w-full flex flex-row justify-start items-center gap-2 sm:gap-3 md:gap-4 lg:gap-[10px] mt-8 sm:mt-10 md:mt-12 lg:mt-[48px]">
-                    <Image
-                      src="/images/img_icon.svg"
-                      alt="Explore Resources Icon"
-                      width={40}
-                      height={40}
-                      className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px]"
-                    />
-                    <span className="text-base sm:text-lg md:text-xl lg:text-[20px] font-semibold leading-5 sm:leading-6 md:leading-7 lg:leading-[25px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Explore Resources
-                    </span>
-                  </div>
-                </div>
+                </Link>
               </div>
             </div>
             {/* Meet the Team Section */}

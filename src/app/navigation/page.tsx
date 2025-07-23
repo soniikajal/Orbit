@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import InteractiveMap from '@/components/map/InteractiveMap';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
+import { useScrollAnimations } from '@/hooks/useScrollAnimations';
 
 const NavigationPage: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -16,6 +17,9 @@ const NavigationPage: React.FC = () => {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [routeQuery, setRouteQuery] = useState('');
   const [showQuickTip, setShowQuickTip] = useState(true);
+
+  // Animation hook
+  const { isLoaded, visibleSections, fadeInUp, fadeInLeft, getCardAnimation, getLoadAnimation } = useScrollAnimations();
 
   // Load buildings data for suggestions
   useEffect(() => {
@@ -134,15 +138,24 @@ const NavigationPage: React.FC = () => {
   return (
     <div className="w-full flex flex-col justify-start items-end">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
-        <div className="w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0">
+        <div className={`w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0 ${getLoadAnimation()}`}>
           <main className="w-full py-2">
             {/* Page Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h1 
+              id="page-title"
+              data-animate-on-scroll
+              className={`text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8 ${fadeInUp('page-title')}`} 
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
               Navigate through the campus
             </h1>
 
             {/* Search Bar */}
-            <div className="w-full mb-[15px] relative">
+            <div 
+              id="search-section"
+              data-animate-on-scroll
+              className={`w-full mb-[15px] relative ${fadeInUp('search-section', '200')}`}
+            >
               <form onSubmit={handleSearch} className="relative">
                 <div className="relative">
                   <input
@@ -202,18 +215,26 @@ const NavigationPage: React.FC = () => {
             </div>
 
             {/* Most searched for */}
-            <div className="w-full mb-[10px]">
+            <div 
+              id="most-searched"
+              data-animate-on-scroll
+              className={`w-full mb-[10px] ${fadeInUp('most-searched', '300')}`}
+            >
               <p className="text-black font-medium text-[14px] text-left pl-[20px]" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Most searched for
               </p>
             </div>
 
             {/* Location Cards */}
-            <div className="w-full mb-[8px] pl-[20px] pr-[20px]">
+            <div 
+              id="location-cards"
+              data-animate-on-scroll
+              className={`w-full mb-[8px] pl-[20px] pr-[20px] ${fadeInUp('location-cards', '400')}`}
+            >
               <div className="flex flex-wrap gap-4 justify-center">
                 <button 
                   onClick={() => handleLocationCardClick('Central Computer Centre/CC/CCW')}
-                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                  className={`h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-300 hover:scale-105 flex items-center justify-center ${getCardAnimation('location-cards', 0)}`}
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Computer Centre (CC)
@@ -221,7 +242,7 @@ const NavigationPage: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleLocationCardClick('SAC (Student Activity Centre)')}
-                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                  className={`h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-300 hover:scale-105 flex items-center justify-center ${getCardAnimation('location-cards', 1)}`}
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Student Activity Centre (SAC)
@@ -229,7 +250,7 @@ const NavigationPage: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleLocationCardClick('Admin Block/Main Audi')}
-                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                  className={`h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-300 hover:scale-105 flex items-center justify-center ${getCardAnimation('location-cards', 2)}`}
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Main Auditorium
@@ -237,7 +258,7 @@ const NavigationPage: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleLocationCardClick('Training & Placement (TNP)')}
-                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                  className={`h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-300 hover:scale-105 flex items-center justify-center ${getCardAnimation('location-cards', 3)}`}
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Training & Placement Cell (TNP)
@@ -245,7 +266,7 @@ const NavigationPage: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleLocationCardClick('Connecting Block (CBT)/Mini Audi')}
-                  className="h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                  className={`h-[40px] px-4 bg-white rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-300 hover:scale-105 flex items-center justify-center ${getCardAnimation('location-cards', 4)}`}
                 >
                   <span className="text-[14px] font-normal text-black whitespace-nowrap" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Connecting Block
@@ -255,7 +276,11 @@ const NavigationPage: React.FC = () => {
             </div>
 
             {/* Map Container */}
-            <div className="w-full mb-0 flex justify-center">
+            <div 
+              id="map-container"
+              data-animate-on-scroll
+              className={`w-full mb-0 flex justify-center ${fadeInUp('map-container')}`}
+            >
               <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative">
                 {/* Interactive Map */}
                 <div className="absolute inset-0 rounded-[30px] overflow-hidden">
@@ -324,7 +349,11 @@ const NavigationPage: React.FC = () => {
           </main>
 
           {/* Footer */}
-          <div className="w-full flex flex-row justify-center items-center mt-28 sm:mt-32 md:mt-36 lg:mt-[140px]">
+          <div 
+            id="footer"
+            data-animate-on-scroll
+            className={`w-full flex flex-row justify-center items-center mt-28 sm:mt-32 md:mt-36 lg:mt-[140px] ${fadeInUp('footer')}`}
+          >
             <div className="w-full flex flex-col gap-10 sm:gap-12 md:gap-14 lg:gap-[50px] justify-center items-center bg-global-background1 rounded-t-[44px] p-10 sm:p-12 md:p-14 lg:p-[50px] mt-1 sm:mt-2 md:mt-3 lg:mt-[4px]">
               {/* Footer Content */}
               <div className="w-full flex flex-col gap-12 sm:gap-14 md:gap-16 lg:gap-[66px] justify-start items-center">

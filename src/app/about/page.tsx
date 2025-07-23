@@ -4,6 +4,7 @@ import Image from 'next/image';
 import EditText from '@/components/ui/EditText';
 import Button from '@/components/ui/Button';
 import Footer from '@/components/layout/Footer';
+import { useScrollAnimations } from '@/hooks/useScrollAnimations';
 
 interface TeamMember {
   id: string;
@@ -22,6 +23,9 @@ const AboutPage: React.FC = () => {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [activeTeamCategory, setActiveTeamCategory] = useState<TeamCategory>('development');
+
+  // Use centralized animation system
+  const { fadeInUp, fadeInLeft, getCardAnimation, getLoadAnimation } = useScrollAnimations();
 
   useEffect(() => {
     // Trigger animations after component mounts
