@@ -125,6 +125,33 @@ const PhonebookPage: React.FC = () => {
     setCurrentPage(1);
   };
 
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Smart pagination with ellipsis
+      if (currentPage <= 3) {
+        // Show first 4 pages + ellipsis + last page
+        pages.push(1, 2, 3, 4, '...', totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        // Show first page + ellipsis + last 4 pages
+        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        // Show first + ellipsis + current-1, current, current+1 + ellipsis + last
+        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
   return (
     <>
       <div className="w-full flex flex-col justify-start items-end">
@@ -132,7 +159,7 @@ const PhonebookPage: React.FC = () => {
           <div className={`w-full flex flex-col justify-start items-start transition-all duration-1500 ease-out ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <main className="w-full py-2">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Faculty Directory
+                PhoneBook
               </h1>
 
               {!selectedDepartment ? (
@@ -216,78 +243,73 @@ const PhonebookPage: React.FC = () => {
 
                           {/* Pagination Controls */}
                           {totalPages > 1 && (
-                            <div className="flex flex-col items-center gap-4 mt-8">
-                              <div className="flex items-center gap-1">
+                            <div className="flex flex-col items-center gap-6 mt-10">
+                              <div className="flex items-center justify-center gap-2">
                                 <button
                                   onClick={goToPreviousPage}
                                   disabled={currentPage === 1}
-                                  className="px-3 py-2 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                  className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-[#F45B69] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                   style={{ fontFamily: 'Inter, sans-serif' }}
                                 >
-                                  &lt;
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                  </svg>
                                 </button>
-                                {(() => {
-                                  const pages = [];
-                                  const maxVisible = 5;
-                                  let start = Math.max(1, currentPage - 2);
-                                  let end = Math.min(totalPages, currentPage + 2);
-                                  if (currentPage <= 3) {
-                                    start = 1;
-                                    end = Math.min(totalPages, maxVisible);
-                                  } else if (currentPage >= totalPages - 2) {
-                                    start = Math.max(1, totalPages - maxVisible + 1);
-                                    end = totalPages;
-                                  }
-                                  if (start > 1) {
-                                    pages.push(
-                                      <button key={1} onClick={() => goToPage(1)} className={`px-3 py-2 rounded-full border ${currentPage === 1 ? 'bg-[#F45B69] text-white border-[#F45B69]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}`} style={{ fontFamily: 'Inter, sans-serif' }}>1</button>
-                                    );
-                                    if (start > 2) pages.push(<span key="start-ellipsis" className="px-2">...</span>);
-                                  }
-                                  for (let i = start; i <= end; i++) {
-                                    if (i === 1 || i === totalPages) continue;
-                                    pages.push(
-                                      <button key={i} onClick={() => goToPage(i)} className={`px-3 py-2 rounded-full border ${currentPage === i ? 'bg-[#F45B69] text-white border-[#F45B69]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}`} style={{ fontFamily: 'Inter, sans-serif' }}>{i}</button>
-                                    );
-                                  }
-                                  if (end < totalPages) {
-                                    if (end < totalPages - 1) pages.push(<span key="end-ellipsis" className="px-2">...</span>);
-                                    pages.push(
-                                      <button key={totalPages} onClick={() => goToPage(totalPages)} className={`px-3 py-2 rounded-full border ${currentPage === totalPages ? 'bg-[#F45B69] text-white border-[#F45B69]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}`} style={{ fontFamily: 'Inter, sans-serif' }}>{totalPages}</button>
-                                    );
-                                  }
-                                  return pages;
-                                })()}
+                                
+                                {getPageNumbers().map((page, index) => (
+                                  page === '...' ? (
+                                    <span key={`ellipsis-${index}`} className="px-3 py-2 text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                      ...
+                                    </span>
+                                  ) : (
+                                    <button
+                                      key={page}
+                                      onClick={() => goToPage(page as number)}
+                                      className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 ${
+                                        currentPage === page
+                                          ? 'bg-[#F45B69] text-white border-[#F45B69] shadow-md'
+                                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-[#F45B69]'
+                                      }`}
+                                      style={{ fontFamily: 'Inter, sans-serif' }}
+                                    >
+                                      {page}
+                                    </button>
+                                  )
+                                ))}
+
                                 <button
                                   onClick={goToNextPage}
                                   disabled={currentPage === totalPages}
-                                  className="px-3 py-2 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                                  className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-[#F45B69] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                   style={{ fontFamily: 'Inter, sans-serif' }}
                                 >
-                                  &gt;
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
                                 </button>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                  Show:
+                              
+                              <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                                <span style={{ fontFamily: 'Inter, sans-serif' }}>
+                                  Showing {indexOfFirstFaculty + 1}-{Math.min(indexOfLastFaculty, filteredFaculty.length)} of {filteredFaculty.length} results
                                 </span>
-                                {[6, 12, 24].map((perPage) => (
-                                  <button
-                                    key={perPage}
-                                    onClick={() => handlePerPageChange(perPage)}
-                                    className={`px-3 py-1 text-sm rounded-md transition-colors duration-200 ${
-                                      facultyPerPage === perPage
-                                        ? 'bg-[#F45B69] text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
-                                    style={{ fontFamily: 'Inter, sans-serif' }}
-                                  >
-                                    {perPage}
-                                  </button>
-                                ))}
-                                <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                  per page
-                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span style={{ fontFamily: 'Inter, sans-serif' }}>Items per page:</span>
+                                  {[6, 12, 24].map((perPage) => (
+                                    <button
+                                      key={perPage}
+                                      onClick={() => handlePerPageChange(perPage)}
+                                      className={`px-3 py-1 text-sm rounded-md transition-colors duration-200 ${
+                                        facultyPerPage === perPage
+                                          ? 'bg-[#F45B69] text-white shadow-md'
+                                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                      }`}
+                                      style={{ fontFamily: 'Inter, sans-serif' }}
+                                    >
+                                      {perPage}
+                                    </button>
+                                  ))}
+                                </div>
                               </div>
                             </div>
                           )}
@@ -308,16 +330,15 @@ const PhonebookPage: React.FC = () => {
                   {(!searchQuery || searchQuery.length < 2) && (
                     <div className="w-full">
                       <div className="flex flex-col gap-6 mb-8">
-                        <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                          Browse by <span className="text-[#F45B69]">Department</span>
-                        </h3>
-                        <p className="text-base text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Explore faculty members organized by departments.
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          <span>{facultyData.length} Total Faculty</span>
-                          <span>•</span>
-                          <span>{departmentCards.length} Departments</span>
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            Browse by <span className="text-[#F45B69]">Department</span>
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            <span>{facultyData.length} Total Faculty</span>
+                            <span>•</span>
+                            <span>{departmentCards.length} Departments</span>
+                          </div>
                         </div>
                       </div>
 
@@ -454,52 +475,73 @@ const PhonebookPage: React.FC = () => {
 
                       {/* Pagination Controls */}
                       {totalPages > 1 && (
-                        <div className="flex flex-col items-center gap-4 mt-8">
-                          <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-center gap-6 mt-10">
+                          <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={goToPreviousPage}
                               disabled={currentPage === 1}
-                              className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                              className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-[#F45B69] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                               style={{ fontFamily: 'Inter, sans-serif' }}
                             >
-                              Previous
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                              </svg>
                             </button>
                             
-                            <span className="px-3 py-2 text-sm text-gray-700" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              Page {currentPage} of {totalPages}
-                            </span>
-                            
+                            {getPageNumbers().map((page, index) => (
+                              page === '...' ? (
+                                <span key={`ellipsis-${index}`} className="px-3 py-2 text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                  ...
+                                </span>
+                              ) : (
+                                <button
+                                  key={page}
+                                  onClick={() => goToPage(page as number)}
+                                  className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200 ${
+                                    currentPage === page
+                                      ? 'bg-[#F45B69] text-white border-[#F45B69] shadow-md'
+                                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-[#F45B69]'
+                                  }`}
+                                  style={{ fontFamily: 'Inter, sans-serif' }}
+                                >
+                                  {page}
+                                </button>
+                              )
+                            ))}
+
                             <button
                               onClick={goToNextPage}
                               disabled={currentPage === totalPages}
-                              className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                              className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-[#F45B69] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                               style={{ fontFamily: 'Inter, sans-serif' }}
                             >
-                              Next
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
                             </button>
                           </div>
                           
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              Show:
+                          <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+                            <span style={{ fontFamily: 'Inter, sans-serif' }}>
+                              Showing {indexOfFirstFaculty + 1}-{Math.min(indexOfLastFaculty, filteredFaculty.length)} of {filteredFaculty.length} results
                             </span>
-                            {[6, 12, 24].map((perPage) => (
-                              <button
-                                key={perPage}
-                                onClick={() => handlePerPageChange(perPage)}
-                                className={`px-3 py-1 text-sm rounded-md transition-colors duration-200 ${
-                                  facultyPerPage === perPage
-                                    ? 'bg-[#F45B69] text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
-                                style={{ fontFamily: 'Inter, sans-serif' }}
-                              >
-                                {perPage}
-                              </button>
-                            ))}
-                            <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              per page
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span style={{ fontFamily: 'Inter, sans-serif' }}>Items per page:</span>
+                              {[6, 12, 24].map((perPage) => (
+                                <button
+                                  key={perPage}
+                                  onClick={() => handlePerPageChange(perPage)}
+                                  className={`px-3 py-1 text-sm rounded-md transition-colors duration-200 ${
+                                    facultyPerPage === perPage
+                                      ? 'bg-[#F45B69] text-white shadow-md'
+                                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                  }`}
+                                  style={{ fontFamily: 'Inter, sans-serif' }}
+                                >
+                                  {perPage}
+                                </button>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
