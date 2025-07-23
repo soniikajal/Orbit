@@ -91,43 +91,36 @@ const HomePage: React.FC = () => {
     {
       id: '1',
       name: 'Kajal Soni',
-      position: 'CEO and Founder',
-      experience: '10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy',
+      position: 'Founder | Full Stack Developer',
+      experience: 'ICE Branch - Founder and Full Stack Developer with expertise in web development and project leadership',
       image: '/images/img_picture.png'
     },
     {
       id: '2',
       name: 'Manik Bhushan',
-      position: 'Design Lead',
-      experience: '7+ years of experience in project management and team leadership. Strong organizational and communication skills',
+      position: 'Creative Head',
+      experience: 'Mechanical Branch - Creative Head with expertise in design and visual content creation',
       image: '/images/img_picture.png'
     },
     {
       id: '3',
-      name: 'Parkhi Mudgal',
-      position: 'Design Lead',
-      experience: '5+ years of experience in SEO and content creation. Proficient in keyword research and on-page optimization',
+      name: 'Kushagra Kataria',
+      position: 'Full Stack Developer',
+      experience: 'CSDS Branch - Full Stack Developer with expertise in both frontend and backend development',
       image: '/images/img_picture.png'
     },
     {
       id: '4',
-      name: 'Aastha Pandey',
-      position: 'Content Lead',
-      experience: '3+ years of experience in paid search advertising. Skilled in campaign management and performance analysis',
+      name: 'Bhavya Goel',
+      position: 'Backend Developer',
+      experience: 'CSAI Branch - Backend Developer with expertise in server-side development and database management',
       image: '/images/img_picture.png'
     },
     {
       id: '5',
-      name: 'Kushagra Kataria',
-      position: 'Dev Lead',
-      experience: '4+ years of experience in social media marketing. Proficient in creating and scheduling content, analyzing metrics, and building engagement',
-      image: '/images/img_picture.png'
-    },
-    {
-      id: '6',
-      name: 'Sarah Kim',
-      position: 'Content Creator',
-      experience: '2+ years of experience in writing and editing\nSkilled in creating compelling, SEO-optimized content for various industries',
+      name: 'Ishit Papnai',
+      position: 'Video Editor',
+      experience: 'ICE Branch - Video Editor with expertise in video editing and multimedia content creation',
       image: '/images/img_picture.png'
     }
   ];
