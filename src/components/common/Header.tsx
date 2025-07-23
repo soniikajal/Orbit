@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   }, []);
 
   return (
-    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-8 sm:mt-12 md:mt-16 transition-all duration-1000 ease-out relative z-50 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'} ${className}`}>
+    <header className={`w-full bg-header-background1 rounded-[30px] p-4 sm:p-6 lg:p-8 mt-2 sm:mt-2 md:mt-2 transition-all duration-1000 ease-out relative z-50 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'} ${className}`}>
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0">
           {/* Logo */}

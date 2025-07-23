@@ -70,8 +70,8 @@ const AboutPage: React.FC = () => {
       {
         id: '0',
         name: 'Kajal Soni',
-        position: 'Founder',
-        branch: 'ICE',
+        position: 'Founder | Full Stack Developer',
+        branch: "ICE",
         linkedin: 'www.linkedin.com/in/kajalsoni2006',
         instagram: 'https://www.instagram.com/rustic.reverie_/'
       },
@@ -79,29 +79,29 @@ const AboutPage: React.FC = () => {
         id: '1',
         name: 'Bhavya Goel',
         position: 'Backend Developer',
-        branch: 'CSAI',
+        branch: "CSAI",
         linkedin: 'www.linkedin.com/in/bhavya-goel-796848264'
       },
       {
         id: '2',
         name: 'Darshdeep',
         position: 'Backend Developer',
-        branch: 'IT',
+        branch: "IT",
         linkedin: 'https://www.linkedin.com/in/darshdeep-singh-b09678321/',
         instagram: 'https://www.instagram.com/darshdeep101/'
       },
       {
         id: '3',
         name: 'Kushagra Kataria',
-        position: 'Developer',
-        branch: 'CSDS',
+        position: 'Full Stack Developer',
+        branch: "CSDS",
         linkedin: 'https://www.linkedin.com/in/kushagrakataria',
         instagram: 'https://www.instagram.com/katariakuxh'
       },
       {
         id: '4',
         name: 'Yash Goel',
-        position: 'Frontend Dev',
+        position: 'Frontend Developer',
         branch: 'ICE'
       }
     ],
@@ -109,8 +109,10 @@ const AboutPage: React.FC = () => {
       {
         id: '5',
         name: 'Manik Bhushan',
-        position: 'Design Lead',
-        branch: 'Mechanical'
+        position: 'Creative Head',
+        branch: 'Mechanical',
+        linkedin: 'https://www.linkedin.com/in/manik-bhushan/',
+        instagram: 'https://www.instagram.com/maeniikkk/'
       },
       {
         id: '6',
@@ -145,7 +147,7 @@ const AboutPage: React.FC = () => {
       {
         id: '10',
         name: 'Disha',
-        position: 'Content Team',
+        position: 'Content Curator',
         branch: 'Biotech',
         linkedin: 'https://www.linkedin.com/in/dishashukla2/',
         instagram: 'https://www.instagram.com/dishaa_shuklaa_/'
@@ -153,7 +155,7 @@ const AboutPage: React.FC = () => {
       {
         id: '11',
         name: 'Tisha Bansal',
-        position: 'Content & PR',
+        position: 'Content Curator',
         branch: 'MAC',
         linkedin: 'https://www.linkedin.com/in/tisha-bansal-00322031b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
         instagram: 'https://www.instagram.com/_tishaa_bansal_?igsh=MmhoMHQ4a2g2cnJ6&utm_source=qr'
@@ -161,7 +163,7 @@ const AboutPage: React.FC = () => {
       {
         id: '12',
         name: 'Aastha Pandey',
-        position: 'Content',
+        position: 'Content Curator',
         branch: 'ICE'
       }
     ],
@@ -384,23 +386,17 @@ const AboutPage: React.FC = () => {
             <div 
               id="meet-the-team"
               data-animate-on-scroll
-              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[50px] justify-start items-start mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[50px] justify-center items-center mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
             >
               {/* Section Header */}
               <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
                   Meet the <span className="text-[#F45B69]">Team</span>
                 </h2>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[48px] font-normal leading-8 sm:leading-9 md:leading-10 lg:leading-[58px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  The <span className="text-[#F45B69]">humans</span> behind Orbit
-                </h3>
-                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  We're not your typical corporate team. We're students who've been through the chaos, felt the confusion, and decided to do something about it. From late-night coding sessions to brainstorming over chai, we're building Orbit with the same energy we wish we had support for during our own college journey.
-                </p>
               </div>
 
               {/* Team Category Buttons */}
-              <div className="flex flex-wrap justify-start gap-4 sm:gap-6 md:gap-8 lg:gap-[20px]">
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-[20px]">
                 <button
                   onClick={() => setActiveTeamCategory('development')}
                   className={`px-6 sm:px-8 md:px-10 lg:px-[40px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] rounded-full transition-all duration-300 ${
