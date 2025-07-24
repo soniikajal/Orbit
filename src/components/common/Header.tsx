@@ -53,28 +53,41 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-0">
           {/* Logo */}
-          <div className={`flex-shrink-0 transition-all duration-800 ease-out delay-200 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          <div className={`flex-shrink-0 flex items-center transition-all duration-800 ease-out delay-200 ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
             <img 
-              src="/images/img_orbit_1.png" 
-              alt="NSUT Logo" 
-              className="w-[120px] h-[73px] sm:w-[150px] sm:h-[91px] md:w-[180px] md:h-[109px] lg:w-[200px] lg:h-[122px] hover:scale-105 transition-transform duration-300"
+              src="/images/img_orbit_2.png" 
+              alt="Orbit Logo" 
+              className="w-[114px] h-[114px] hover:scale-105 transition-transform duration-300 relative" 
+              style={{ top: '-12px' }}
             />
+            <span
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 700,
+                fontSize: '35px',
+                color: '#262626',
+                letterSpacing: 0
+              }}
+              className="select-none"
+            >
+              Orbit
+            </span>
           </div>
 
           {/* Center Navigation Menu */}
-          <nav className={`${menuOpen ? 'block' : 'hidden'} lg:block flex-1 lg:flex lg:justify-center transition-all duration-800 ease-out delay-400 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+          <nav className={`${menuOpen ? 'block' : 'hidden'} lg:block flex-1 lg:flex lg:justify-center transition-all duration-800 ease-out delay-400 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`} style={{ marginLeft: '30px', marginRight: '0px' }}>
             <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 xl:gap-10">
               {/* Home Menu Item with Active State */}
               <div className="flex flex-col items-center group">
                 <Link href="/">
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
+                    className="text-[20px] font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105 items-center leading-[68px]"
                   >
                     Home
                   </button>
                 </Link>
-                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[60px] ${pathname === '/' ? 'w-[60px]' : 'w-0'}`}></div>
+                <div className={`h-[1px] bg-[#facc6b] m-0 p-0 transition-all duration-300 group-hover:w-[60px] ${pathname === '/' ? 'w-[60px]' : 'w-0'}`}></div>
               </div>
 
               {/* Navigation Menu Item with Active State */}
@@ -82,19 +95,19 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                 <Link href="/navigation">
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
+                    className="text-[20px] font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105 items-center leading-[68px]"
                   >
                     Navigation
                   </button>
                 </Link>
-                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[100px] ${pathname === '/navigation' ? 'w-[100px]' : 'w-0'}`}></div>
+                <div className={`h-[1px] bg-[#facc6b] m-0 p-0 transition-all duration-300 group-hover:w-[100px] ${pathname === '/navigation' ? 'w-[100px]' : 'w-0'}`}></div>
               </div>
 
               {/* Survival Kit Dropdown */}
               <div className="relative" ref={survivalKitRef}>
                 <button 
                   role="menuitem"
-                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105"
+                  className="text-[20px] font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105 leading-[68px]"
                   onClick={() => setSurvivalKitOpen(!survivalKitOpen)}
                 >
                   Survival Kit
@@ -157,7 +170,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
               <div className="relative" ref={quickLinksRef}>
                 <button 
                   role="menuitem"
-                  className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105"
+                  className="text-[20px] font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 flex items-center gap-1 hover:scale-105 leading-[68px]"
                   onClick={() => setQuickLinksOpen(!quickLinksOpen)}
                 >
                   Quick Links
@@ -230,12 +243,12 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                 <Link href="/about">
                   <button 
                     role="menuitem"
-                    className="text-base sm:text-lg md:text-xl font-space-grotesk font-normal text-global-text2 hover:text-global-text3 transition-all duration-300 hover:scale-105"
+                    className={`text-[20px] font-space-grotesk font-normal transition-all duration-300 hover:scale-105 items-center leading-[68px] ${pathname === '/' ? 'text-white' : 'text-global-text2'} hover:text-global-text3`}
                   >
                     About Us
                   </button>
                 </Link>
-                <div className={`h-[1px] bg-[#facc6b] mt-1 transition-all duration-300 group-hover:w-[80px] ${pathname === '/about' ? 'w-[80px]' : 'w-0'}`}></div>
+                <div className={`h-[1px] bg-[#facc6b] m-0 p-0 transition-all duration-300 group-hover:w-[80px] ${pathname === '/about' ? 'w-[80px]' : 'w-0'}`}></div>
               </div>
             </div>
           </nav>
@@ -251,7 +264,7 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                 <SignOutButton className="px-6 py-4 text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[30px]" />
               </div>
             ) : (
-              <SignInButton className="px-6 py-4 text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[30px]" />
+              <SignInButton className={`w-[195px] h-[68px] text-[20px] font-normal transition-all duration-300 rounded-[30px] bg-transparent ${pathname === '/' ? 'text-white border-white' : 'text-black border-[#262626]'} hover:text-[#262626] hover:underline`} style={{ borderRadius: '30px' }} />
             )}
           </div>
 

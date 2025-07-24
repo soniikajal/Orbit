@@ -233,7 +233,7 @@ const HomePage: React.FC = () => {
             alt="Background Illustration with Rocket"
             layout="fill"
             objectFit="cover"
-            objectPosition="calc(100% + 120px) top"
+            objectPosition="calc(100% + 178px) top"
             quality={100}
           />
         </div>
