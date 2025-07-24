@@ -255,12 +255,12 @@ const HomePage: React.FC = () => {
                   SURVIVAL KIT
                 </h2>
               </div>
-              <p className={`text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl mt-8 sm:mt-12 md:mt-16 transition-all duration-1800 ease-elegant delay-150 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '20px' }}>
+              <p className={`text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl mb-0 transition-all duration-1800 ease-elegant delay-150 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '20px', marginTop: '80px' }}>
                 Your complete guide to NSUT&apos;s campus. Access map, resources,<br></br> events, and connect with fellow students all in one place
               </p>
             </div>
             {/* Get Started / View Dashboard Button */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-0 sm:mt-0 md:mt-0 lg:mt-8">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6" style={{ marginTop: '-200px', marginBottom: '120px' }}>
               {session ? (
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   <Link href="/dashboard">
