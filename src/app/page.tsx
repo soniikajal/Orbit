@@ -249,18 +249,18 @@ const HomePage: React.FC = () => {
             <div className="relative w-full h-auto flex flex-col justify-start items-start pt-[100px] pb-40 lg:pb-60"> {/* Added more top padding for content below fixed navbar */}
               <div className={`relative transition-all duration-2200 ease-elegant delay-100 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 <h1 className="text-[120px] sm:text-[160px] md:text-[200px] lg:text-[280px] xl:text-[320px] font-bold leading-[0.8] text-left text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  NSUT
+                  <span style={{ fontSize: '230px', lineHeight: 0.8, display: 'block' }}>NSUT</span>
                 </h1>
-                <h2 className="absolute top-[80%] left-[15%] text-[40px] sm:text-[60px] md:text-[80px] lg:text-[100px] xl:text-[120px] font-normal leading-[0.8] text-[#F45B69] tracking-wide" style={{ fontFamily: 'Lost in South, cursive' }}>
+                <h2 className="absolute top-[80%] left-[12%] font-normal leading-[0.8] text-[#F45B69] tracking-wide" style={{ fontFamily: 'Lost in South, cursive', fontSize: '90px' }}>
                   SURVIVAL KIT
                 </h2>
               </div>
-              <p className={`text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl mt-8 sm:mt-12 md:mt-16 transition-all duration-1800 ease-elegant delay-150 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                Your complete guide to NSUT&apos;s campus. Access map, resources, events, and connect with fellow students all in one place
+              <p className={`text-lg sm:text-xl md:text-2xl lg:text-[25px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[30px] text-left text-black w-full max-w-2xl mt-8 sm:mt-12 md:mt-16 transition-all duration-1800 ease-elegant delay-150 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ fontFamily: 'Inter, sans-serif', fontSize: '20px' }}>
+                Your complete guide to NSUT&apos;s campus. Access map, resources,<br></br> events, and connect with fellow students all in one place
               </p>
             </div>
             {/* Get Started / View Dashboard Button */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-0 sm:mt-0 md:mt-0 lg:mt-8">
               {session ? (
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   <Link href="/dashboard">
