@@ -185,11 +185,7 @@ const PhonebookPage: React.FC = () => {
 
               {!selectedDepartment ? (
                 <>
-                  <div className="w-full flex flex-col gap-6 mb-8">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                      Search Faculty
-                    </h3>
-                  </div>
+                  
                   
                   <div className="w-full mb-[15px]">
                     <form className="relative">
@@ -353,7 +349,7 @@ const PhonebookPage: React.FC = () => {
                       <div className="flex flex-col gap-6 mb-8">
                         <div className="flex items-center justify-between">
                           <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                            Browse by <span className="text-[#F45B69]">Department</span>
+                            Browse by <span className="text-[#F45B69]">Departments</span>
                           </h3>
                           <div className="flex items-center gap-4 text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                             <span>{facultyData.length} Total Faculty</span>
