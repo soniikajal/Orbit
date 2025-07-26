@@ -106,7 +106,9 @@ const AboutPage: React.FC = () => {
         id: '4',
         name: 'Yash Goel',
         position: 'Frontend Developer',
-        branch: 'ICE'
+        branch: 'ICE',
+        linkedin: 'ttps://www.linkedin.com/in/yash-goel-22b952283/',
+        instagram: 'tps://www.instagram.com/yash_.goel'
       }
     ],
     creative: [
@@ -290,60 +292,66 @@ const AboutPage: React.FC = () => {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
                   Our Mission
                 </h2>
-                <div className="w-full bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[50px]">
-                  <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Let's be honest: college is chaotic. From accidentally ending up in the wrong block to Googling "how to survive engineering without a mental breakdown?", college hits like a whirlwind. That's where we come in. At Orbit, our mission is to make sure you don't have to suffer like we did. We're here to simplify the mess, connect the dots, and be the all-in-one guide we wish we had when we first stepped onto campus.
-                  </p>
-                </div>
+                
+                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs)
+                </p>
+                
               </div>
 
               {/* Mission Points Grid */}
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] mt-8">
                 {/* Simplify Navigation */}
                 <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-12 h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  {/* <div className="w-12 h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
+                    <svg width="24" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                       <circle cx="12" cy="10" r="3"></circle>
                     </svg>
-                  </div>
+                  </div> */}
+                  
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Simplify Navigation
                   </h3>
+                  <div className="w-full h-[2px] bg-black"></div>
                   <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Lost? Finding your way at NSUT shouldn't feel like solving a maze. We help you locate your classes, labs, chai spots — and yes, even that one obscure seminar hall everyone keeps mentioning.
                   </p>
+
+                  
                 </div>
 
                 {/* Support Learning */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-12 h-12 bg-[#FACC6B] rounded-full flex items-center justify-center">
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-black border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
+                  {/* <div className="w-12 h-12 bg-[#FACC6B] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                     </svg>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  </div> */}
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif',color:'white' }}>
                     Support Learning
                   </h3>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="w-full h-[2px] bg-white"></div>
+                  <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' ,color:'white'}}>
                     Study, but make it make sense. Get access to curated notes, previous year papers, toppers' secrets (maybe), and study hacks.
                   </p>
                 </div>
 
                 {/* Find Your People */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-12 h-12 bg-[#114B5F] rounded-full flex items-center justify-center">
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#F45B69] border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'}`}>
+                  {/* <div className="w-12 h-12 bg-[#114B5F] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                       <circle cx="9" cy="7" r="4"></circle>
                       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                  </div>
+                  </div> */}
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Find Your People
                   </h3>
+                  <div className="w-full h-[2px] bg-black"></div>
                   <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     From societies to secret jam rooms, we help you discover where you fit in. Whether you're an introvert, extrovert, or just here for the memes, there's a space for you.
                   </p>
@@ -351,7 +359,7 @@ const AboutPage: React.FC = () => {
 
                 {/* Foster Innovation */}
                 <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-8'}`}>
-                  <div className="w-12 h-12 bg-[#E4FDE1] border border-global-text2 rounded-full flex items-center justify-center">
+                  {/* <div className="w-12 h-12 bg-[#E4FDE1] border border-global-text2 rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="5"></circle>
                       <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -363,10 +371,11 @@ const AboutPage: React.FC = () => {
                       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                  </div>
+                  </div> */}
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Foster Innovation
                   </h3>
+                  <div className="w-full h-[2px] bg-black"></div>
                   <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Big ideas need more than caffeine. We're building platforms (like Launchpad) where student entrepreneurs, builders, and dreamers can create magic — supported by resources and mentorship.
                   </p>
@@ -383,7 +392,7 @@ const AboutPage: React.FC = () => {
               {/* Section Header */}
               <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                  Meet the <span className="text-[#F45B69]">Team</span>
+                  The <span className="text-[#F45B69]">Humans</span> behind Orbit
                 </h2>
               </div>
 
