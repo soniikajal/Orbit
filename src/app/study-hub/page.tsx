@@ -20,6 +20,9 @@ interface StudyMaterial {
 }
 
 const StudyHubPage: React.FC = () => {
+  // Search bar state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [showScrollToTop, setShowScrollToTop] = useState(false);
@@ -82,42 +85,83 @@ const StudyHubPage: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const semesterOptions: SemesterOption[] = [
-    { id: 1, label: 'Semester 1', value: 1, available: true },
-    { id: 2, label: 'Semester 2', value: 2, available: true },
-    { id: 3, label: 'Semester 3', value: 3, available: false },
-    { id: 4, label: 'Semester 4', value: 4, available: false },
-    { id: 5, label: 'Semester 5', value: 5, available: false },
-    { id: 6, label: 'Semester 6', value: 6, available: false },
-    { id: 7, label: 'Semester 7', value: 7, available: false },
-    { id: 8, label: 'Semester 8', value: 8, available: false },
+  const yearOptions = [
+    { id: 1, label: 'Year 1', value: 1, available: true },
+    { id: 2, label: 'Year 2', value: 2, available: true },
   ];
 
-  const studyMaterials: StudyMaterial[] = [
-    {
-      id: 'gyansutra',
-      name: 'Gyansutra',
-      description: 'Comprehensive study materials, notes, and resources curated by seniors and faculty for foundational engineering subjects.',
-      url: '/GYANSUTRA.pdf',
-      icon: '📚'
-    },
-    {
-      id: 'ieee',
-      name: 'IEEE NSUT Resources',
-      description: 'Technical papers, research materials, and engineering resources from IEEE specifically curated for NSUT students.',
-      url: '/IEEE NSUT Resources for the Batch of 2028.pdf',
-      icon: '⚡'
-    }
+  const branchOptions = [
+    { id: 'cse', label: 'CSE' },
+    { id: 'ece', label: 'ECE' },
+    { id: 'it', label: 'IT' },
+    { id: 'me', label: 'Mechanical' },
+    { id: 'ce', label: 'Civil' },
+    { id: 'ee', label: 'Electrical' },
+    // Add more branches as needed
   ];
+
+  const [selectedYear, setSelectedYear] = useState<number>(1);
+  const [selectedBranch, setSelectedBranch] = useState<string>('cse');
+
+  // Example: Per-semester and per-subject materials (expand as needed)
+  // Materials by year and branch (expand as needed)
+  const allMaterials: Record<number, Record<string, StudyMaterial[]>> = {
+    1: {
+      all: [
+        { id: 'IEEE', name: 'IEEE pdf', description: 'Notes and practice papers.', url: '/IEEE NSUT Resources for the Batch of 2028', icon: '📝' },
+        { id: 'gyansutra', name: 'Gyansutra', description: 'Comprehensive study materials curated by seniors and faculty.', url: '/GYANSUTRA.pdf', icon: '📚' },
+        { id: 'asme', name: 'ASME', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1PCfGdEsdT8CoA1DjoAbodPdUIIxRXc_o?usp=share_link', icon: '🧮' },
+      ]
+    },
+    2: {
+      cse: [
+        { id: 'CAO', name: 'CAO', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1WxM_6hWh7-bVbnKn1WedspM2GhKSv-FK?usp=share_link', icon: '🧮' },
+        { id: 'daa', name: 'DAA', description: 'Lecture notes, code samples, and lab files.', url: 'https://drive.google.com/drive/folders/1Kn9y7WQVZvmCjtyvYVxukeQLjIVYB5wN?usp=share_link', icon: '�' },
+        { id: 'dbms', name: 'DBMS', description: 'Notes, assignments, and solved problems.', url: 'https://drive.google.com/drive/folders/12DGCRTRTHmZxsF-jUHFpk95_ugpPm3iA?usp=share_link', icon: '�‍💻' },
+        { id: 'os', name: 'OS', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1v-dmD2L03R6o8g7AYwQEe0pyY6206fQk?usp=share_link', icon: '🧮' },
+        { id: 'prob', name: 'Stats & Prob', description: 'Lecture notes, code samples, and lab files.', url: 'https://drive.google.com/drive/folders/1kdBap-ebgDR1tmZgq2_QBbBnrg05MxT3?usp=share_link', icon: '�' },
+      ],
+      me: [
+        { id: 'asmesem3', name: 'ASME Sem 3', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1u4RNW4oVDQ0gj8PiO1v2oqZfeuuEfHsl?usp=share_link', icon: '🧮' },
+        { id: 'mpae3', name: 'MPAE Sem 3', description: 'Notes, lab files, and solved examples.', url: 'https://drive.google.com/drive/folders/1u78vxUKbzSBPECT8pYh8nvbjnEh5XB26?usp=share_link', icon: '💡' },
+        { id: 'mpae4', name: 'MPAE Sem 4', description: 'Notes and lab files.', url: 'https://drive.google.com/drive/folders/17u-mSGYUyyWFhj_GBrwPOtkOa6eZV5l0?usp=share_link', icon: '📡' },
+      ],
+      // Add more branches as needed
+    }
+  };
+
+
+  // Contribute Material form state
+  const [contributeLink, setContributeLink] = useState('');
+  const [contributeDesc, setContributeDesc] = useState('');
+  const [contributeSubmitted, setContributeSubmitted] = useState(false);
+
+  // Materials for selected year/branch
+  const yearMaterials = selectedYear === 1
+    ? allMaterials[1].all
+    : (allMaterials[2][selectedBranch] || []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSemesterSelect = (semester: number) => {
-    console.log('Semester selected:', semester);
-    setSelectedSemester(semester);
+
+  const handleYearSelect = (year: number) => {
+    setSelectedYear(year);
+    // Reset branch to default when switching year
+    if (year === 1) setSelectedBranch('cse');
+    // Reset contribute form state
+    setContributeLink('');
+    setContributeDesc('');
+    setContributeSubmitted(false);
   };
+
+  useEffect(() => {
+    // Reset contribute form state when branch changes (for Year 2)
+    setContributeLink('');
+    setContributeDesc('');
+    setContributeSubmitted(false);
+  }, [selectedBranch]);
 
   const handleMaterialClick = (material: StudyMaterial) => {
     if (material.url) {
@@ -153,187 +197,143 @@ const StudyHubPage: React.FC = () => {
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Study Hub
                 </h1>
+                {/* Year Selector */}
+                <div className="w-full flex flex-row gap-4 mb-4">
+                  {yearOptions.map(option => (
+                    <button
+                      key={option.id}
+                      className={`px-6 py-3 rounded-[20px] font-bold text-lg transition-all duration-200 border-2 ${selectedYear === option.value ? 'bg-[#F45B69] text-white border-[#F45B69]' : 'bg-white text-[#F45B69] border-[#F45B69]'}`}
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                      onClick={() => handleYearSelect(option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                {/* Branch Selector (Year 2 only) */}
+                {selectedYear === 2 && (
+                  <div className="w-full flex flex-row gap-4 mb-4">
+                    {branchOptions.map(branch => (
+                      <button
+                        key={branch.id}
+                        className={`px-5 py-2 rounded-[16px] font-medium text-base transition-all duration-200 border-2 ${selectedBranch === branch.id ? 'bg-[#FACC6B] text-black border-[#FACC6B]' : 'bg-white text-[#F45B69] border-[#F45B69]'}`}
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        onClick={() => setSelectedBranch(branch.id)}
+                      >
+                        {branch.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
+
             </div>
 
             {/* Study Materials Section with Semester Selection */}
             <div 
               id="study-materials"
               data-animate-on-scroll
-              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] justify-start items-start mt-20 sm:mt-24 md:mt-28 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('study-materials') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              className={`w-full flex flex-col gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] justify-start items-start mt-2 sm:mt-24 md:mt-2 lg:mt-[120px] transition-all duration-1000 ease-out ${visibleSections.has('study-materials') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
             >
-              {/* Semester Selection Header */}
-              <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
-                <div className="flex-1">
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold leading-8 sm:leading-10 md:leading-12 lg:leading-[73px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                    Select Your <span className="text-[#F45B69]">Semester</span>
-                  </h3>
-                  <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-left text-global-text2 mt-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Choose your current semester to access relevant study materials and resources.
-                  </p>
-                </div>
-                
-                {/* Semester Dropdown */}
-                <div className="relative w-full sm:w-auto min-w-[280px] semester-dropdown">
-                  <div 
-                    className="bg-global-background5 border border-global-text2 rounded-[20px] p-4 sm:p-5 md:p-6 lg:p-[24px] cursor-pointer transition-all duration-300 hover:border-[#F45B69] hover:shadow-lg"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
-                          <span className="text-lg sm:text-xl font-bold text-white" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {selectedSemester || 1}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="text-lg sm:text-xl md:text-2xl lg:text-[20px] font-bold text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Semester {selectedSemester || 1}
-                          </p>
-                          <p className="text-sm sm:text-base md:text-lg lg:text-[14px] font-normal text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {semesterOptions.find(s => s.value === (selectedSemester || 1))?.available ? 'Materials Available' : 'Coming Soon'}
-                          </p>
-                        </div>
+           
+            
+              {/* Materials Grid/Content for all years/branches */}
+              {yearMaterials.length > 0 ? (
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-[32px]">
+                  {yearMaterials.map((material, index) => (
+                    <div
+                      key={material.id}
+                      className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-[40px] cursor-pointer transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl hover:border-[#F45B69] opacity-100 translate-y-0`}
+                      style={{ transitionDelay: `${index * 200}ms` }}
+                      onClick={() => handleMaterialClick(material)}
+                    >
+                      {/* Material Icon */}
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-[#F45B69] rounded-full flex items-center justify-center">
+                        <span className="text-2xl sm:text-3xl md:text-4xl lg:text-[32px]">
+                          {material.icon}
+                        </span>
                       </div>
-                      <svg 
-                        className={`w-5 h-5 text-global-text2 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </div>
-                  
-                  {/* Dropdown Menu */}
-                  {dropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-[20px] shadow-2xl z-50 overflow-hidden">
-                      <div className="max-h-[300px] overflow-y-auto">
-                        {semesterOptions.map((semester, index) => (
-                          <div
-                            key={semester.id}
-                            className={`p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 ${
-                              selectedSemester === semester.value ? 'bg-[#F45B69]/10' : ''
-                            }`}
-                            onClick={() => {
-                              handleSemesterSelect(semester.value);
-                              setDropdownOpen(false);
-                            }}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                  selectedSemester === semester.value 
-                                    ? 'bg-[#F45B69] text-white' 
-                                    : 'bg-gray-100 text-gray-600'
-                                }`}>
-                                  <span className="text-sm font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                    {semester.value}
-                                  </span>
-                                </div>
-                                <div>
-                                  <p className="text-base font-medium text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                    Semester {semester.value}
-                                  </p>
-                                  <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                    {semester.available ? 'Materials Available' : 'Coming Soon'}
-                                  </p>
-                                </div>
-                              </div>
-                              {selectedSemester === semester.value && (
-                                <svg className="w-4 h-4 text-[#F45B69]" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                              )}
-                            </div>
-                          </div>
-                        ))}
+                      {/* Material Info */}
+                      <div className="w-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-[12px]">
+                        <h5 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-bold leading-6 sm:leading-7 md:leading-8 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {material.name}
+                        </h5>
+                        <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {material.description}
+                        </p>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Materials Content */}
-              {selectedSemester && (
-                <>
-                  {/* Materials Section Header */}
-                  <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
-                    <h4 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold leading-8 sm:leading-10 md:leading-12 lg:leading-[58px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                      Semester {selectedSemester} <span className="text-[#F45B69]">Materials</span>
-                    </h4>
-                  </div>
-
-                  {/* Materials Grid/Content */}
-                  {selectedSemester === 1 || selectedSemester === 2 ? (
-                    /* Semester 1 & 2 Materials */
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-[32px]">
-                      {studyMaterials.map((material, index) => (
-                        <div
-                          key={material.id}
-                          className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[20px] p-6 sm:p-8 md:p-10 lg:p-[40px] cursor-pointer transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl hover:border-[#F45B69] opacity-100 translate-y-0`}
-                          style={{ transitionDelay: `${index * 200}ms` }}
-                          onClick={() => handleMaterialClick(material)}
-                        >
-                          {/* Material Icon */}
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-[#F45B69] rounded-full flex items-center justify-center">
-                            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-[32px]">
-                              {material.icon}
-                            </span>
-                          </div>
-                          
-                          {/* Material Info */}
-                          <div className="w-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-[12px]">
-                            <h5 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-bold leading-6 sm:leading-7 md:leading-8 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              {material.name}
-                            </h5>
-                            <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              {material.description}
-                            </p>
-                          </div>
-
-                          {/* Access Button */}
-                          <div className="w-full flex justify-start items-center mt-2">
-                            <Button
-                              variant="secondary"
-                              className="px-4 sm:px-5 md:px-6 lg:px-[24px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-white hover:scale-105 transition-all duration-300"
-                              style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#F45B69', borderRadius: '20px', border: 'none' }}
-                            >
-                              Download PDF →
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    /* Coming Soon for Semesters 3-8 */
-                    <div className={`w-full flex flex-col justify-center items-center bg-global-background5 border border-global-text2 rounded-[20px] p-8 sm:p-10 md:p-12 lg:p-[60px] transition-all duration-700 ease-out opacity-100 translate-y-0`}>
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-[80px] lg:h-[80px] bg-[#FACC6B] rounded-full flex items-center justify-center mb-6">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <polyline points="12,6 12,12 16,14"></polyline>
-                        </svg>
-                      </div>
-                      <h5 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold leading-7 sm:leading-8 md:leading-9 lg:leading-[44px] text-center text-global-text2 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
-                        Coming Soon!
-                      </h5>
-                      <p className="text-base sm:text-lg md:text-xl lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-center text-global-text2 max-w-lg mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        We're working hard to bring you comprehensive study materials for Semester {selectedSemester}. Stay tuned for updates!
-                      </p>
-                      <div className="mt-4">
+                      {/* Access Button */}
+                      <div className="w-full flex justify-start items-center mt-2">
                         <Button
                           variant="secondary"
-                          className="px-6 sm:px-7 md:px-8 lg:px-[32px] py-2 sm:py-2.5 md:py-3 lg:py-[10px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-black hover:scale-105 transition-all duration-300"
-                          style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#FACC6B', borderRadius: '20px', border: 'none' }}
-                          onClick={() => setSelectedSemester(1)}
+                          className="px-4 sm:px-5 md:px-6 lg:px-[24px] py-2 sm:py-2.5 md:py-3 lg:py-[8px] text-sm sm:text-base md:text-lg lg:text-[14px] font-medium leading-4 sm:leading-5 md:leading-6 lg:leading-[18px] text-center text-white hover:scale-105 transition-all duration-300"
+                          style={{ fontFamily: 'Inter, sans-serif', backgroundColor: '#F45B69', borderRadius: '20px', border: 'none' }}
                         >
-                          View Available Materials
+                          {material.url?.includes('drive.google.com') ? 'Open in Drive →' : 'Download PDF →'}
                         </Button>
                       </div>
                     </div>
-                  )}
-                </>
+                  ))}
+                </div>
+              ) : (
+                <div className={`w-full flex flex-col justify-center items-center bg-global-background5 border border-global-text2 rounded-[20px] p-8 sm:p-10 md:p-12 lg:p-[60px] transition-all duration-700 ease-out opacity-100 translate-y-0`}>
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-[80px] lg:h-[80px] bg-[#FACC6B] rounded-full flex items-center justify-center mb-6">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
+                  </div>
+                  <h5 className="text-2xl sm:text-3xl md:text-4xl lg:text-[36px] font-bold leading-7 sm:leading-8 md:leading-9 lg:leading-[44px] text-center text-global-text2 mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    No materials found!
+                  </h5>
+                  <p className="text-base sm:text-lg md:text-xl lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-center text-global-text2 max-w-lg mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Try another branch or check back later for updates.
+                  </p>
+                  {/* Contribute Material Form */}
+                  <div className="w-full max-w-md mt-8 bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center shadow-md">
+                    <h6 className="text-lg font-bold mb-2 text-[#F45B69]">Contribute Material</h6>
+                    <p className="text-sm text-gray-600 mb-4 text-center">Have useful notes, PDFs, or Drive links for this branch? Share them with the community!</p>
+                    <form
+                      className="w-full flex flex-col gap-4"
+                      onSubmit={e => {
+                        e.preventDefault();
+                        if (contributeLink && contributeDesc) {
+                          setContributeSubmitted(true);
+                          setContributeLink('');
+                          setContributeDesc('');
+                        }
+                      }}
+                    >
+                      <input
+                        type="url"
+                        required
+                        placeholder="Google Drive Link"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#F45B69]"
+                        value={contributeLink}
+                        onChange={e => setContributeLink(e.target.value)}
+                      />
+                      <textarea
+                        required
+                        placeholder="Short description (e.g. subject, type, etc.)"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-[#F45B69]"
+                        value={contributeDesc}
+                        onChange={e => setContributeDesc(e.target.value)}
+                        rows={2}
+                      />
+                      <button
+                        type="submit"
+                        className="w-full bg-[#F45B69] text-white font-semibold py-2 rounded-lg hover:bg-[#e04856] transition-all duration-200"
+                      >
+                        Share Material
+                      </button>
+                    </form>
+                    {contributeSubmitted && (
+                      <div className="w-full mt-4 p-3 bg-green-100 text-green-800 rounded-lg text-center text-sm">
+                        Thank you for contributing! Your link has been submitted for review.
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           </div>
