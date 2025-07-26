@@ -4,23 +4,24 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import Image from 'next/image'
 
-export default function SignIn() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/'
+
+
+function SignInContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   useEffect(() => {
-    // Check if user is already signed in
     getSession().then((session) => {
       if (session) {
-        router.push(callbackUrl)
+        router.push(callbackUrl);
       }
-    })
-  }, [router, callbackUrl])
+    });
+  }, [router, callbackUrl]);
 
   const handleSignIn = () => {
-    signIn('google', { callbackUrl })
-  }
+    signIn('google', { callbackUrl });
+  };
 
   return (
     <div className="min-h-screen bg-[#fffcf9] flex items-center justify-center px-4">
@@ -36,7 +37,6 @@ export default function SignIn() {
             Sign in with your NSUT or NSIT email to access your complete campus guide
           </p>
         </div>
-        
         <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
           <div className="space-y-6">
             <div className="text-center">
@@ -44,7 +44,6 @@ export default function SignIn() {
                 Only @nsut.ac.in and @nsit.ac.in emails are allowed
               </p>
             </div>
-            
             <button
               onClick={handleSignIn}
               className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f4c430] transition-all duration-200"
@@ -60,7 +59,6 @@ export default function SignIn() {
             </button>
           </div>
         </div>
-        
         <div className="text-center text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
           <p>
             By signing in, you agree to our{' '}
@@ -75,5 +73,15 @@ export default function SignIn() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+import { Suspense } from 'react';
+
+export default function SignIn() {
+  return (
+    <Suspense>
+      <SignInContent />
+    </Suspense>
+  );
 }

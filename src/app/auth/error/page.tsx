@@ -2,9 +2,12 @@
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
-export default function AuthError() {
-  const searchParams = useSearchParams()
-  const error = searchParams.get('error')
+
+import { Suspense } from 'react';
+
+function AuthErrorContent() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get('error');
 
   const getErrorMessage = (error: string | null) => {
     switch (error) {
@@ -13,23 +16,23 @@ export default function AuthError() {
           title: 'Access Denied',
           message: 'Sorry, only NSUT and NSIT email addresses are allowed to access this application.',
           detail: 'Please use your @nsut.ac.in or @nsit.ac.in email address to sign in.'
-        }
+        };
       case 'Configuration':
         return {
           title: 'Configuration Error',
           message: 'There was a problem with the server configuration.',
           detail: 'Please contact the administrator.'
-        }
+        };
       default:
         return {
           title: 'Authentication Error',
           message: 'An unexpected error occurred during sign in.',
           detail: 'Please try again or contact support if the problem persists.'
-        }
+        };
     }
-  }
+  };
 
-  const errorInfo = getErrorMessage(error)
+  const errorInfo = getErrorMessage(error);
 
   return (
     <div className="auth-error-container">
@@ -50,7 +53,6 @@ export default function AuthError() {
             {errorInfo.detail}
           </p>
         </div>
-        
         <div className="auth-error-card">
           <div className="auth-error-actions">
             <Link
@@ -59,7 +61,6 @@ export default function AuthError() {
             >
               Try Again
             </Link>
-            
             <Link
               href="/"
               className="auth-error-button-secondary"
@@ -68,7 +69,6 @@ export default function AuthError() {
             </Link>
           </div>
         </div>
-        
         <div className="auth-error-footer">
           <p>
             Need help? Contact us at{' '}
@@ -79,5 +79,13 @@ export default function AuthError() {
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+export default function AuthError() {
+  return (
+    <Suspense>
+      <AuthErrorContent />
+    </Suspense>
+  );
 }
