@@ -63,9 +63,9 @@ const EventBoardPage: React.FC = () => {
     try {
       const res = await fetch(`/api/event-board?page=${currentPage}&limit=${eventsPerPage}&month=${selectedMonth}&year=${selectedYear}`);
       const data = await res.json();
-      setEvents(data.events);
-      setTotalEvents(data.totalEvents);
-      setTotalPages(data.totalPages);
+      setEvents(Array.isArray(data.events) ? data.events : []);
+      setTotalEvents(typeof data.totalEvents === 'number' ? data.totalEvents : 0);
+      setTotalPages(typeof data.totalPages === 'number' ? data.totalPages : 1);
     } catch (err) {
       console.error('Failed to load events:', err);
     }
