@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
       name: 'Manik Bhushan',
       position: 'Creative Head | Designer',
       experience: 'Mechanical Branch - Creative Head with expertise in design and visual content creation',
-      image: '/images/img_picture.png'
+      image: '/images/team/manik.png'
     },
     {
       id: '3',
@@ -152,7 +152,7 @@ const HomePage: React.FC = () => {
       name: 'Bhavya Goel',
       position: 'Backend Developer',
       experience: 'CSAI Branch - Backend Developer with expertise in server-side development and database management',
-      image: '/images/img_picture.png'
+      image: '/images/team/bhavya.png'
     },
     {
       id: '5',
