@@ -169,21 +169,30 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
       waypoints: [startLatLng.current, endLatLng.current],
       router: L.Routing.osrmv1({
         profile: 'foot',
-        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
+        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
       }),
       lineOptions: {
         styles: [{ color: '#007bff', weight: 5 }],
         extendToWaypoints: true,
-        missingRouteTolerance: 10
+        missingRouteTolerance: 10,
       },
       addWaypoints: false,
       routeWhileDragging: false,
       draggableWaypoints: false,
       fitSelectedRoutes: true,
-      createMarker: () => null, // 👈 removes the draggable markers
-      show: false,              // 👈 hides the sidebar UI (optional)
+      createMarker: () => null,
+      show: false,
     }).addTo(mapInstance.current!);
+
+    // ✅ Force redraw after route render
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        mapInstance.current?.invalidateSize();
+        routingControl.current?._container?.classList?.add('leaflet-routing-show');
+      }, 300);
+    });
   };
+
 
   const handleZoomIn = () => {
     if (mapInstance.current) {
