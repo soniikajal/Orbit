@@ -1,4 +1,3 @@
-// src/components/map/RoutingMap.tsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -15,7 +14,12 @@ interface RoutingMapProps {
   showSearchBar?: boolean;
 }
 
-export default function RoutingMap({ className = "", searchQuery, onLocationSelect, showSearchBar = true }: RoutingMapProps) {
+export default function RoutingMap({
+  className = "",
+  searchQuery,
+  onLocationSelect,
+  showSearchBar = true
+}: RoutingMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const routingControl = useRef<any>(null);
@@ -30,16 +34,16 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   const userLocation = useRef<L.LatLng | null>(null);
   const locationAddedToFuse = useRef<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(17);
+  const [mapReady, setMapReady] = useState(false); // ✅ Fix
 
-  // Handle search query from navigation page
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== '') {
       setEndInput(searchQuery);
-      // Auto-trigger search if there's a match
-      const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      const building = buildings.current.find(b =>
+        b.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
       if (building) {
         endLatLng.current = building.latlng;
-        // Set start location to user location if available
         if (userLocation.current) {
           startLatLng.current = userLocation.current;
           setStartInput("Your Location");
@@ -47,7 +51,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         tryRoute();
       }
     }
-  }, [searchQuery]);
+  }, [searchQuery, mapReady]);
 
   useEffect(() => {
     const initMap = async () => {
@@ -60,7 +64,9 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: ''
-        }).addTo(mapInstance.current);
+        }).addTo(mapInstance.current).on('load', () => {
+          setMapReady(true); // ✅ Wait for tiles
+        });
 
         mapInstance.current.locate({ setView: false, enableHighAccuracy: true });
 
@@ -69,17 +75,13 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
           startLatLng.current = e.latlng;
           setStartInput("Your Location");
 
-          // Only add "Your Location" once to buildings and Fuse
           if (!locationAddedToFuse.current) {
             buildings.current.unshift({ name: "Your Location", latlng: e.latlng });
             fuse.current = new Fuse(buildings.current, { keys: ['name'], threshold: 0.3 });
             locationAddedToFuse.current = true;
           }
 
-          // Call onLocationSelect to update parent component
-          if (onLocationSelect) {
-            onLocationSelect("Your Location");
-          }
+          if (onLocationSelect) onLocationSelect("Your Location");
 
           L.marker(e.latlng, {
             icon: L.icon({
@@ -124,44 +126,14 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
     };
   }, []);
 
-  const handleSearchChange = (val: string, type: 'start' | 'end') => {
-    if (type === 'start') setStartInput(val);
-    else setEndInput(val);
-
-    setActiveInput(type);
-    if (!fuse.current) return setSuggestions([]);
-
-    const results = fuse.current.search(val.trim()).map((r: any) => r.item.name);
-    const uniqueSuggestions = Array.from(new Set(["Your Location", ...results]));
-    setSuggestions(uniqueSuggestions.slice(0, 8));
-  };
-
-  const handleSuggestionClick = (name: string) => {
-    let result;
-
-    if (name === "Your Location" && userLocation.current) {
-      result = { name: "Your Location", latlng: userLocation.current };
-    } else {
-      result = buildings.current.find((b) => b.name === name);
-    }
-
-    if (!result) return;
-
-    if (activeInput === 'start') {
-      setStartInput(result.name);
-      startLatLng.current = result.latlng;
-    } else {
-      setEndInput(result.name);
-      endLatLng.current = result.latlng;
-    }
-    setSuggestions([]);
-    tryRoute();
-  };
-
   const tryRoute = () => {
-    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
+    if (
+      !startLatLng.current ||
+      !endLatLng.current ||
+      !mapInstance.current ||
+      !mapReady
+    ) return;
 
-    // Remove previous route
     if (routingControl.current) {
       mapInstance.current.removeControl(routingControl.current);
       routingControl.current = null;
@@ -185,10 +157,41 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         show: false,
         createMarker: () => null
       }).addTo(mapInstance.current!);
-    }, 500); // Delay to allow DOM + map stabilization
+    }, 100); // Small delay for DOM/map stability
   };
 
+  const handleSearchChange = (val: string, type: 'start' | 'end') => {
+    if (type === 'start') setStartInput(val);
+    else setEndInput(val);
 
+    setActiveInput(type);
+    if (!fuse.current) return setSuggestions([]);
+
+    const results = fuse.current.search(val.trim()).map((r: any) => r.item.name);
+    const uniqueSuggestions = Array.from(new Set(["Your Location", ...results]));
+    setSuggestions(uniqueSuggestions.slice(0, 8));
+  };
+
+  const handleSuggestionClick = (name: string) => {
+    let result;
+    if (name === "Your Location" && userLocation.current) {
+      result = { name: "Your Location", latlng: userLocation.current };
+    } else {
+      result = buildings.current.find((b) => b.name === name);
+    }
+
+    if (!result) return;
+
+    if (activeInput === 'start') {
+      setStartInput(result.name);
+      startLatLng.current = result.latlng;
+    } else {
+      setEndInput(result.name);
+      endLatLng.current = result.latlng;
+    }
+    setSuggestions([]);
+    tryRoute();
+  };
 
   const handleZoomIn = () => {
     if (mapInstance.current) {
@@ -236,12 +239,8 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         </div>
       )}
 
-      {/* Most searched */}
-      {/* Location cards removed - functionality moved to navigation page */}
-
-      {/* Custom Zoom Controls */}
+      {/* Zoom Buttons */}
       <div className="absolute bottom-4 right-4 z-[999] flex flex-col gap-2">
-        {/* Zoom In Button */}
         <button
           onClick={handleZoomIn}
           className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
@@ -251,8 +250,6 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
         </button>
-        
-        {/* Zoom Out Button */}
         <button
           onClick={handleZoomOut}
           className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
