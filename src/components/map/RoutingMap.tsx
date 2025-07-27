@@ -176,9 +176,12 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         extendToWaypoints: true,
         missingRouteTolerance: 10
       },
-      show: true,
       addWaypoints: false,
-      routeWhileDragging: false
+      routeWhileDragging: false,
+      draggableWaypoints: false,
+      fitSelectedRoutes: true,
+      createMarker: () => null, // 👈 removes the draggable markers
+      show: false,              // 👈 hides the sidebar UI (optional)
     }).addTo(mapInstance.current!);
   };
 
