@@ -131,7 +131,7 @@ const HomePage: React.FC = () => {
       name: 'Kajal Soni',
       position: 'Founder | Full Stack Developer',
       experience: 'ICE Branch - Founder and Full Stack Developer with expertise in web development and project leadership',
-      image: '/images/img_picture.png'
+      image: '/images/team/kajal.png'
     },
     {
       id: '2',

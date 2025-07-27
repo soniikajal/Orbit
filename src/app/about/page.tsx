@@ -77,7 +77,8 @@ const AboutPage: React.FC = () => {
         position: 'Founder | Full Stack Developer',
         branch: "ICE",
         linkedin: 'www.linkedin.com/in/kajalsoni2006',
-        instagram: 'https://www.instagram.com/rustic.reverie_/'
+        instagram: 'https://www.instagram.com/rustic.reverie_/',
+        image: '/images/team/kajal.png'
       },
       {
         id: '1',
