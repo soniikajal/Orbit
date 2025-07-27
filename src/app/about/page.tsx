@@ -85,7 +85,8 @@ const AboutPage: React.FC = () => {
         name: 'Bhavya Goel',
         position: 'Backend Developer',
         branch: "CSAI",
-        linkedin: 'www.linkedin.com/in/bhavya-goel-796848264'
+        linkedin: 'www.linkedin.com/in/bhavya-goel-796848264',
+        image: '/images/team/bhavya.png'
       },
       {
         id: '2',
@@ -93,7 +94,8 @@ const AboutPage: React.FC = () => {
         position: 'Backend Developer',
         branch: "IT",
         linkedin: 'https://www.linkedin.com/in/darshdeep-singh-b09678321/',
-        instagram: 'https://www.instagram.com/darshdeep101/'
+        instagram: 'https://www.instagram.com/darshdeep101/',
+        image: '/images/team/darshdeep.png'
       },
       {
         id: '3',
@@ -119,7 +121,8 @@ const AboutPage: React.FC = () => {
         position: 'Creative Head',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/manik-bhushan/',
-        instagram: 'https://www.instagram.com/maeniikkk/'
+        instagram: 'https://www.instagram.com/maeniikkk/',
+        image: '/images/team/manik.png'
       },
       {
         id: '6',
@@ -127,13 +130,15 @@ const AboutPage: React.FC = () => {
         position: 'Graphic Designer',
         branch: 'ICE',
         linkedin: 'Parkhi Mudgal - NSUT\'28 (ICE) | LinkedIn',
-        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA=='
+        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA==',
+        image: '/images/team/parkhi.png'
       },
       {
         id: '7',
         name: 'Sakshi Sahu',
         position: 'Graphic Designer',
-        branch: 'Mechanical'
+        branch: 'Mechanical',
+        image: '/images/team/sakshi.png'
       },
       {
         id: '8',
