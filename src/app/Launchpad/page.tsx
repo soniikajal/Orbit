@@ -128,7 +128,7 @@ const LaunchpadPage: React.FC = () => {
 
     if (data.success) {
       alert('Project deleted successfully.');
-      setProjects(prev => prev.filter(p => p.id !== projectId));
+      setProjects(prev => prev.filter(p => p._id !== projectId));
     } else {
       alert(data.message || 'Failed to delete project.');
     }
@@ -492,7 +492,7 @@ const LaunchpadPage: React.FC = () => {
                       </a>
                       {session?.user?.email === project.contactEmail && (
                         <button
-                          onClick={() => handleDelete(project.id)}
+                          onClick={() => handleDelete(project._id)}
                           className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto flex items-center justify-center"
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         >

@@ -127,37 +127,6 @@ const EventBoardPage: React.FC = () => {
     window.open(calendarUrl, '_blank');
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmed = window.confirm('Are you sure you want to delete this event?');
-    if (!confirmed) return;
-
-    try {
-      const res = await fetch('/api/event-board', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id,
-          email: session?.user?.email,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert('Event deleted successfully!');
-        setEvents(prev => prev.filter(e => e.id !== id));
-      } else {
-        alert(data.message || 'Failed to delete event.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error deleting event.');
-    }
-  };
-
-
   const handleEventFormChange = (field: string, value: string | boolean) => {
     // Prevent changes to contactEmail field - it should remain locked to user's session email
     if (field === 'contactEmail') {
@@ -448,15 +417,6 @@ const EventBoardPage: React.FC = () => {
                         </div>
                         <span className="text-white text-[14px] font-bold">Add to calendar</span>
                       </button>
-                      {session?.user?.email === event.contactEmail && (
-                      <button
-                        onClick={() => handleDelete(event.id)}
-                        className="text-red-400 mt-2 text-sm hover:underline"
-                        style={{ fontFamily: 'Inter, sans-serif' }}
-                      >
-                        Delete Event
-                      </button>
-                    )}
                     </div>
                   </div>
                 ))}

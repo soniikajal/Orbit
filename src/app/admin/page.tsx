@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Button from '@/components/ui/Button'
-import { getMockUsers, getMockSubmissions } from '@/lib/admin'
 
 interface UserData {
   id: string
@@ -27,7 +26,7 @@ export default function AdminDashboard() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'in-progress' | 'resolved'>('all');
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'users' | 'submissions' | 'analytics' | 'launchpad' | 'events'>('users')
+  const [activeTab, setActiveTab] = useState<'users_analytics' | 'submissions' | 'launchpad' | 'events'>('users_analytics')
   const [users, setUsers] = useState<UserData[]>([])
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [launchpadSubmissions, setLaunchpadSubmissions] = useState<any[]>([])
@@ -50,28 +49,32 @@ export default function AdminDashboard() {
 
 
   const loadMockData = async () => {
-    const mockUsers = getMockUsers()
-
     try {
-      const contactRes = await fetch('/api/contact')
+      const [userRes, contactRes, launchpadRes, eventRes] = await Promise.all([
+        fetch('/api/admin/users'),
+        fetch('/api/contact'),
+        fetch('/api/admin/launchpad'),
+        fetch('/api/admin/event-board')
+      ])
+
+      const userData = await userRes.json()
       const contactData = await contactRes.json()
-      setSubmissions(contactData.success ? contactData.contacts : [])
-
-      const launchpadRes = await fetch('/api/admin/launchpad')
       const launchpadData = await launchpadRes.json()
-      setLaunchpadSubmissions(launchpadData.success ? launchpadData.projects : [])
-
-      const eventRes = await fetch('/api/admin/event-board')
       const eventData = await eventRes.json()
+
+      setUsers(userData.users || [])
+      setSubmissions(contactData.success ? contactData.contacts : [])
+      setLaunchpadSubmissions(launchpadData.success ? launchpadData.projects : [])
       setEventSubmissions(eventData.success ? eventData.events : [])
+
     } catch (err) {
       console.error('Failed to fetch data', err)
+      setUsers([])
       setSubmissions([])
       setLaunchpadSubmissions([])
       setEventSubmissions([])
-    }
+}
 
-    setUsers(mockUsers)
   }
 
 
@@ -175,15 +178,15 @@ export default function AdminDashboard() {
             <div className="mb-8">
               <div className="flex space-x-4 bg-white rounded-lg p-2 shadow-sm">
                 <button
-                  onClick={() => setActiveTab('users')}
+                  onClick={() => setActiveTab('users_analytics')}
                   className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                    activeTab === 'users'
+                    activeTab === 'users_analytics'
                       ? 'bg-[#f45b6a] text-white shadow-md'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  Users Management
+                  Users & Analytics
                 </button>
                 <button
                   onClick={() => setActiveTab('submissions')}
@@ -195,17 +198,6 @@ export default function AdminDashboard() {
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   Contact Submissions
-                </button>
-                <button
-                  onClick={() => setActiveTab('analytics')}
-                  className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                    activeTab === 'analytics'
-                      ? 'bg-[#f45b6a] text-white shadow-md'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  Analytics
                 </button>
                 <button
                   onClick={() => setActiveTab('launchpad')}
@@ -233,8 +225,9 @@ export default function AdminDashboard() {
             </div>
 
             {/* Users Management Tab */}
-            {activeTab === 'users' && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
+            {activeTab === 'users_analytics' && (
+              <>
+              {<div className="bg-white rounded-lg shadow-lg p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Registered Users
                 </h2>
@@ -282,7 +275,73 @@ export default function AdminDashboard() {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </div>}
+              {<div className="bg-white rounded-lg shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Application Analytics
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
+                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Total Users
+                    </h3>
+                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {users.length}
+                    </p>
+                  </div>
+                  <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
+                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Total Submissions
+                    </h3>
+                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {submissions.length}
+                    </p>
+                  </div>
+                  <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-6 text-white">
+                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Pending Issues
+                    </h3>
+                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {submissions.filter(s => s.status === 'pending').length}
+                    </p>
+                  </div>
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
+                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      Resolved Issues
+                    </h3>
+                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {submissions.filter(s => s.status === 'resolved').length}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-8">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Recent Activity
+                  </h3>
+                  <div className="space-y-3">
+                    {submissions.slice(0, 5).map((submission) => (
+                      <div key={submission.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className={`w-3 h-3 rounded-full ${
+                          submission.status === 'pending' ? 'bg-yellow-500' :
+                          submission.status === 'in-progress' ? 'bg-blue-500' :
+                          'bg-green-500'
+                        }`}></div>
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            <span className="font-medium">{submission.name}</span> submitted a {submission.type}
+                          </p>
+                          <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            {submission.timestamp}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>}
+              </>
+
             )}
 
             {/* Contact Submissions Tab */}
@@ -358,75 +417,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
             )}
-
-            {/* Analytics Tab */}
-            {activeTab === 'analytics' && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Application Analytics
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Total Users
-                    </h3>
-                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {users.length}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Total Submissions
-                    </h3>
-                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {submissions.length}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Pending Issues
-                    </h3>
-                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {submissions.filter(s => s.status === 'pending').length}
-                    </p>
-                  </div>
-                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Resolved Issues
-                    </h3>
-                    <p className="text-3xl font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {submissions.filter(s => s.status === 'resolved').length}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Recent Activity
-                  </h3>
-                  <div className="space-y-3">
-                    {submissions.slice(0, 5).map((submission) => (
-                      <div key={submission.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                        <div className={`w-3 h-3 rounded-full ${
-                          submission.status === 'pending' ? 'bg-yellow-500' :
-                          submission.status === 'in-progress' ? 'bg-blue-500' :
-                          'bg-green-500'
-                        }`}></div>
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            <span className="font-medium">{submission.name}</span> submitted a {submission.type}
-                          </p>
-                          <p className="text-xs text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {submission.timestamp}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Launchpad Tab */}
             {activeTab === 'launchpad' && (
               <div className="bg-white rounded-lg shadow-lg p-6">

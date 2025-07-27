@@ -1,6 +1,8 @@
 import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { isAdmin } from './admin'
+import { connectToDB } from '@/lib/mongoose'
+import User from '@/models/User'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,48 +12,69 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      // Check if the user's email domain is allowed
+    async signIn({ user }) {
+      // Restrict domain
       if (user.email) {
         const emailDomain = user.email.split('@')[1]
         const allowedDomains = ['nsut.ac.in', 'nsit.ac.in']
-        
-        if (!allowedDomains.includes(emailDomain)) {
-          return false // Reject sign-in
-        }
+        if (!allowedDomains.includes(emailDomain)) return false
       }
-      return true // Allow sign-in
+
+      try {
+        await connectToDB()
+        const existingUser = await User.findOne({ email: user.email })
+
+        if (!existingUser) {
+          await User.create({
+            name: user.name,
+            email: user.email,
+            role: isAdmin(user.email!) ? 'admin' : 'user',
+            lastLogin: new Date(),
+          })
+        } else {
+          existingUser.lastLogin = new Date()
+          await existingUser.save()
+        }
+      } catch (err) {
+        console.error('Error syncing user to DB:', err)
+      }
+
+      return true
     },
-    async session({ session, token }) {
-      // Add admin role to session
-      if (session.user && session.user.email && isAdmin(session.user.email)) {
-        session.user.role = 'admin'
-      } else if (session.user) {
-        session.user.role = 'user'
+
+    async session({ session }) {
+      if (session.user?.email) {
+        try {
+          await connectToDB()
+          const dbUser = await User.findOne({ email: session.user.email })
+          session.user.role = dbUser?.role || 'user'
+        } catch (err) {
+          console.error('Session callback error:', err)
+          session.user.role = 'user'
+        }
       }
       return session
     },
-    async jwt({ token, user }) {
-      // Add admin role to JWT token
-      if (token.email && isAdmin(token.email)) {
-        token.role = 'admin'
-      } else {
-        token.role = 'user'
+
+    async jwt({ token }) {
+      if (token.email) {
+        token.role = isAdmin(token.email) ? 'admin' : 'user'
       }
       return token
     },
+
     async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
+      if (url.startsWith('/')) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     },
   },
+
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',
   },
+
   session: {
     strategy: 'jwt',
   },
