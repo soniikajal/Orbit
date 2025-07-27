@@ -103,7 +103,8 @@ const AboutPage: React.FC = () => {
         position: 'Full Stack Developer',
         branch: "CSDS",
         linkedin: 'https://www.linkedin.com/in/kushagrakataria',
-        instagram: 'https://www.instagram.com/katariakuxh'
+        instagram: 'https://www.instagram.com/katariakuxh',
+        image: '/images/team/kushagra.png'
       },
       {
         id: '4',
@@ -138,6 +139,7 @@ const AboutPage: React.FC = () => {
         name: 'Sakshi Sahu',
         position: 'Graphic Designer',
         branch: 'Mechanical',
+        linkedin: 'https://www.linkedin.com/in/sakshi-sahu-ss/',
         image: '/images/team/sakshi.png'
       },
       {

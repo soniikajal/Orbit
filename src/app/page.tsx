@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
       name: 'Kushagra Kataria',
       position: 'Full Stack Developer',
       experience: 'CSDS Branch - Full Stack Developer with expertise in both frontend and backend development',
-      image: '/images/img_picture.png'
+      image: '/images/team/kushagra.png'
     },
     {
       id: '4',
