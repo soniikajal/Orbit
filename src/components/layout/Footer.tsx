@@ -58,21 +58,27 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             <div className="w-full flex flex-row justify-start items-center gap-4 sm:gap-5 md:gap-6 lg:gap-[20px]">
               {/* Instagram Button */}
               <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300">
-                <button
+                <a
+                  href="https://www.instagram.com/nsut.orbit/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
                   aria-label="Instagram"
                 >
                   <i className="fa-brands fa-instagram text-black text-[30px]"></i>
-                </button>
+                </a>
               </div>
               {/* LinkedIn Button */}
               <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-[60px] lg:h-[60px] bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300">
-                <button
+                <a
+                  href="https://www.linkedin.com/company/106825945/admin/dashboard/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-[40px] lg:h-[40px] flex items-center justify-center rounded-full hover:opacity-80 transition-opacity duration-200"
                   aria-label="LinkedIn"
                 >
                   <i className="fa-brands fa-linkedin-in text-black text-[30px]"></i>
-                </button>
+                </a>
               </div>
             </div>
           </div>
