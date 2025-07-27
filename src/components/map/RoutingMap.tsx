@@ -14,12 +14,7 @@ interface RoutingMapProps {
   showSearchBar?: boolean;
 }
 
-export default function RoutingMap({
-  className = "",
-  searchQuery,
-  onLocationSelect,
-  showSearchBar = true
-}: RoutingMapProps) {
+export default function RoutingMap({ className = "", searchQuery, onLocationSelect, showSearchBar = true }: RoutingMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const routingControl = useRef<any>(null);
@@ -34,14 +29,12 @@ export default function RoutingMap({
   const userLocation = useRef<L.LatLng | null>(null);
   const locationAddedToFuse = useRef<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(17);
-  const [mapReady, setMapReady] = useState(false); // ✅ Fix
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== '') {
       setEndInput(searchQuery);
-      const building = buildings.current.find(b =>
-        b.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
       if (building) {
         endLatLng.current = building.latlng;
         if (userLocation.current) {
@@ -51,7 +44,7 @@ export default function RoutingMap({
         tryRoute();
       }
     }
-  }, [searchQuery, mapReady]);
+  }, [searchQuery]);
 
   useEffect(() => {
     const initMap = async () => {
@@ -64,9 +57,7 @@ export default function RoutingMap({
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: ''
-        }).addTo(mapInstance.current).on('load', () => {
-          setMapReady(true); // ✅ Wait for tiles
-        });
+        }).addTo(mapInstance.current);
 
         mapInstance.current.locate({ setView: false, enableHighAccuracy: true });
 
@@ -81,7 +72,9 @@ export default function RoutingMap({
             locationAddedToFuse.current = true;
           }
 
-          if (onLocationSelect) onLocationSelect("Your Location");
+          if (onLocationSelect) {
+            onLocationSelect("Your Location");
+          }
 
           L.marker(e.latlng, {
             icon: L.icon({
@@ -113,6 +106,8 @@ export default function RoutingMap({
         L.geoJSON(pathsData, {
           style: { color: '#888', weight: 2.5, dashArray: '4,4' }
         }).addTo(mapInstance.current!);
+
+        setMapReady(true);
       }
     };
 
@@ -125,40 +120,6 @@ export default function RoutingMap({
       }
     };
   }, []);
-
-  const tryRoute = () => {
-    if (
-      !startLatLng.current ||
-      !endLatLng.current ||
-      !mapInstance.current ||
-      !mapReady
-    ) return;
-
-    if (routingControl.current) {
-      mapInstance.current.removeControl(routingControl.current);
-      routingControl.current = null;
-    }
-
-    setTimeout(() => {
-      routingControl.current = L.Routing.control({
-        waypoints: [startLatLng.current, endLatLng.current],
-        router: L.Routing.osrmv1({
-          profile: 'foot',
-          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
-        }),
-        lineOptions: {
-          styles: [{ color: '#007bff', weight: 5 }],
-          extendToWaypoints: true,
-          missingRouteTolerance: 10
-        },
-        addWaypoints: false,
-        draggableWaypoints: false,
-        fitSelectedRoutes: true,
-        show: false,
-        createMarker: () => null
-      }).addTo(mapInstance.current!);
-    }, 100); // Small delay for DOM/map stability
-  };
 
   const handleSearchChange = (val: string, type: 'start' | 'end') => {
     if (type === 'start') setStartInput(val);
@@ -191,6 +152,41 @@ export default function RoutingMap({
     }
     setSuggestions([]);
     tryRoute();
+  };
+
+  const tryRoute = () => {
+    if (!startLatLng.current || !endLatLng.current || !mapInstance.current || !mapReady) return;
+
+    if (routingControl.current) {
+      mapInstance.current.removeControl(routingControl.current);
+      routingControl.current = null;
+    }
+
+    routingControl.current = L.Routing.control({
+      waypoints: [startLatLng.current, endLatLng.current],
+      router: L.Routing.osrmv1({
+        profile: 'foot',
+        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
+      }),
+      lineOptions: {
+        styles: [{ color: '#007bff', weight: 5 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 10
+      },
+      addWaypoints: false,
+      draggableWaypoints: false,
+      fitSelectedRoutes: false, // important fix
+      show: false,
+      createMarker: () => null
+    }).addTo(mapInstance.current);
+
+    routingControl.current.on('routesfound', function (e: any) {
+      const bounds = L.latLngBounds([]);
+      e.routes[0].coordinates.forEach((coord: any) => {
+        bounds.extend(coord);
+      });
+      mapInstance.current!.fitBounds(bounds, { padding: [30, 30] });
+    });
   };
 
   const handleZoomIn = () => {
@@ -239,7 +235,6 @@ export default function RoutingMap({
         </div>
       )}
 
-      {/* Zoom Buttons */}
       <div className="absolute bottom-4 right-4 z-[999] flex flex-col gap-2">
         <button
           onClick={handleZoomIn}
