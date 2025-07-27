@@ -161,37 +161,33 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   const tryRoute = () => {
     if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
 
+    // Remove previous route
     if (routingControl.current) {
       mapInstance.current.removeControl(routingControl.current);
+      routingControl.current = null;
     }
 
-    routingControl.current = L.Routing.control({
-      waypoints: [startLatLng.current, endLatLng.current],
-      router: L.Routing.osrmv1({
-        profile: 'foot',
-        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
-      }),
-      lineOptions: {
-        styles: [{ color: '#007bff', weight: 5 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 10,
-      },
-      addWaypoints: false,
-      routeWhileDragging: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      createMarker: () => null,
-      show: false,
-    }).addTo(mapInstance.current!);
-
-    // ✅ Force redraw after route render
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        mapInstance.current?.invalidateSize();
-        routingControl.current?._container?.classList?.add('leaflet-routing-show');
-      }, 300);
-    });
+    setTimeout(() => {
+      routingControl.current = L.Routing.control({
+        waypoints: [startLatLng.current, endLatLng.current],
+        router: L.Routing.osrmv1({
+          profile: 'foot',
+          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
+        }),
+        lineOptions: {
+          styles: [{ color: '#007bff', weight: 5 }],
+          extendToWaypoints: true,
+          missingRouteTolerance: 10
+        },
+        addWaypoints: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: true,
+        show: false,
+        createMarker: () => null
+      }).addTo(mapInstance.current!);
+    }, 500); // Delay to allow DOM + map stabilization
   };
+
 
 
   const handleZoomIn = () => {
