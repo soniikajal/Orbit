@@ -536,10 +536,9 @@ const HomePage: React.FC = () => {
                           const linkedinUrls: { [key: string]: string } = {
                             'Kajal Soni': 'https://www.linkedin.com/in/kajalsoni2006/',
                             'Manik Bhushan': 'https://www.linkedin.com/in/manik-bhushan/',
-                            'Parkhi Mudgal': 'https://www.linkedin.com/in/parkhi-mudgal-9a4285323/',
-                            'Aastha Pandey': 'https://www.linkedin.com/in/aastha-pandey/',
                             'Kushagra Kataria': 'https://www.linkedin.com/in/kushagra-kataria/',
-                            'Sarah Kim': 'https://www.linkedin.com/in/sarah-kim/'
+                            'bhavya goel': 'www.linkedin.com/in/bhavya-goel-796848264',
+                            'ishit papnai': 'https://www.linkedin.com/in/ishit-papnai-44218b320/'
                           };
                           return linkedinUrls[member.name] || '#';
                         })()}
@@ -556,10 +555,10 @@ const HomePage: React.FC = () => {
                           const instagramUrls: { [key: string]: string } = {
                             'Kajal Soni': 'https://www.instagram.com/rustic.reverie_/',
                             'Manik Bhushan': 'https://www.instagram.com/iammvnik/',
-                            'Parkhi Mudgal': 'https://www.instagram.com/p_mudgal26/',
-                            'Aastha Pandey': 'https://www.instagram.com/aastha.pandey/',
+                            'bhavya goel': 'https://www.instagram.com/bhavya_goel_11/',
                             'Kushagra Kataria': 'https://www.instagram.com/katariakuxh/',
-                            'Sarah Kim': 'https://www.instagram.com/sarah.kim/'
+                            'ishit papnai': 'https://www.instagram.com/papnaishit/'
+                            
                           };
                           return instagramUrls[member.name] || '#';
                         })()}

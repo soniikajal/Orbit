@@ -86,7 +86,7 @@ const AboutPage: React.FC = () => {
         position: 'Backend Developer',
         branch: "CSAI",
         linkedin: 'www.linkedin.com/in/bhavya-goel-796848264',
-        image: '/images/team/bhavya.png'
+        image: '/images/team/bhavya.png' 
       },
       {
         id: '2',
