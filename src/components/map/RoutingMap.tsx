@@ -155,43 +155,39 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   };
 
   const tryRoute = () => {
-    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
+    if (!startLatLng.current || !endLatLng.current || !mapInstance.current || !mapReady) return;
 
-    // ✅ Remove previous route control if exists
     if (routingControl.current) {
       mapInstance.current.removeControl(routingControl.current);
       routingControl.current = null;
     }
 
-    // ✅ Small delay to let DOM/layout stabilize
-    setTimeout(() => {
-      routingControl.current = L.Routing.control({
-        waypoints: [startLatLng.current, endLatLng.current],
-        router: L.Routing.osrmv1({
-          profile: 'foot',
-          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
-        }),
-        lineOptions: {
-          styles: [{ color: '#007bff', weight: 5 }],
-          extendToWaypoints: true,
-          missingRouteTolerance: 10
-        },
-        addWaypoints: false,
-        draggableWaypoints: false,
-        fitSelectedRoutes: true,
-        show: false,
-        createMarker: () => null
-      }).addTo(mapInstance.current!);
+    routingControl.current = L.Routing.control({
+      waypoints: [startLatLng.current, endLatLng.current],
+      router: L.Routing.osrmv1({
+        profile: 'foot',
+        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
+      }),
+      lineOptions: {
+        styles: [{ color: '#007bff', weight: 5 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 10
+      },
+      addWaypoints: false,
+      draggableWaypoints: false,
+      fitSelectedRoutes: false, // important fix
+      show: false,
+      createMarker: () => null
+    }).addTo(mapInstance.current);
 
-      // ✅ Force Leaflet to recompute layout after route is found (fixes Vercel bug)
-      routingControl.current.on('routesfound', () => {
-        setTimeout(() => {
-          mapInstance.current?.invalidateSize();
-        }, 100); // slight delay helps in stable re-render
+    routingControl.current.on('routesfound', function (e: any) {
+      const bounds = L.latLngBounds([]);
+      e.routes[0].coordinates.forEach((coord: any) => {
+        bounds.extend(coord);
       });
-    }, 300); // allow layout/render to settle
+      mapInstance.current!.fitBounds(bounds, { padding: [30, 30] });
+    });
   };
-
 
   const handleZoomIn = () => {
     if (mapInstance.current) {

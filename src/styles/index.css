@@ -63,7 +63,7 @@ body {
 }
 
 /* Hide default routing control container to use our custom controls */
-.leaflet-routing-container {
+.leaflet-routing-container.leaflet-bar {
   display: none;
 }
 
