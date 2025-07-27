@@ -39,9 +39,30 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     setNewsletterEmail(stringValue);
   };
 
-  const handleNewsletterSubmit = () => {
-    console.log('Newsletter subscription:', newsletterEmail);
-    setNewsletterEmail('');
+  const handleNewsletterSubmit = async () => {
+    if (!newsletterEmail.includes('@')) {
+      alert('Please enter a valid email address.')
+      return
+    }
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      })
+
+      if (res.status === 409) {
+        alert('You are already subscribed.')
+      } else if (res.ok) {
+        alert('Subscribed successfully!')
+        setNewsletterEmail('')
+      } else {
+        alert('Subscription failed. Please try again.')
+      }
+    } catch (err) {
+      alert('An error occurred. Please try again later.')
+    }
   };
 
   return (
