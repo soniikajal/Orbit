@@ -49,7 +49,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   useEffect(() => {
     const initMap = async () => {
       if (mapRef.current && !mapInstance.current) {
-        const map = L.map(mapRef.current, {
+        const map = mapInstance.current ?? L.map(mapRef.current!, {
           attributionControl: false,
           zoomControl: false
         }).setView([28.6103, 77.0370], 17);
@@ -155,39 +155,39 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   };
 
   const tryRoute = () => {
-    if (!startLatLng.current || !endLatLng.current || !mapInstance.current || !mapReady) return;
+    if (!mapInstance.current || !mapRef.current || !startLatLng.current || !endLatLng.current) return;
 
+
+    // Clear old control safely
     if (routingControl.current) {
-      mapInstance.current.removeControl(routingControl.current);
+      routingControl.current.remove();  // 👈 safer than removeControl
       routingControl.current = null;
     }
 
-    routingControl.current = L.Routing.control({
-      waypoints: [startLatLng.current, endLatLng.current],
-      router: L.Routing.osrmv1({
-        profile: 'foot',
-        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
-      }),
-      lineOptions: {
-        styles: [{ color: '#007bff', weight: 5 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 10
-      },
-      addWaypoints: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: false, // important fix
-      show: false,
-      createMarker: () => null
-    }).addTo(mapInstance.current);
+    // Delay routing slightly to allow layout paint (helps on Vercel)
+    setTimeout(() => {
+      if (!mapInstance.current) return;
 
-    routingControl.current.on('routesfound', function (e: any) {
-      const bounds = L.latLngBounds([]);
-      e.routes[0].coordinates.forEach((coord: any) => {
-        bounds.extend(coord);
-      });
-      mapInstance.current!.fitBounds(bounds, { padding: [30, 30] });
-    });
+      routingControl.current = L.Routing.control({
+        waypoints: [startLatLng.current, endLatLng.current],
+        router: L.Routing.osrmv1({
+          profile: 'foot',
+          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
+        }),
+        lineOptions: {
+          styles: [{ color: '#007bff', weight: 5 }],
+          extendToWaypoints: true,
+          missingRouteTolerance: 10,
+        },
+        addWaypoints: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: true,
+        createMarker: () => null,
+        show: false,
+      }).addTo(mapInstance.current!);
+    }, 500); // 500ms is sweet spot for DOM stabilization on Vercel
   };
+
 
   const handleZoomIn = () => {
     if (mapInstance.current) {
