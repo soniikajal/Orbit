@@ -155,38 +155,40 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   };
 
   const tryRoute = () => {
-    if (!mapInstance.current || !mapRef.current || !startLatLng.current || !endLatLng.current) return;
+    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
 
-
-    // Clear old control safely
+    // Clear old route
     if (routingControl.current) {
-      routingControl.current.remove();  // 👈 safer than removeControl
+      mapInstance.current.removeControl(routingControl.current);
       routingControl.current = null;
     }
 
-    // Delay routing slightly to allow layout paint (helps on Vercel)
-    setTimeout(() => {
-      if (!mapInstance.current) return;
-
-      routingControl.current = L.Routing.control({
-        waypoints: [startLatLng.current, endLatLng.current],
-        router: L.Routing.osrmv1({
-          profile: 'foot',
-          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
-        }),
-        lineOptions: {
-          styles: [{ color: '#007bff', weight: 5 }],
-          extendToWaypoints: true,
-          missingRouteTolerance: 10,
-        },
-        addWaypoints: false,
-        draggableWaypoints: false,
-        fitSelectedRoutes: true,
-        createMarker: () => null,
-        show: false,
-      }).addTo(mapInstance.current!);
-    }, 500); // 500ms is sweet spot for DOM stabilization on Vercel
+    routingControl.current = L.Routing.control({
+      waypoints: [startLatLng.current, endLatLng.current],
+      router: L.Routing.osrmv1({
+        profile: 'foot',
+        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
+      }),
+      lineOptions: {
+        styles: [{ color: '#007bff', weight: 5 }],
+        extendToWaypoints: true,
+        missingRouteTolerance: 10,
+      },
+      addWaypoints: false,
+      draggableWaypoints: false,
+      fitSelectedRoutes: true,
+      show: false,
+      createMarker: () => null,
+    })
+      .on('routesfound', function (e) {
+        console.log("✅ Route found on Vercel");
+        setTimeout(() => {
+          mapInstance.current?.invalidateSize();
+        }, 300); // delay to allow CSS/layout paint
+      })
+      .addTo(mapInstance.current!);
   };
+
 
 
   const handleZoomIn = () => {
