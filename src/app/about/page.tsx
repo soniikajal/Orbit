@@ -113,7 +113,8 @@ const AboutPage: React.FC = () => {
         position: 'Frontend Developer',
         branch: 'ICE',
         linkedin: 'ttps://www.linkedin.com/in/yash-goel-22b952283/',
-        instagram: 'tps://www.instagram.com/yash_.goel'
+        instagram: 'tps://www.instagram.com/yash_.goel',
+        image: '/images/team/yash.png'
       }
     ],
     creative: [
@@ -173,7 +174,8 @@ const AboutPage: React.FC = () => {
         position: 'Content Curator',
         branch: 'MAC',
         linkedin: 'https://www.linkedin.com/in/tisha-bansal-00322031b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
-        instagram: 'https://www.instagram.com/_tishaa_bansal_?igsh=MmhoMHQ4a2g2cnJ6&utm_source=qr'
+        instagram: 'https://www.instagram.com/_tishaa_bansal_?igsh=MmhoMHQ4a2g2cnJ6&utm_source=qr',
+        image: '/images/team/tisha.png'
       },
       {
         id: '12',
@@ -303,8 +305,8 @@ const AboutPage: React.FC = () => {
                 </h2>
                 
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs). Submit the form to get your event listed on the Event Board. (To be filled by Society POCs)
-                </p>
+                  Let's be honest: college is chaotic. From accidently ending up in the wrong block to googling "how to survive engineering without a mental breakdown?", college hits like a whirlwind. That's where we come in. At Orbit, our mission is to make sure that you don't have to suffer like we did. We are here to simplify the mess, connect the dots, and be the all-in-one guide we wish we had when we first stepped onto campus.
+                 </p>
                 
               </div>
 
