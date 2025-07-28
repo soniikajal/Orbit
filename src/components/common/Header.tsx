@@ -332,11 +332,33 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
               >
                 Course Curriculum
               </button>
-              <Link href="/academic-calendar" onClick={() => setMenuOpen(false)}>
-                <button className={`w-full text-left py-3 px-4 rounded-lg text-base font-space-grotesk transition-all duration-200 ${pathname === '/academic-calendar' ? 'bg-[#facc6b] text-black font-medium' : 'text-global-text2 hover:bg-gray-100'}`}>
-                  Academic Calendar
-                </button>
-              </Link>
+              <button 
+                className="w-full text-left py-3 px-4 rounded-lg text-base font-space-grotesk text-global-text2 hover:bg-gray-100 transition-all duration-200"
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.open('/Academic calender .pdf', '_blank');
+                }}
+              >
+                Academic Calendar
+              </button>
+              <button 
+                className="w-full text-left py-3 px-4 rounded-lg text-base font-space-grotesk text-global-text2 hover:bg-gray-100 transition-all duration-200"
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.open('http://nsut.ac.in/en/for-students/existing-students/co-curricular-activities-societies-and-clubs', '_blank');
+                }}
+              >
+                Societies and Clubs
+              </button>
+              <button 
+                className="w-full text-left py-3 px-4 rounded-lg text-base font-space-grotesk text-global-text2 hover:bg-gray-100 transition-all duration-200"
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.open('https://www.imsnsit.org/imsnsit/', '_blank');
+                }}
+              >
+                CUMS Website
+              </button>
               <Link href="/timetable" onClick={() => setMenuOpen(false)}>
                 <button className={`w-full text-left py-3 px-4 rounded-lg text-base font-space-grotesk transition-all duration-200 ${pathname === '/timetable' ? 'bg-[#facc6b] text-black font-medium' : 'text-global-text2 hover:bg-gray-100'}`}>
                   Time Table
