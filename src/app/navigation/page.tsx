@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import InteractiveMap from '@/components/map/InteractiveMap';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
@@ -157,7 +158,7 @@ const NavigationPage: React.FC = () => {
               className={`w-full mb-[15px] relative ${fadeInUp('search-section', '200')}`}
             >
               <form onSubmit={handleSearch} className="relative">
-                <div className="relative">
+                <div className="relative z-[100]">
                   <input
                     type="text"
                     value={searchQuery}
@@ -187,31 +188,42 @@ const NavigationPage: React.FC = () => {
               </form>
               
               {/* Suggestions Dropdown */}
-              {isSearchFocused && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-[20px] shadow-lg z-[1000] mt-2 max-h-48 overflow-y-auto">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`px-6 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150 first:rounded-t-[20px] last:rounded-b-[20px] ${
-                        index === selectedSuggestionIndex 
-                          ? 'bg-blue-50 border-blue-200' 
-                          : 'hover:bg-gray-50'
-                      }`}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                    >
-                      <div className="flex items-center gap-3">
-                        <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span className="text-[14px] font-normal text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          {suggestion}
-                        </span>
+              {isSearchFocused && suggestions.length > 0 && typeof window !== 'undefined' && (() => {
+                let top = 100, left = 0, width = 400;
+                const el = document.activeElement;
+                if (el && el instanceof HTMLElement) {
+                  const rect = el.getBoundingClientRect();
+                  top = rect.bottom + window.scrollY + 8;
+                  left = rect.left + window.scrollX;
+                  width = rect.width;
+                }
+                return createPortal(
+                  <div className="fixed bg-white border border-gray-300 rounded-[20px] shadow-lg z-[99999] mt-2 max-h-48 overflow-y-auto" style={{ top, left, width }}>
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className={`px-6 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150 first:rounded-t-[20px] last:rounded-b-[20px] ${
+                          index === selectedSuggestionIndex 
+                            ? 'bg-blue-50 border-blue-200' 
+                            : 'hover:bg-gray-50'
+                        }`}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span className="text-[14px] font-normal text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            {suggestion}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>,
+                  document.body
+                );
+              })()}
             </div>
 
             {/* Most searched for */}
@@ -283,7 +295,7 @@ const NavigationPage: React.FC = () => {
             >
               <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 relative">
                 {/* Interactive Map */}
-                <div className="absolute inset-0 rounded-[30px] overflow-hidden">
+                <div className="absolute inset-0 rounded-[30px]">
                   <InteractiveMap 
                     className="w-full h-full"
                     searchQuery={routeQuery}
