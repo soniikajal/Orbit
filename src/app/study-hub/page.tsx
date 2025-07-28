@@ -212,11 +212,11 @@ const StudyHubPage: React.FC = () => {
                 </div>
                 {/* Branch Selector (Year 2 only) */}
                 {selectedYear === 2 && (
-                  <div className="w-full flex flex-row gap-4 mb-4">
+                  <div className="w-full flex flex-wrap gap-2 sm:gap-3 md:gap-4 mb-4">
                     {branchOptions.map(branch => (
                       <button
                         key={branch.id}
-                        className={`px-5 py-2 rounded-[16px] font-medium text-base transition-all duration-200 border-2 ${selectedBranch === branch.id ? 'bg-[#FACC6B] text-black border-[#FACC6B]' : 'bg-white text-[#F45B69] border-[#F45B69]'}`}
+                        className={`px-3 sm:px-4 md:px-5 py-2 rounded-[16px] font-medium text-sm sm:text-base transition-all duration-200 border-2 whitespace-nowrap ${selectedBranch === branch.id ? 'bg-[#FACC6B] text-black border-[#FACC6B]' : 'bg-white text-[#F45B69] border-[#F45B69]'}`}
                         style={{ fontFamily: 'Inter, sans-serif' }}
                         onClick={() => setSelectedBranch(branch.id)}
                       >
