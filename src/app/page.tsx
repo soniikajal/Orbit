@@ -556,9 +556,9 @@ const HomePage: React.FC = () => {
                           const instagramUrls: { [key: string]: string } = {
                             'Kajal Soni': 'https://www.instagram.com/rustic.reverie_/',
                             'Manik Bhushan': 'https://www.instagram.com/maeniikkk/',
-                            'bhavya goel': 'https://www.instagram.com/bhavya_goel_11/',
+                            'bhavya Goel': 'https://www.instagram.com/bhavya_goel_11/',
                             'Kushagra Kataria': 'https://www.instagram.com/katariakuxh/',
-                            'ishit papnai': 'https://www.instagram.com/papnaishit/'
+                            'Ishit Papnai': 'https://www.instagram.com/papnaishit/'
                             
                           };
                           return instagramUrls[member.name] || '#';
