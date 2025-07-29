@@ -49,7 +49,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   useEffect(() => {
     const initMap = async () => {
       if (mapRef.current && !mapInstance.current) {
-        const map = L.map(mapRef.current, {
+        const map = mapInstance.current ?? L.map(mapRef.current!, {
           attributionControl: false,
           zoomControl: false
         }).setView([28.6103, 77.0370], 17);
@@ -155,8 +155,9 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   };
 
   const tryRoute = () => {
-    if (!startLatLng.current || !endLatLng.current || !mapInstance.current || !mapReady) return;
+    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
 
+    // Clear old route
     if (routingControl.current) {
       mapInstance.current.removeControl(routingControl.current);
       routingControl.current = null;
@@ -166,28 +167,29 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
       waypoints: [startLatLng.current, endLatLng.current],
       router: L.Routing.osrmv1({
         profile: 'foot',
-        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1'
+        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
       }),
       lineOptions: {
         styles: [{ color: '#007bff', weight: 5 }],
         extendToWaypoints: true,
-        missingRouteTolerance: 10
+        missingRouteTolerance: 10,
       },
       addWaypoints: false,
       draggableWaypoints: false,
-      fitSelectedRoutes: false, // important fix
+      fitSelectedRoutes: true,
       show: false,
-      createMarker: () => null
-    }).addTo(mapInstance.current);
-
-    routingControl.current.on('routesfound', function (e: any) {
-      const bounds = L.latLngBounds([]);
-      e.routes[0].coordinates.forEach((coord: any) => {
-        bounds.extend(coord);
-      });
-      mapInstance.current!.fitBounds(bounds, { padding: [30, 30] });
-    });
+      createMarker: () => null,
+    })
+      .on('routesfound', function (e) {
+        console.log("✅ Route found on Vercel");
+        setTimeout(() => {
+          mapInstance.current?.invalidateSize();
+        }, 300); // delay to allow CSS/layout paint
+      })
+      .addTo(mapInstance.current!);
   };
+
+
 
   const handleZoomIn = () => {
     if (mapInstance.current) {
