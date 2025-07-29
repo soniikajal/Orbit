@@ -20,6 +20,8 @@ const LaunchpadPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalProjects, setTotalProjects] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [projectForm, setProjectForm] = useState({
     projectName: '',
     category: '',
@@ -30,6 +32,37 @@ const LaunchpadPage: React.FC = () => {
     contactEmail: '',
     additionalInfo: ''
   });
+
+  // Animation setup
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections(prev => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    const sections = document.querySelectorAll('[data-animate-on-scroll]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
 
   // Prefill email when session loads
   useEffect(() => {
@@ -332,12 +365,22 @@ const LaunchpadPage: React.FC = () => {
           <div className="w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0">
             <main className="w-full py-2">
               {/* Page Title */}
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Launch Pad
-              </h1>
+              <div 
+                id="page-header"
+                data-animate-on-scroll
+                className={`transition-all duration-1000 ease-out ${visibleSections.has('page-header') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              >
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  Launch Pad
+                </h1>
+              </div>
 
               {/* Search Bar */}
-              <div className="w-full mb-[15px]">
+              <div 
+                id="search-section"
+                data-animate-on-scroll
+                className={`w-full mb-[15px] transition-all duration-1000 ease-out delay-200 ${visibleSections.has('search-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              >
                 <form onSubmit={handleSearch} className="relative">
                   <div className="relative">
                     <input
@@ -360,7 +403,11 @@ const LaunchpadPage: React.FC = () => {
               </div>
 
               {/* Add Project Button */}
-              <div className="w-full flex justify-center items-center mt-[15px]">
+              <div 
+                id="add-project-button"
+                data-animate-on-scroll
+                className={`w-full flex justify-center items-center mt-[15px] transition-all duration-1000 ease-out delay-400 ${visibleSections.has('add-project-button') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              >
                 <button
                   className="w-[278px] h-[54px] bg-[#F45B6A] text-white font-bold text-[20px] rounded-[30px] hover:opacity-90 transition-opacity duration-200"
                   style={{ fontFamily: 'Inter, sans-serif' }}
@@ -384,10 +431,24 @@ const LaunchpadPage: React.FC = () => {
               </div> */}
 
               {/* Project Cards */}
-            <div className="w-full mt-8">
+            <div 
+              id="projects-grid"
+              data-animate-on-scroll
+              className={`w-full mt-8 transition-all duration-1000 ease-out delay-600 ${visibleSections.has('projects-grid') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {projects.map((project) => (
-                  <div key={project.id} className="w-full max-w-[280px] mx-auto h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col relative overflow-hidden">
+                {projects.map((project, index) => (
+                  <div 
+                    key={project.id} 
+                    className={`w-full max-w-[280px] mx-auto h-[440px] bg-white rounded-[30px] px-4 py-5 shadow-sm border border-gray-100 flex flex-col relative overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                      visibleSections.has('projects-grid')
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-8'
+                    }`}
+                    style={{ 
+                      transitionDelay: visibleSections.has('projects-grid') ? `${index * 100}ms` : '0ms'
+                    }}
+                  >
                     {/* Date - Top Right */}
                     <div className="absolute top-5 right-4">
                       <span className="text-[12px] font-normal text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -507,7 +568,11 @@ const LaunchpadPage: React.FC = () => {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="w-full flex flex-col items-center mt-12 space-y-6">
+              <div 
+                id="pagination-section"
+                data-animate-on-scroll
+                className={`w-full flex flex-col items-center mt-12 space-y-6 transition-all duration-1000 ease-out delay-800 ${visibleSections.has('pagination-section') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              >
                 {/* Page Info */}
                 <div className="text-[16px] text-global-text2 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Showing page {currentPage} of {totalPages} ({totalProjects} total projects)
