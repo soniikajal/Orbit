@@ -354,7 +354,7 @@ const EventBoardPage: React.FC = () => {
                 transitionDelay: '0.5s'
               }}
             >
-              {/* Carousel Navigation Buttons - Hidden on mobile */}
+              {/* Carousel Navigation Buttons - Visible on desktop */}
               <button
                 className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#FACC6B] rounded-full p-3 hover:bg-[#F4C430] transition-colors duration-200 -ml-16"
                 onClick={() => {
@@ -399,17 +399,16 @@ const EventBoardPage: React.FC = () => {
               {/* Scrollable Cards Container */}
               <div 
                 id="event-cards-container"
-                className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-4 items-start"
+                className="flex gap-3 sm:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide pb-4 items-start"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="bg-[#262626] rounded-[20px] sm:rounded-[25px] p-4 sm:p-6 text-white relative flex flex-col flex-shrink-0 self-start overflow-hidden"
+                    className="bg-[#262626] rounded-[20px] sm:rounded-[25px] p-4 sm:p-6 text-white relative flex flex-col flex-shrink-0 self-start overflow-hidden w-[calc(80vw-24px)] sm:w-[calc(45vw-24px)] lg:w-[calc(22vw-24px)] xl:w-[calc(20vw-24px)]"
                     style={{ 
-                      width: 'calc(80vw - 24px)',
                       minWidth: '280px',
-                      maxWidth: '320px'
+                      maxWidth: '350px'
                     }}
                   >
                     {/* Date Badge */}
