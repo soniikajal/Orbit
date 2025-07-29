@@ -249,8 +249,83 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    // Outer-most container: relative to contain fixed elements, occupies full width.
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <>
+      {/* Safari-specific CSS fixes */}
+      <style jsx global>{`
+        /* Safari-specific fixes for team member cards */
+        @supports (-webkit-appearance: none) {
+          .safari-team-card {
+            display: -webkit-box !important;
+            display: -webkit-flex !important;
+            display: flex !important;
+            -webkit-box-orient: vertical !important;
+            -webkit-flex-direction: column !important;
+            flex-direction: column !important;
+            -webkit-box-pack: start !important;
+            -webkit-justify-content: flex-start !important;
+            justify-content: flex-start !important;
+            -webkit-box-align: center !important;
+            -webkit-align-items: center !important;
+            align-items: center !important;
+            min-height: 280px !important;
+            height: auto !important;
+          }
+          
+          .safari-team-image {
+            width: 100% !important;
+            height: 150px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            border-radius: 12px !important;
+            margin-bottom: 12px !important;
+            background-color: #e5e7eb !important;
+          }
+          
+          .safari-team-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            -webkit-object-fit: cover !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+          }
+          
+          .safari-team-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+            gap: 20px !important;
+            width: 100% !important;
+          }
+          
+          @media (min-width: 640px) {
+            .safari-team-grid {
+              grid-template-columns: repeat(2, 1fr) !important;
+            }
+          }
+          
+          @media (min-width: 768px) {
+            .safari-team-grid {
+              grid-template-columns: repeat(3, 1fr) !important;
+            }
+          }
+          
+          @media (min-width: 1024px) {
+            .safari-team-grid {
+              grid-template-columns: repeat(4, 1fr) !important;
+            }
+          }
+          
+          @media (min-width: 1280px) {
+            .safari-team-grid {
+              grid-template-columns: repeat(5, 1fr) !important;
+            }
+          }
+        }
+      `}</style>
+      
+      {/* Outer-most container: relative to contain fixed elements, occupies full width. */}
+      <div className="relative w-full min-h-screen overflow-hidden">
       {/* Background SVG - positioned as fixed to cover the entire viewport */}
       {showBackground && (
         <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none" style={{ opacity: backgroundOpacity, transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)' }}>
@@ -520,25 +595,30 @@ const HomePage: React.FC = () => {
               </p>
             </div>
             {/* Team Grid - Show only first 5 members */}
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-[20px]">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-[20px] safari-team-grid">
               {teamMembers.slice(0, 5).map((member, index) => (
                 <div
                   key={member.id}
-                  className={`w-full flex flex-col justify-start items-center bg-white border border-gray-300 rounded-[15px] p-4 transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                  style={{ transitionDelay: visibleSections.has('meet-the-team') ? `${index * 100}ms` : '0ms' }}
+                  className={`safari-team-card w-full min-h-[280px] flex flex-col justify-start items-center bg-white border border-gray-300 rounded-[15px] p-4 transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('meet-the-team') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                  style={{ 
+                    transitionDelay: visibleSections.has('meet-the-team') ? `${index * 100}ms` : '0ms',
+                    WebkitTransform: visibleSections.has('meet-the-team') ? 'translateY(0)' : 'translateY(32px)',
+                    transform: visibleSections.has('meet-the-team') ? 'translateY(0)' : 'translateY(32px)'
+                  }}
                 >
                   {/* Member Image */}
-                  <div className="w-full aspect-square bg-gray-200 rounded-[12px] mb-3 overflow-hidden">
+                  <div className="safari-team-image w-full h-[150px] bg-gray-200 rounded-[12px] mb-3 overflow-hidden relative">
                     {member.image ? (
                       <Image
                         src={member.image}
                         alt={member.name}
                         width={150}
                         height={150}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover absolute inset-0"
+                        style={{ objectFit: 'cover' }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                      <div className="w-full h-full bg-gray-300 flex items-center justify-center absolute inset-0">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                           <circle cx="12" cy="7" r="4"></circle>
@@ -789,6 +869,7 @@ const HomePage: React.FC = () => {
         </svg>
       </button>
     </div>
+    </>
   );
 };
 
