@@ -20,6 +20,7 @@ interface ContactFormData {
   name: string;
   email: string;
   message: string;
+  bugImage?: File | null;
 }
 
 const HomePage: React.FC = () => {
@@ -27,7 +28,8 @@ const HomePage: React.FC = () => {
   const [contactForm, setContactForm] = useState<ContactFormData>({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    bugImage: null
   });
   const [feedbackType, setFeedbackType] = useState<'askQuery' | 'leaveFeedback' | 'reportBug'>('askQuery');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -172,26 +174,50 @@ const HomePage: React.FC = () => {
 
   const handleContactSubmit = async () => {
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      let formData: FormData | null = null;
+      let headers: Record<string, string> = {};
+      let body: any;
+      if (feedbackType === 'reportBug' && contactForm.bugImage) {
+        formData = new FormData();
+        formData.append('name', contactForm.name);
+        formData.append('email', contactForm.email);
+        formData.append('message', contactForm.message);
+        formData.append('type', 'reportBug');
+        formData.append('bugImage', contactForm.bugImage);
+        body = formData;
+        // Don't set Content-Type header for FormData
+      } else {
+        headers['Content-Type'] = 'application/json';
+        body = JSON.stringify({
           ...contactForm,
           type: feedbackType === 'askQuery' ? 'askQuery' :
                 feedbackType === 'leaveFeedback' ? 'leaveFeedback' :
-                'reportBug'
-        }),
+                'reportBug',
+          // Don't send bugImage in JSON
+        });
+      }
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers,
+        body,
       });
       const data = await res.json();
       if (data.success) {
         alert('Your message has been sent!');
-        setContactForm({ name: '', email: '', message: '' });
+        setContactForm({ name: '', email: '', message: '', bugImage: null });
       } else {
         alert('Something went wrong.');
       }
     } catch (error) {
       console.error('Error:', error);
       alert('Network error.');
+    }
+  };
+  const handleBugImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setContactForm(prev => ({ ...prev, bugImage: e.target.files![0] }));
+    } else {
+      setContactForm(prev => ({ ...prev, bugImage: null }));
     }
   };
 
@@ -693,6 +719,23 @@ const HomePage: React.FC = () => {
                       style={{ borderRadius: '30px' }}
                     />
                   </div>
+                  {/* Bug Image Upload Field (only for reportBug) */}
+                  {feedbackType === 'reportBug' && (
+                    <div className="w-full flex flex-col gap-1 sm:gap-1.5 md:gap-2 lg:gap-[4px] justify-center items-start">
+                      <label className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Bug Screenshot
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleBugImageChange}
+                        className="w-full border border-gray-300 rounded-[30px] px-3 py-2 text-sm"
+                      />
+                      {contactForm.bugImage && (
+                        <span className="text-xs text-gray-600 mt-1">Selected: {contactForm.bugImage.name}</span>
+                      )}
+                    </div>
+                  )}
                   {/* Submit Button */}
                   <Button
                     variant="secondary"
