@@ -87,10 +87,11 @@ const LaunchpadPage: React.FC = () => {
         }
       })
   }, [])
+  
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (searchQuery.trim()) {
-        handleSearch();  // Your existing function
+        handleSearch();
       } else {
         // If cleared, reload first page normally
         fetch(`/api/launchpad?page=1&limit=12`)
@@ -105,10 +106,10 @@ const LaunchpadPage: React.FC = () => {
             }
           });
       }
-    }, 400); // Adjust debounce delay as needed (ms)
+    }, 400);
 
-  return () => clearTimeout(delayDebounce);
-}, [searchQuery])
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery])
   // Load projects for specific page
   const loadPage = async (page: number) => {
     const res = await fetch(`/api/launchpad?page=${page}&limit=12`)
@@ -161,7 +162,7 @@ const LaunchpadPage: React.FC = () => {
 
     if (data.success) {
       alert('Project deleted successfully.');
-      setProjects(prev => prev.filter(p => p._id !== projectId));
+      setProjects(prev => prev.filter(p => p.id !== projectId));
     } else {
       alert(data.message || 'Failed to delete project.');
     }
@@ -553,7 +554,7 @@ const LaunchpadPage: React.FC = () => {
                       </a>
                       {session?.user?.email === project.contactEmail && (
                         <button
-                          onClick={() => handleDelete(project._id)}
+                          onClick={() => handleDelete(project.id)}
                           className="w-[150px] h-[36px] bg-[#F45B6A] rounded-[30px] text-white text-[13px] font-normal hover:opacity-90 transition-opacity duration-200 mx-auto flex items-center justify-center"
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         >
