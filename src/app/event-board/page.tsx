@@ -399,16 +399,16 @@ const EventBoardPage: React.FC = () => {
               {/* Scrollable Cards Container */}
               <div 
                 id="event-cards-container"
-                className="flex gap-3 sm:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide pb-4 items-start"
+                className="flex gap-1 sm:gap-2 lg:gap-1 xl:gap-2 overflow-x-auto scrollbar-hide pb-4 items-start"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="bg-[#262626] rounded-[20px] sm:rounded-[25px] p-4 sm:p-6 text-white relative flex flex-col flex-shrink-0 self-start overflow-hidden w-[calc(80vw-24px)] sm:w-[calc(45vw-24px)] lg:w-[calc(22vw-24px)] xl:w-[calc(20vw-24px)]"
+                    className="bg-[#262626] rounded-[20px] sm:rounded-[25px] p-3 sm:p-4 text-white relative flex flex-col flex-shrink-0 self-start overflow-hidden w-[calc(80vw-16px)] sm:w-[calc(45vw-16px)] lg:w-[calc(20vw-2px)] xl:w-[calc(19vw-1px)]"
                     style={{ 
-                      minWidth: '280px',
-                      maxWidth: '350px'
+                      minWidth: '200px',
+                      maxWidth: '280px'
                     }}
                   >
                     {/* Date Badge */}
@@ -445,11 +445,8 @@ const EventBoardPage: React.FC = () => {
 
                       {/* Description */}
                       <div className="mb-4 sm:mb-6 flex-1 min-h-0">
-                        <p className="text-[12px] sm:text-[14px] font-normal leading-relaxed text-gray-300 break-words overflow-hidden" style={{ 
+                        <p className="text-[12px] sm:text-[14px] font-normal leading-relaxed text-gray-300 break-words" style={{ 
                           fontFamily: 'Inter, sans-serif',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 4,
-                          WebkitBoxOrient: 'vertical',
                           wordWrap: 'break-word',
                           hyphens: 'auto'
                         }}>
