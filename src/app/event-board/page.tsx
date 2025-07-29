@@ -30,6 +30,8 @@ const EventBoardPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showEventForm, setShowEventForm] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [eventForm, setEventForm] = useState({
     eventName: '',
     category: '',
@@ -43,6 +45,37 @@ const EventBoardPage: React.FC = () => {
     additionalInfo: ''
   });
   const eventsPerPage = 8;
+
+  // Animation setup
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections(prev => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    );
+
+    const sections = document.querySelectorAll('[data-animate-on-scroll]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, []);
 
   // Prefill email when session loads
   useEffect(() => {
@@ -266,45 +299,64 @@ const EventBoardPage: React.FC = () => {
         <div className="w-full flex flex-col justify-start items-start mt-2 sm:mt-3 md:mt-4">
           <main className="w-full py-2">
             {/* Page Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
-              Event Board
-            </h1>
+            <div 
+              id="page-header"
+              data-animate-on-scroll
+              className={`transition-all duration-1000 ease-out ${visibleSections.has('page-header') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            >
+              <h1 className="text-[clamp(32px,8vw,80px)] font-bold leading-tight text-left text-global-text2 mb-6 sm:mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Event Board
+              </h1>
+            </div>
 
             {/* Month Navigation */}
-            <div className="w-full flex justify-start items-center mb-12">
+            <div 
+              id="month-navigation"
+              data-animate-on-scroll
+              className={`w-full flex justify-center sm:justify-start items-center mb-8 sm:mb-12 transition-all duration-1000 ease-out delay-200 ${visibleSections.has('month-navigation') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            >
               <button
                 onClick={() => navigateMonth('prev')}
-                className="mr-4 hover:opacity-70 transition-opacity duration-200"
+                className="mr-3 sm:mr-4 hover:opacity-70 transition-opacity duration-200 p-1"
               >
-                <svg className="w-8 h-8 text-black font-bold" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black font-bold" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
                 </svg>
               </button>
 
-              <div className="bg-[#F45B69] rounded-[25px] px-6 py-3 flex items-center gap-3">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#F45B69] rounded-[20px] sm:rounded-[25px] px-4 sm:px-6 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
                 </svg>
-                <span className="text-white text-[18px] font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <span className="text-white text-[14px] sm:text-[18px] font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
                   {monthNames[selectedMonth]}, {selectedYear}
                 </span>
               </div>
 
               <button
                 onClick={() => navigateMonth('next')}
-                className="ml-4 hover:opacity-70 transition-opacity duration-200"
+                className="ml-3 sm:ml-4 hover:opacity-70 transition-opacity duration-200 p-1"
               >
-                <svg className="w-8 h-8 text-black font-bold" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black font-bold" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
                 </svg>
               </button>
             </div>
 
             {/* Event Cards Horizontal Scroll */}
-            <div className="w-full mb-12 relative">
-              {/* Carousel Navigation Buttons */}
+            <div 
+              id="events"
+              data-animate-on-scroll 
+              className="w-full mb-8 sm:mb-12 relative transition-all duration-1000 ease-out" 
+              style={{ 
+                opacity: visibleSections.has('events') ? 1 : 0,
+                transform: visibleSections.has('events') ? 'translateY(0)' : 'translateY(30px)',
+                transitionDelay: '0.5s'
+              }}
+            >
+              {/* Carousel Navigation Buttons - Hidden on mobile */}
               <button
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#FACC6B] rounded-full p-3 hover:bg-[#F4C430] transition-colors duration-200 -ml-16"
+                className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#FACC6B] rounded-full p-3 hover:bg-[#F4C430] transition-colors duration-200 -ml-16"
                 onClick={() => {
                   const container = document.getElementById('event-cards-container');
                   if (container) {
@@ -324,7 +376,7 @@ const EventBoardPage: React.FC = () => {
               </button>
 
               <button
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#FACC6B] rounded-full p-3 hover:bg-[#F4C430] transition-colors duration-200 -mr-16"
+                className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#FACC6B] rounded-full p-3 hover:bg-[#F4C430] transition-colors duration-200 -mr-16"
                 onClick={() => {
                   const container = document.getElementById('event-cards-container');
                   if (container) {
@@ -347,75 +399,103 @@ const EventBoardPage: React.FC = () => {
               {/* Scrollable Cards Container */}
               <div 
                 id="event-cards-container"
-                className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 items-start"
+                className="flex gap-3 sm:gap-4 overflow-x-auto scrollbar-hide pb-4 items-start"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="bg-[#262626] rounded-[25px] p-6 text-white relative flex flex-col flex-shrink-0 self-start"
+                    className="bg-[#262626] rounded-[20px] sm:rounded-[25px] p-4 sm:p-6 text-white relative flex flex-col flex-shrink-0 self-start overflow-hidden"
                     style={{ 
-                      width: 'calc(25% - 12px)',
-                      minWidth: '260px'
+                      width: 'calc(80vw - 24px)',
+                      minWidth: '280px',
+                      maxWidth: '320px'
                     }}
                   >
                     {/* Date Badge */}
-                    <div className="absolute top-5 right-5">
-                      <span className="text-[#FACC6B] text-[12px] font-bold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <div className="absolute top-3 sm:top-5 right-3 sm:right-5 max-w-[100px] sm:max-w-[120px]">
+                      <span className="text-[#FACC6B] text-[10px] sm:text-[12px] font-bold break-words text-right block" style={{ 
+                        fontFamily: 'Inter, sans-serif',
+                        wordWrap: 'break-word',
+                        lineHeight: '1.2'
+                      }}>
                         {new Date(event.date).getDate()} {monthNames[new Date(event.date).getMonth()].slice(0, 3)}, {new Date(event.date).getFullYear()}
                       </span>
                     </div>
 
                     {/* Event Content */}
-                    <div className="flex flex-col mt-4 pt-2">
+                    <div className="flex flex-col mt-3 sm:mt-4 pt-2 min-h-0 flex-1">
                       {/* Title */}
-                      <h3 className="text-[28px] font-bold mb-3 text-white leading-tight pr-16" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <h3 className="text-[22px] sm:text-[28px] font-bold mb-2 sm:mb-3 text-white leading-tight pr-12 sm:pr-16 break-words overflow-hidden" style={{ 
+                        fontFamily: 'Playfair Display, serif',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        wordWrap: 'break-word',
+                        hyphens: 'auto'
+                      }}>
                         {event.title}
                       </h3>
 
                       {/* Category Tag */}
-                      <div className="mb-4 w-fit border border-[#FACC6B] rounded-[15px] px-3 py-1">
-                        <span className="text-[#FACC6B] text-[11px] font-bold uppercase tracking-wide" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="mb-3 sm:mb-4 w-fit border border-[#FACC6B] rounded-[12px] sm:rounded-[15px] px-2 sm:px-3 py-1 flex-shrink-0">
+                        <span className="text-[#FACC6B] text-[9px] sm:text-[11px] font-bold uppercase tracking-wide break-words" style={{ fontFamily: 'Inter, sans-serif' }}>
                           {event.category}
                         </span>
                       </div>
 
                       {/* Description */}
-                      <div className="mb-6">
-                        <p className="text-[14px] font-normal leading-relaxed text-gray-300" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div className="mb-4 sm:mb-6 flex-1 min-h-0">
+                        <p className="text-[12px] sm:text-[14px] font-normal leading-relaxed text-gray-300 break-words overflow-hidden" style={{ 
+                          fontFamily: 'Inter, sans-serif',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 4,
+                          WebkitBoxOrient: 'vertical',
+                          wordWrap: 'break-word',
+                          hyphens: 'auto'
+                        }}>
                           {event.description}
                         </p>
                       </div>
 
                       {/* Event Details */}
-                      {event.venue && (
-                        <div className="mb-1">
-                          <span className="text-[12px] text-gray-400" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Venue: {event.venue}
-                          </span>
-                        </div>
-                      )}
+                      <div className="mb-3 sm:mb-4 flex-shrink-0">
+                        {event.venue && (
+                          <div className="mb-1">
+                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                              fontFamily: 'Inter, sans-serif',
+                              wordWrap: 'break-word',
+                              hyphens: 'auto'
+                            }}>
+                              Venue: {event.venue}
+                            </span>
+                          </div>
+                        )}
 
-                      {event.time && (
-                        <div className="mb-4">
-                          <span className="text-[12px] text-gray-400" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Time: {event.time}
-                          </span>
-                        </div>
-                      )}
+                        {event.time && (
+                          <div className="mb-2">
+                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                              fontFamily: 'Inter, sans-serif',
+                              wordWrap: 'break-word'
+                            }}>
+                              Time: {event.time}
+                            </span>
+                          </div>
+                        )}
+                      </div>
 
                       {/* Add to Calendar Button */}
                       <button
                         onClick={() => addToCalendar(event)}
-                        className="flex items-center gap-3 w-fit hover:opacity-90 transition-opacity duration-200"
+                        className="flex items-center gap-2 sm:gap-3 w-fit hover:opacity-90 transition-opacity duration-200 flex-shrink-0 mt-auto"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                       >
-                        <div className="bg-[#FACC6B] rounded-full p-2 flex items-center justify-center">
-                          <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24" style={{ transform: 'rotate(315deg)' }}>
+                        <div className="bg-[#FACC6B] rounded-full p-1.5 sm:p-2 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-black" fill="currentColor" viewBox="0 0 24 24" style={{ transform: 'rotate(315deg)' }}>
                             <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
                           </svg>
                         </div>
-                        <span className="text-white text-[14px] font-bold">Add to calendar</span>
+                        <span className="text-white text-[12px] sm:text-[14px] font-bold whitespace-nowrap">Add to calendar</span>
                       </button>
                     </div>
                   </div>
@@ -425,28 +505,37 @@ const EventBoardPage: React.FC = () => {
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="w-full flex justify-center items-center gap-4 mb-12">
+              <div 
+                id="pagination"
+                data-animate-on-scroll 
+                className="w-full flex justify-center items-center gap-2 sm:gap-4 mb-8 sm:mb-12 transition-all duration-1000 ease-out px-4" 
+                style={{ 
+                  opacity: visibleSections.has('pagination') ? 1 : 0,
+                  transform: visibleSections.has('pagination') ? 'translateY(0)' : 'translateY(30px)',
+                  transitionDelay: '0.7s'
+                }}
+              >
                 {/* Previous Button */}
                 <button
                   onClick={goToPreviousPage}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base ${
                     currentPage === 1
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'bg-global-background3 text-global-text4 hover:opacity-90'
                   }`}
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  Previous
+                  Prev
                 </button>
 
                 {/* Page Numbers */}
-                <div className="flex gap-2">
+                <div className="flex gap-1 sm:gap-2 overflow-x-auto scrollbar-hide max-w-[200px] sm:max-w-none">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
                       onClick={() => goToPage(page)}
-                      className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                      className={`px-2 sm:px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base flex-shrink-0 ${
                         currentPage === page
                           ? 'bg-global-background3 text-global-text4'
                           : 'bg-gray-200 text-global-text2 hover:bg-gray-300'
@@ -462,7 +551,7 @@ const EventBoardPage: React.FC = () => {
                 <button
                   onClick={goToNextPage}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm sm:text-base ${
                     currentPage === totalPages
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'bg-global-background3 text-global-text4 hover:opacity-90'
@@ -475,15 +564,24 @@ const EventBoardPage: React.FC = () => {
             )}
 
             {/* Want Your Event Listed Section */}
-            <div className="w-full bg-[#FFFCF9] rounded-[30px] p-8 text-center">
-              <h2 className="text-[48px] font-bold text-global-text1 mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <div 
+              id="event-form-cta"
+              data-animate-on-scroll 
+              className="w-full bg-[#FFFCF9] rounded-[20px] sm:rounded-[30px] p-6 sm:p-8 text-center transition-all duration-1000 ease-out" 
+              style={{ 
+                opacity: visibleSections.has('event-form-cta') ? 1 : 0,
+                transform: visibleSections.has('event-form-cta') ? 'translateY(0)' : 'translateY(30px)',
+                transitionDelay: '0.9s'
+              }}
+            >
+              <h2 className="text-[clamp(28px,6vw,48px)] font-bold text-global-text1 mb-3 sm:mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                 Want your event listed?
               </h2>
-              <p className="text-[18px] text-[#262626] mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-[14px] sm:text-[18px] text-[#262626] mb-4 sm:mb-6 leading-relaxed px-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Submit the form to get your event listed on the Event Board. (To be filled by Society POCs)
               </p>
               <button
-                className="bg-global-background3 text-global-text4 rounded-[30px] px-8 py-4 text-[18px] font-medium hover:opacity-90 transition-opacity duration-200"
+                className="bg-global-background3 text-global-text4 rounded-[20px] sm:rounded-[30px] px-6 sm:px-8 py-3 sm:py-4 text-[16px] sm:text-[18px] font-medium hover:opacity-90 transition-opacity duration-200"
                 style={{ fontFamily: 'Inter, sans-serif' }}
                 onClick={handleAddEventClick}
               >
@@ -494,20 +592,20 @@ const EventBoardPage: React.FC = () => {
 
           {/* Event Submission Form Modal */}
           {showEventForm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-[30px] w-full max-w-2xl max-h-[90vh] overflow-hidden">
-                <div className="max-h-[90vh] overflow-y-auto modal-scroll">
-                  <div className="p-8">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+              <div className="bg-white rounded-[20px] sm:rounded-[30px] w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
+                <div className="max-h-[95vh] sm:max-h-[90vh] overflow-y-auto modal-scroll">
+                  <div className="p-4 sm:p-8">
                   {/* Form Header */}
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-[32px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <div className="flex justify-between items-center mb-4 sm:mb-6">
+                    <h2 className="text-[24px] sm:text-[32px] font-bold text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
                       Submit Your Event
                     </h2>
                     <button 
                       onClick={handleCloseEventForm}
-                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+                      className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200 flex-shrink-0"
                     >
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                       </svg>
@@ -515,10 +613,10 @@ const EventBoardPage: React.FC = () => {
                   </div>
 
                   {/* Form */}
-                  <form onSubmit={handleEventFormSubmit} className="space-y-6">
+                  <form onSubmit={handleEventFormSubmit} className="space-y-4 sm:space-y-6">
                     {/* Event Name */}
                     <div>
-                      <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <label className="block text-[14px] sm:text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Event Name *
                       </label>
                       <input
@@ -526,7 +624,7 @@ const EventBoardPage: React.FC = () => {
                         required
                         value={eventForm.eventName}
                         onChange={(e) => handleEventFormChange('eventName', e.target.value)}
-                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                        className="w-full h-[45px] sm:h-[50px] px-4 text-[14px] rounded-[20px] sm:rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                         placeholder="Enter your event name"
                       />
