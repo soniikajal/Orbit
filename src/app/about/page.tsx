@@ -16,7 +16,7 @@ interface TeamMember {
   instagram?: string;
 }
 
-type TeamCategory = 'development' | 'creative' | 'marketing' | 'academic';
+type TeamCategory = 'development' | 'creative' | 'marketing';
 
 const AboutPage: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -121,7 +121,7 @@ const AboutPage: React.FC = () => {
       {
         id: '5',
         name: 'Manik Bhushan',
-        position: 'Creative Head',
+        position: 'Head of Design',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/manik-bhushan/',
         instagram: 'https://www.instagram.com/maeniikkk/',
@@ -150,7 +150,8 @@ const AboutPage: React.FC = () => {
         position: 'Graphic Designer',
         branch: 'CSDS',
         linkedin: 'https://www.linkedin.com/in/akshatkashyap13/',
-        instagram: 'https://www.instagram.com/akshattkashyap'
+        instagram: 'https://www.instagram.com/akshattkashyap',
+        image: '/images/team/akshat.png'
       },
       {
         id: '9',
@@ -158,7 +159,8 @@ const AboutPage: React.FC = () => {
         position: 'Video Editor',
         branch: 'ICE',
         linkedin: 'https://www.linkedin.com/in/ishit-papnai-44218b320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
-        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ=='
+        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ==',
+        image: '/images/team/ishit.png'
       },
       {
         id: '10',
@@ -166,7 +168,8 @@ const AboutPage: React.FC = () => {
         position: 'Content Curator',
         branch: 'Biotech',
         linkedin: 'https://www.linkedin.com/in/dishashukla2/',
-        instagram: 'https://www.instagram.com/dishaa_shuklaa_/'
+        instagram: 'https://www.instagram.com/dishaa_shuklaa_/',
+        image: '/images/team/disha.png'
       },
       {
         id: '11',
@@ -176,12 +179,6 @@ const AboutPage: React.FC = () => {
         linkedin: 'https://www.linkedin.com/in/tisha-bansal-00322031b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
         instagram: 'https://www.instagram.com/_tishaa_bansal_?igsh=MmhoMHQ4a2g2cnJ6&utm_source=qr',
         image: '/images/team/tisha.png'
-      },
-      {
-        id: '12',
-        name: 'Aastha Pandey',
-        position: 'Content Curator',
-        branch: 'ICE'
       }
     ],
     marketing: [
@@ -202,37 +199,6 @@ const AboutPage: React.FC = () => {
         instagram: 'https://www.instagram.com/jan.agrawal/'
       }
     ],
-    academic: [
-      {
-        id: '15',
-        name: 'N Bahuli Naidu',
-        position: 'Academic',
-        branch: 'EE',
-        instagram: 'https://www.instagram.com/b__ahuli?igsh=NDA4MGRhMXVseGg3'
-      },
-      {
-        id: '16',
-        name: 'Saanvi',
-        position: 'Academic',
-        branch: 'ECE',
-        linkedin: 'www.linkedin.com/in/saanvi-s-5504b1352/'
-      },
-      {
-        id: '17',
-        name: 'Nandita Mandava',
-        position: 'Academic',
-        branch: 'CSDS',
-        linkedin: 'https://www.linkedin.com/in/nandita-mandava-483253316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app',
-        instagram: 'https://www.instagram.com/spoutingnansense?igsh=cnUxZGF1N3p3MW12&utm_source=qr'
-      },
-      {
-        id: '18',
-        name: 'Phalguni Kaushik',
-        position: 'Academic',
-        branch: 'Design',
-        instagram: 'https://www.instagram.com/phalguni__k/'
-      }
-    ]
   };
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -441,17 +407,6 @@ const AboutPage: React.FC = () => {
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   Marketing Team
-                </button>
-                <button
-                  onClick={() => setActiveTeamCategory('academic')}
-                  className={`px-6 sm:px-8 md:px-10 lg:px-[40px] py-3 sm:py-4 md:py-5 lg:py-[16px] text-base sm:text-lg md:text-xl lg:text-[18px] font-medium leading-6 sm:leading-7 md:leading-8 lg:leading-[22px] rounded-full transition-all duration-300 ${
-                    activeTeamCategory === 'academic'
-                      ? 'bg-[#F45B69] text-white shadow-[0px_4px_0px_#000000]'
-                      : 'bg-global-background5 text-global-text2 border border-global-text2 hover:bg-[#F45B69] hover:text-white'
-                  }`}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  Academic Resources
                 </button>
               </div>
 

@@ -159,7 +159,7 @@ const HomePage: React.FC = () => {
       name: 'Ishit Papnai',
       position: 'Video Editor',
       experience: 'ICE Branch - Video Editor with expertise in video editing and multimedia content creation',
-      image: '/images/img_picture.png'
+      image: '/images/team/ishit.png'
     }
   ];
 
@@ -555,7 +555,7 @@ const HomePage: React.FC = () => {
                         href={(() => {
                           const instagramUrls: { [key: string]: string } = {
                             'Kajal Soni': 'https://www.instagram.com/rustic.reverie_/',
-                            'Manik Bhushan': 'https://www.instagram.com/iammvnik/',
+                            'Manik Bhushan': 'https://www.instagram.com/maeniikkk/',
                             'bhavya goel': 'https://www.instagram.com/bhavya_goel_11/',
                             'Kushagra Kataria': 'https://www.instagram.com/katariakuxh/',
                             'ishit papnai': 'https://www.instagram.com/papnaishit/'
