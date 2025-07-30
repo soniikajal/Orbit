@@ -431,7 +431,7 @@ const HomePage: React.FC = () => {
 
     {/* Card Content (z-10 to appear above SVG) */}
     <div className="relative z-10 w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-start">
-      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
         Event Board
       </h3>
       <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] pr-4 sm:pr-0" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -474,7 +474,7 @@ const HomePage: React.FC = () => {
 
     {/* Card Content (z-10 to appear above SVG) */}
     <div className="relative z-10 w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[14px] justify-start items-start">
-      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text4" style={{ fontFamily: 'Playfair Display, serif' }}>
         Launch Pad
       </h3>
       <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text4 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] pr-4 sm:pr-0" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -517,7 +517,7 @@ const HomePage: React.FC = () => {
 
     {/* Card Content (z-10 to appear above SVG) */}
     <div className="relative z-10 w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
         Campus Navigation
       </h3>
       <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[58%] pr-4 sm:pr-0" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -560,7 +560,7 @@ const HomePage: React.FC = () => {
 
     {/* Card Content (z-10 to appear above SVG) */}
     <div className="relative z-10 w-full flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-[16px] justify-start items-start">
-      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[40px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[49px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif'}}>
         Study Hub
       </h3>
       <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-left text-global-text2 w-full sm:w-4/5 md:w-3/5 lg:w-[64%] pr-4 sm:pr-0" style={{ fontFamily: 'Inter, sans-serif' }}>
