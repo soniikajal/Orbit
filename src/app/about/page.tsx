@@ -290,7 +290,7 @@ const AboutPage: React.FC = () => {
                     </svg>
                   </div> */}
                   
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Simplify Navigation
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
@@ -313,7 +313,7 @@ const AboutPage: React.FC = () => {
                   </div> */}
 
                   
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif',color:'white' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif',color:'white' }}>
                     Support Learning
                   </h3>
                   <div className="w-full h-[2px] bg-white"></div>
@@ -335,7 +335,7 @@ const AboutPage: React.FC = () => {
                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                   </div> */}
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Find Your People
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
@@ -362,7 +362,7 @@ const AboutPage: React.FC = () => {
                       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                   </div> */}
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Foster Innovation
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
