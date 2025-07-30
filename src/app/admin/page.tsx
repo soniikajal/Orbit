@@ -58,10 +58,10 @@ export default function AdminDashboard() {
         fetch('/api/admin/event-board')
       ])
 
-      const userData = await userRes.json()
-      const contactData = await contactRes.json()
-      const launchpadData = await launchpadRes.json()
-      const eventData = await eventRes.json()
+      const userData = userRes.ok ? await userRes.json() : { users: [] }
+      const contactData = contactRes.ok ? await contactRes.json() : { contacts: [], success: false }
+      const launchpadData = launchpadRes.ok ? await launchpadRes.json() : { projects: [], success: false }
+      const eventData = eventRes.ok ? await eventRes.json() : { events: [], success: false }
 
       setUsers(userData.users || [])
       setSubmissions(contactData.success ? contactData.contacts : [])
@@ -74,9 +74,9 @@ export default function AdminDashboard() {
       setSubmissions([])
       setLaunchpadSubmissions([])
       setEventSubmissions([])
-}
-
+    }
   }
+
 
 
   const handleApproval = async (id: string, approve: boolean) => {
