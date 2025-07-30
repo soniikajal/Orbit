@@ -278,8 +278,11 @@ const AboutPage: React.FC = () => {
 
               {/* Mission Points Grid */}
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] mt-8">
-                {/* Simplify Navigation */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'}`}>
+                
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
+  }`}
+  style={{ borderTopColor: 'var(--teal)' }}>
                   {/* <div className="w-12 h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
                     <svg width="24" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -299,13 +302,17 @@ const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Support Learning */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-black border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}>
+                
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#262626] border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}
+  style={{ borderTopColor: '[#262626]' }}>
                   {/* <div className="w-12 h-12 bg-[#FACC6B] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                       <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                     </svg>
                   </div> */}
+
+                  
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif',color:'white' }}>
                     Support Learning
                   </h3>
@@ -316,7 +323,10 @@ const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Find Your People */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#F45B69] border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'}`}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#F45B69] border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'
+  }`}
+  style={{ borderTopColor: 'var(--teal)' }}>
                   {/* <div className="w-12 h-12 bg-[#114B5F] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -335,7 +345,10 @@ const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Foster Innovation */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-500' : 'opacity-0 translate-y-8'}`}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
+  }`}
+  style={{ borderTopColor: 'var(--teal)' }}>
                   {/* <div className="w-12 h-12 bg-[#E4FDE1] border border-global-text2 rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="5"></circle>
