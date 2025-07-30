@@ -402,7 +402,6 @@ export default function AdminDashboard() {
                       <p className="text-gray-700 mb-3 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {submission.message}
                       </p>
-<<<<<<< HEAD
                       {submission.type === 'reportBug' && submission.screenshot && (
                         <div className="mb-3">
                           <p className="text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -422,9 +421,6 @@ export default function AdminDashboard() {
                         </div>
                       )}
                       <div className="flex items-center space-x-2">
-=======
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
->>>>>>> bc9ab82a48953955814f1acc82418d67f448d1b1
                         <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Status:
                         </span>
