@@ -129,13 +129,14 @@ const AboutPage: React.FC = () => {
       },
       {
         id: '6',
-        name: 'Parkhi Mudgal',
-        position: 'Graphic Designer',
+        name: 'Ishit Papnai',
+        position: 'Video Editor',
         branch: 'ICE',
-        linkedin: 'Parkhi Mudgal - NSUT\'28 (ICE) | LinkedIn',
-        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA==',
-        image: '/images/team/parkhi.png'
+        linkedin: 'https://www.linkedin.com/in/ishit-papnai-44218b320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ==',
+        image: '/images/team/ishit.png'
       },
+    
       {
         id: '7',
         name: 'Sakshi Sahu',
@@ -144,8 +145,17 @@ const AboutPage: React.FC = () => {
         linkedin: 'https://www.linkedin.com/in/sakshi-sahu-ss/',
         image: '/images/team/sakshi.png'
       },
-      {
+        {
         id: '8',
+        name: 'Parkhi Mudgal',
+        position: 'Graphic Designer',
+        branch: 'ICE',
+        linkedin: 'Parkhi Mudgal - NSUT\'28 (ICE) | LinkedIn',
+        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA==',
+        image: '/images/team/parkhi.png'
+      },
+      {
+        id: '9',
         name: 'Akshat Kashyap',
         position: 'Graphic Designer',
         branch: 'CSDS',
@@ -153,15 +163,7 @@ const AboutPage: React.FC = () => {
         instagram: 'https://www.instagram.com/akshattkashyap',
         image: '/images/team/akshat.png'
       },
-      {
-        id: '9',
-        name: 'Ishit Papnai',
-        position: 'Video Editor',
-        branch: 'ICE',
-        linkedin: 'https://www.linkedin.com/in/ishit-papnai-44218b320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
-        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ==',
-        image: '/images/team/ishit.png'
-      },
+      
       {
         id: '10',
         name: 'Disha',
@@ -182,22 +184,7 @@ const AboutPage: React.FC = () => {
       }
     ],
     marketing: [
-      {
-        id: '13',
-        name: 'Nikhil Suresh',
-        position: 'Marketing Lead',
-        branch: 'Mechanical',
-        linkedin: 'https://www.linkedin.com/in/nikhil-suresh-ae',
-        instagram: 'https://www.instagram.com/nikhilsureshh?igsh=N2syZzU3czdkbDRn&utm_source=qr'
-      },
-      {
-        id: '14',
-        name: 'Janvi Agrawal',
-        position: 'Marketing',
-        branch: 'ECE',
-        linkedin: 'www.linkedin.com/in/janvi-agrawal-07b330310',
-        instagram: 'https://www.instagram.com/jan.agrawal/'
-      }
+     
     ],
   };
   const scrollToTop = () => {
