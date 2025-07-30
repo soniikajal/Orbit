@@ -108,9 +108,9 @@ const StudyHubPage: React.FC = () => {
   const allMaterials: Record<number, Record<string, StudyMaterial[]>> = {
     1: {
       all: [
-        { id: 'IEEE', name: 'IEEE pdf', description: 'Notes and practice papers.', url: '/IEEE NSUT Resources for the Batch of 2028.pdf', icon: '📝' },
-        { id: 'gyansutra', name: 'Gyansutra', description: 'Comprehensive study materials curated by seniors and faculty.', url: '/GYANSUTRA.pdf', icon: '📚' },
-        { id: 'asme', name: 'ASME', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1PCfGdEsdT8CoA1DjoAbodPdUIIxRXc_o?usp=share_link', icon: '🧮' },
+        { id: 'IEEE', name: 'IEEE pdf', description: 'by IEEE', url: '/IEEE NSUT Resources for the Batch of 2028.pdf', icon: '📝' },
+        { id: 'gyansutra', name: 'Gyansutra', description: 'by Nakshatra', url: '/GYANSUTRA.pdf', icon: '📚' },
+        { id: 'asme', name: 'ASME', description: 'by ASME', url: 'https://drive.google.com/drive/folders/1PCfGdEsdT8CoA1DjoAbodPdUIIxRXc_o?usp=share_link', icon: '🧮' },
       ]
     },
     2: {
