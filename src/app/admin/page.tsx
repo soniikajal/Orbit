@@ -52,12 +52,11 @@ export default function AdminDashboard() {
   const loadMockData = async () => {
     try {
       const [userRes, contactRes, launchpadRes, eventRes] = await Promise.all([
-        fetch('/api/admin/users', { cache: 'no-store' }),
-        fetch('/api/contact', { cache: 'no-store' }),
-        fetch('/api/admin/launchpad', { cache: 'no-store' }),
-        fetch('/api/admin/event-board', { cache: 'no-store' })
+        fetch('/api/admin/users'),
+        fetch('/api/contact'),
+        fetch('/api/admin/launchpad'),
+        fetch('/api/admin/event-board')
       ])
-
 
       const userData = await userRes.json()
       const contactData = await contactRes.json()
