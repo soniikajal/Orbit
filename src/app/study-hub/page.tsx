@@ -115,16 +115,16 @@ const StudyHubPage: React.FC = () => {
     },
     2: {
       cse: [
-        { id: 'CAO', name: 'CAO', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1WxM_6hWh7-bVbnKn1WedspM2GhKSv-FK?usp=share_link', icon: '🧮' },
-        { id: 'daa', name: 'DAA', description: 'Lecture notes, code samples, and lab files.', url: 'https://drive.google.com/drive/folders/1Kn9y7WQVZvmCjtyvYVxukeQLjIVYB5wN?usp=share_link', icon: '�' },
-        { id: 'dbms', name: 'DBMS', description: 'Notes, assignments, and solved problems.', url: 'https://drive.google.com/drive/folders/12DGCRTRTHmZxsF-jUHFpk95_ugpPm3iA?usp=share_link', icon: '�‍💻' },
-        { id: 'os', name: 'OS', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1v-dmD2L03R6o8g7AYwQEe0pyY6206fQk?usp=share_link', icon: '🧮' },
-        { id: 'prob', name: 'Stats & Prob', description: 'Lecture notes, code samples, and lab files.', url: 'https://drive.google.com/drive/folders/1kdBap-ebgDR1tmZgq2_QBbBnrg05MxT3?usp=share_link', icon: '�' },
+        { id: 'CAO', name: 'CAO', description: ' ', url: 'https://drive.google.com/drive/folders/1WxM_6hWh7-bVbnKn1WedspM2GhKSv-FK?usp=share_link', icon: '🧮' },
+        { id: 'daa', name: 'DAA', description: ' ', url: 'https://drive.google.com/drive/folders/1Kn9y7WQVZvmCjtyvYVxukeQLjIVYB5wN?usp=share_link', icon: '�' },
+        { id: 'dbms', name: 'DBMS', description: ' ', url: 'https://drive.google.com/drive/folders/12DGCRTRTHmZxsF-jUHFpk95_ugpPm3iA?usp=share_link', icon: '�‍💻' },
+        { id: 'os', name: 'OS', description: ' ', url: 'https://drive.google.com/drive/folders/1v-dmD2L03R6o8g7AYwQEe0pyY6206fQk?usp=share_link', icon: '🧮' },
+        { id: 'prob', name: 'Stats & Prob', description: ' ', url: 'https://drive.google.com/drive/folders/1kdBap-ebgDR1tmZgq2_QBbBnrg05MxT3?usp=share_link', icon: '�' },
       ],
       me: [
-        { id: 'asmesem3', name: 'ASME Sem 3', description: 'Lecture notes, assignments, and previous year papers.', url: 'https://drive.google.com/drive/folders/1u4RNW4oVDQ0gj8PiO1v2oqZfeuuEfHsl?usp=share_link', icon: '🧮' },
-        { id: 'mpae3', name: 'MPAE Sem 3', description: 'Notes, lab files, and solved examples.', url: 'https://drive.google.com/drive/folders/1u78vxUKbzSBPECT8pYh8nvbjnEh5XB26?usp=share_link', icon: '💡' },
-        { id: 'mpae4', name: 'MPAE Sem 4', description: 'Notes and lab files.', url: 'https://drive.google.com/drive/folders/17u-mSGYUyyWFhj_GBrwPOtkOa6eZV5l0?usp=share_link', icon: '📡' },
+        { id: 'asmesem3', name: 'ASME Sem 3', description: '', url: 'https://drive.google.com/drive/folders/1u4RNW4oVDQ0gj8PiO1v2oqZfeuuEfHsl?usp=share_link', icon: '🧮' },
+        { id: 'mpae3', name: 'MPAE Sem 3', description: ' ', url: 'https://drive.google.com/drive/folders/1u78vxUKbzSBPECT8pYh8nvbjnEh5XB26?usp=share_link', icon: '💡' },
+        { id: 'mpae4', name: 'MPAE Sem 4', description: ' ', url: 'https://drive.google.com/drive/folders/17u-mSGYUyyWFhj_GBrwPOtkOa6eZV5l0?usp=share_link', icon: '📡' },
       ],
       // Add more branches as needed
     }
