@@ -60,26 +60,40 @@ export async function POST(req: Request) {
 
 // GET: Fetch all contact submissions
 export async function GET() {
-  await connectToAltDB()
-  const contacts = await Contact.find().sort({ timestamp: -1 })
+  try {
+    await connectToAltDB()
+    const bugReports = await Contact.find().sort({ timestamp: -1 })
 
-  const safeContacts = contacts.map((c) => ({
-    id: c._id.toString(),
-    name: c.name,
-    email: c.email,
-    message: c.message,
-    type: c.type,
-    status: c.status,
-    timestamp: c.timestamp,
-    screenshot: c.screenshot || null,
-  }))
+    await connectToDB()
+    const otherContacts = await Contact.find().sort({ timestamp: -1 })
 
-  return NextResponse.json({ success: true, contacts: safeContacts })
+    const allContacts = [...bugReports, ...otherContacts].sort(
+      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    )
+
+    const safeContacts = allContacts.map((c) => ({
+      id: c._id.toString(),
+      name: c.name,
+      email: c.email,
+      message: c.message,
+      type: c.type,
+      status: c.status,
+      timestamp: c.timestamp,
+      screenshot: c.screenshot || null,
+    }))
+
+    return NextResponse.json({ success: true, contacts: safeContacts })
+  } catch (error) {
+    console.error('Error fetching contact data:', error)
+    return NextResponse.json(
+      { success: false, message: 'Internal Server Error' },
+      { status: 500 }
+    )
+  }
 }
 
 // PATCH: Update status of submission
 export async function PATCH(req: NextRequest) {
-  await connectToAltDB()
   const { id, status } = await req.json()
 
   if (!id || !status) {
@@ -87,7 +101,15 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
-    const updated = await Contact.findByIdAndUpdate(id, { status }, { new: true })
+    // Try to update in altDB first (bug reports)
+    await connectToAltDB()
+    let updated = await Contact.findByIdAndUpdate(id, { status }, { new: true })
+
+    if (!updated) {
+      // Fallback to main DB
+      await connectToDB()
+      updated = await Contact.findByIdAndUpdate(id, { status }, { new: true })
+    }
 
     if (!updated) {
       return NextResponse.json({ success: false, message: 'Submission not found' }, { status: 404 })
