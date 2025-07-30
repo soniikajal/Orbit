@@ -20,6 +20,7 @@ interface ContactSubmission {
   message: string
   timestamp: string
   status: 'pending' | 'resolved' | 'in-progress'
+  screenshot?: string
 }
 
 export default function AdminDashboard() {
@@ -397,6 +398,24 @@ export default function AdminDashboard() {
                       <p className="text-gray-700 mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {submission.message}
                       </p>
+                      {submission.type === 'reportBug' && submission.screenshot && (
+                        <div className="mb-3">
+                          <p className="text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Screenshot:
+                          </p>
+                          <a
+                            href={`data:image/png;base64,${submission.screenshot}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={`data:image/png;base64,${submission.screenshot}`}
+                              alt="Bug Screenshot"
+                              className="max-w-xs max-h-48 rounded-md border border-gray-300 shadow"
+                            />
+                          </a>
+                        </div>
+                      )}
                       <div className="flex items-center space-x-2">
                         <span className="text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Status:

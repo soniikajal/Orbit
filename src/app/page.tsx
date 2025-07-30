@@ -183,7 +183,7 @@ const HomePage: React.FC = () => {
         formData.append('email', contactForm.email);
         formData.append('message', contactForm.message);
         formData.append('type', 'reportBug');
-        formData.append('bugImage', contactForm.bugImage);
+        formData.append('screenshot', contactForm.bugImage);
         body = formData;
         // Don't set Content-Type header for FormData
       } else {
@@ -213,14 +213,19 @@ const HomePage: React.FC = () => {
       alert('Network error.');
     }
   };
+  
   const handleBugImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setContactForm(prev => ({ ...prev, bugImage: e.target.files![0] }));
+      const file = e.target.files[0];
+      if (file.size > 50 * 1024) {
+        alert('Image must be under 50KB');
+        return;
+      }
+      setContactForm(prev => ({ ...prev, bugImage: file }));
     } else {
       setContactForm(prev => ({ ...prev, bugImage: null }));
     }
   };
-
 
   const handleNameChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
