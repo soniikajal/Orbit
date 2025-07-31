@@ -112,8 +112,8 @@ const AboutPage: React.FC = () => {
         name: 'Yash Goel',
         position: 'Frontend Developer',
         branch: 'ICE',
-        linkedin: 'ttps://www.linkedin.com/in/yash-goel-22b952283/',
-        instagram: 'tps://www.instagram.com/yash_.goel',
+        linkedin: 'https://www.linkedin.com/in/yash-goel-22b952283/',
+        instagram: 'https://www.instagram.com/yash_.goel',
         image: '/images/team/yash.png'
       }
     ],
@@ -129,13 +129,14 @@ const AboutPage: React.FC = () => {
       },
       {
         id: '6',
-        name: 'Parkhi Mudgal',
-        position: 'Graphic Designer',
+        name: 'Ishit Papnai',
+        position: 'Video Editor',
         branch: 'ICE',
-        linkedin: 'Parkhi Mudgal - NSUT\'28 (ICE) | LinkedIn',
-        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA==',
-        image: '/images/team/parkhi.png'
+        linkedin: 'https://www.linkedin.com/in/ishit-papnai-44218b320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ==',
+        image: '/images/team/ishit.png'
       },
+    
       {
         id: '7',
         name: 'Sakshi Sahu',
@@ -144,8 +145,17 @@ const AboutPage: React.FC = () => {
         linkedin: 'https://www.linkedin.com/in/sakshi-sahu-ss/',
         image: '/images/team/sakshi.png'
       },
-      {
+        {
         id: '8',
+        name: 'Parkhi Mudgal',
+        position: 'Graphic Designer',
+        branch: 'ICE',
+        linkedin: 'Parkhi Mudgal - NSUT\'28 (ICE) | LinkedIn',
+        instagram: 'https://www.instagram.com/p_mudgal26/profilecard/?igsh=MWJjN2t3czVzZTVqeA==',
+        image: '/images/team/parkhi.png'
+      },
+      {
+        id: '9',
         name: 'Akshat Kashyap',
         position: 'Graphic Designer',
         branch: 'CSDS',
@@ -153,15 +163,7 @@ const AboutPage: React.FC = () => {
         instagram: 'https://www.instagram.com/akshattkashyap',
         image: '/images/team/akshat.png'
       },
-      {
-        id: '9',
-        name: 'Ishit Papnai',
-        position: 'Video Editor',
-        branch: 'ICE',
-        linkedin: 'https://www.linkedin.com/in/ishit-papnai-44218b320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
-        instagram: 'https://www.instagram.com/papnaishit?igsh=MXJsZnFybDBpajAzZQ==',
-        image: '/images/team/ishit.png'
-      },
+      
       {
         id: '10',
         name: 'Disha',
@@ -182,22 +184,7 @@ const AboutPage: React.FC = () => {
       }
     ],
     marketing: [
-      {
-        id: '13',
-        name: 'Nikhil Suresh',
-        position: 'Marketing Lead',
-        branch: 'Mechanical',
-        linkedin: 'https://www.linkedin.com/in/nikhil-suresh-ae',
-        instagram: 'https://www.instagram.com/nikhilsureshh?igsh=N2syZzU3czdkbDRn&utm_source=qr'
-      },
-      {
-        id: '14',
-        name: 'Janvi Agrawal',
-        position: 'Marketing',
-        branch: 'ECE',
-        linkedin: 'www.linkedin.com/in/janvi-agrawal-07b330310',
-        instagram: 'https://www.instagram.com/jan.agrawal/'
-      }
+     
     ],
   };
   const scrollToTop = () => {
@@ -279,10 +266,10 @@ const AboutPage: React.FC = () => {
               {/* Mission Points Grid */}
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-[40px] mt-8">
                 
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
-  }`}
-  style={{ borderTopColor: 'var(--teal)' }}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-b-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                  visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ borderBottomColor: '[#262626]' }}>
                   {/* <div className="w-12 h-12 bg-[#F45B69] rounded-full flex items-center justify-center">
                     <svg width="24" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -290,7 +277,7 @@ const AboutPage: React.FC = () => {
                     </svg>
                   </div> */}
                   
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Simplify Navigation
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
@@ -303,8 +290,8 @@ const AboutPage: React.FC = () => {
 
                 {/* Support Learning */}
                 
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#262626] border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}
-  style={{ borderTopColor: '[#262626]' }}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#262626] border border-global-text2 border-b-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-8'}`}
+                style={{ borderBottomColor: '[#262626]' }}>
                   {/* <div className="w-12 h-12 bg-[#FACC6B] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -313,7 +300,7 @@ const AboutPage: React.FC = () => {
                   </div> */}
 
                   
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif',color:'white' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif',color:'white' }}>
                     Support Learning
                   </h3>
                   <div className="w-full h-[2px] bg-white"></div>
@@ -323,10 +310,10 @@ const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Find Your People */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#F45B69] border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'
-  }`}
-  style={{ borderTopColor: 'var(--teal)' }}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-[#F45B69] border border-global-text2 border-b-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-400' : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ borderBottomColor: 'var(--teal)' }}>
                   {/* <div className="w-12 h-12 bg-[#114B5F] rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -335,7 +322,7 @@ const AboutPage: React.FC = () => {
                       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
                   </div> */}
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Find Your People
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
@@ -345,10 +332,10 @@ const AboutPage: React.FC = () => {
                 </div>
 
                 {/* Foster Innovation */}
-                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-t-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
-    visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
-  }`}
-  style={{ borderTopColor: 'var(--teal)' }}>
+                <div className={`w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-start bg-global-background5 border border-global-text2 border-b-[5px] rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[40px] transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl ${
+                  visibleSections.has('our-mission') ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ borderBottomColor: 'var(--teal)' }}>
                   {/* <div className="w-12 h-12 bg-[#E4FDE1] border border-global-text2 rounded-full flex items-center justify-center">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="5"></circle>
@@ -362,7 +349,7 @@ const AboutPage: React.FC = () => {
                       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                   </div> */}
-                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Foster Innovation
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
