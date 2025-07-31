@@ -202,13 +202,16 @@ const HomePage: React.FC = () => {
         body,
       });
       const data = await res.json();
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       if (data.success) {
         alert('Your message has been sent!');
-        setContactForm({ name: '', email: '', message: '', bugImage: null });
       } else {
         alert('Something went wrong.');
       }
     } catch (error) {
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       console.error('Error:', error);
       alert('Network error.');
     }
@@ -219,6 +222,9 @@ const HomePage: React.FC = () => {
       const file = e.target.files[0];
       if (file.size > 50 * 1024) {
         alert('Image must be under 50KB');
+        // Clear the file input and state
+        e.target.value = '';
+        setContactForm(prev => ({ ...prev, bugImage: null }));
         return;
       }
       setContactForm(prev => ({ ...prev, bugImage: file }));
@@ -419,13 +425,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }} // adjust as needed for your design
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/1.svg"
       alt="Event Board Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -462,13 +468,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/3.svg"
       alt="Launch Pad Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -505,13 +511,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/2.svg"
       alt="Navigation Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -548,13 +554,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/4.svg"
       alt="Study Hub Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
