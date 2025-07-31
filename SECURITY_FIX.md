@@ -12,11 +12,13 @@ The `seed-events.js` file contained hardcoded MongoDB Atlas credentials in the c
 
 ### Action Required: Setup Environment Variables
 
+> ⚠️ **IMPORTANT**: All examples below use placeholder values. Replace `YOUR_USERNAME`, `YOUR_PASSWORD`, `YOUR_CLUSTER`, and `YOUR_DATABASE` with your actual MongoDB Atlas credentials.
+
 #### For Development:
 1. **Create/Update `.env.local`** file in the project root:
    ```bash
-   # Copy your MongoDB connection string here
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database_name
+   # Copy your MongoDB connection string here (replace with your actual values)
+   MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/YOUR_DATABASE
    
    # Other existing variables...
    NEXTAUTH_URL=http://localhost:4028
@@ -42,6 +44,10 @@ The `seed-events.js` file contained hardcoded MongoDB Atlas credentials in the c
 - ✅ Environment variables are properly gitignored
 - ✅ Error handling for missing required variables
 - ✅ Clear separation of development and production configs
+- ✅ Documentation uses placeholder values only
+
+### Documentation Security Note:
+All example credentials in documentation files use placeholder format (e.g., `YOUR_USERNAME`, `YOUR_PASSWORD`) to prevent GitHub security scanning from flagging them as real secrets.
 
 ### Important Security Steps for MongoDB Atlas:
 

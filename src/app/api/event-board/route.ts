@@ -3,6 +3,34 @@ import { NextRequest, NextResponse } from 'next/server'
 import { connectToDB } from '@/lib/mongoose'
 import Event from '@/models/Event'
 
+interface EventDocument {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  venue: string;
+  date: string;
+  time?: string;
+  organizer: string;
+  contactEmail: string;
+  additionalInfo?: string;
+  approved: boolean;
+}
+
+interface FormattedEvent {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  venue: string;
+  date: string;
+  time: string;
+  organizer: string;
+  contactEmail: string;
+  additionalInfo: string;
+  approved: boolean;
+}
+
 export async function GET(req: NextRequest) {
   try {
     await connectToDB();
@@ -10,8 +38,8 @@ export async function GET(req: NextRequest) {
 
     const month = parseInt(searchParams.get("month") || "");
     const year = parseInt(searchParams.get("year") || "");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "8");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+    const limit = Math.min(50, Math.max(1, parseInt(searchParams.get("limit") || "8"))); // Limit between 1-50
 
     const skip = (page - 1) * limit;
 
@@ -28,18 +56,24 @@ export async function GET(req: NextRequest) {
       .sort({ date: 1 })
       .skip(skip)
       .limit(limit)
-      .lean(); // Use lean() for better performance and cleaner objects
+      .lean() as unknown as EventDocument[]; // Safe type assertion for lean query
     
     console.log('Events from database:', events); // Debug log
     console.log('Sample event fields:', events[0] ? Object.keys(events[0]) : 'No events found'); // Debug log
 
     // Ensure venue and time fields are properly formatted
-    const formattedEvents = events.map(event => ({
-      ...event,
+    const formattedEvents: FormattedEvent[] = events.map(event => ({
       id: event._id.toString(),
+      title: event.title,
+      description: event.description,
+      category: event.category,
       venue: event.venue || '',
       time: event.time || '',
-      _id: undefined // Remove _id from response
+      date: event.date,
+      organizer: event.organizer,
+      contactEmail: event.contactEmail,
+      additionalInfo: event.additionalInfo || '',
+      approved: event.approved
     }));
 
     return NextResponse.json({
@@ -50,7 +84,12 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     console.error("GET /api/event-board error:", err);
-    return NextResponse.json({ success: false, message: "Failed to fetch events" }, { status: 500 });
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+    return NextResponse.json({ 
+      success: false, 
+      message: "Failed to fetch events", 
+      error: errorMessage 
+    }, { status: 500 });
   }
 }
 
@@ -63,10 +102,31 @@ export async function POST(req: NextRequest) {
     console.log('Received event data for creation:', data); // Debug log
     
     // Validate required fields
-    if (!data.title || !data.description || !data.category || !data.venue || !data.date || !data.organizer || !data.contactEmail) {
+    const requiredFields = ['title', 'description', 'category', 'venue', 'date', 'organizer', 'contactEmail'];
+    const missingFields = requiredFields.filter(field => !data[field]);
+    
+    if (missingFields.length > 0) {
       return NextResponse.json({ 
         success: false, 
-        message: 'Missing required fields: title, description, category, venue, date, organizer, contactEmail' 
+        message: `Missing required fields: ${missingFields.join(', ')}` 
+      }, { status: 400 });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.contactEmail)) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid email format' 
+      }, { status: 400 });
+    }
+
+    // Validate date format
+    const eventDate = new Date(data.date);
+    if (isNaN(eventDate.getTime())) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid date format' 
       }, { status: 400 });
     }
 
@@ -91,7 +151,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, event: event.toObject() })
   } catch (err) {
     console.error('POST /api/event-board error:', err)
-    return NextResponse.json({ success: false, message: 'Failed to submit event', error: err.message }, { status: 500 })
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+    return NextResponse.json({ success: false, message: 'Failed to submit event', error: errorMessage }, { status: 500 })
   }
 }
 
@@ -99,18 +160,39 @@ export async function DELETE(req: NextRequest) {
   try {
     await connectToDB()
     const { id, email } = await req.json()
+    
     if (!id || !email) {
-      return NextResponse.json({ success: false, message: 'Event ID and email required' }, { status: 400 })
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Event ID and email required' 
+      }, { status: 400 })
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Invalid email format' 
+      }, { status: 400 });
     }
 
     const deleted = await Event.findOneAndDelete({ _id: id, contactEmail: email })
     if (!deleted) {
-      return NextResponse.json({ success: false, message: 'Unauthorized or not found' }, { status: 403 })
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Event not found or unauthorized access' 
+      }, { status: 403 })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, message: 'Event deleted successfully' })
   } catch (err) {
     console.error('DELETE /api/event-board error:', err)
-    return NextResponse.json({ success: false, message: 'Failed to delete event' }, { status: 500 })
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Failed to delete event', 
+      error: errorMessage 
+    }, { status: 500 })
   }
 }
