@@ -1,19 +1,17 @@
 import mongoose from 'mongoose'
 
-let isConnected = false
+let altConnection: typeof mongoose | null = null
 
 export async function connectToAltDB() {
-  if (isConnected) return
+  if (altConnection) return altConnection
 
   try {
-    await mongoose.connect(process.env.ALT_MONGODB_URI!, {
-      dbName: 'bugReports', // or any custom DB name you want
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as any)
+    altConnection = await mongoose.createConnection(process.env.ALT_MONGODB_URI!, {
+      dbName: 'bugReports',
+    }).asPromise()
 
-    isConnected = true
     console.log('✅ Connected to alternate MongoDB cluster')
+    return altConnection
   } catch (error) {
     console.error('❌ Alt MongoDB connection error:', error)
     throw new Error('Failed to connect to alternate MongoDB')

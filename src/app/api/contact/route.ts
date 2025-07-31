@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectToDB } from '@/lib/mongoose'
-import getAltContactModel from '@/models/AltContact'
 import Contact from '@/models/Contact'
+import getAltContactModel from '@/models/AltContact'
 
 // POST: Submit new contact
 export async function POST(req: Request) {
@@ -9,7 +9,6 @@ export async function POST(req: Request) {
 
   if (contentType.includes('multipart/form-data')) {
     const formData = await req.formData()
-
     const name = formData.get('name') as string
     const email = formData.get('email') as string
     const message = formData.get('message') as string
@@ -32,6 +31,7 @@ export async function POST(req: Request) {
     const base64Image = buffer.toString('base64')
 
     const AltContact = await getAltContactModel()
+
     const newContact = await AltContact.create({
       name,
       email,
@@ -43,16 +43,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, contact: newContact })
   }
 
-  // Fallback to JSON for queries/feedback
+  // For queries or feedback
   const { name, email, message, type } = await req.json()
-
   if (!email || !message || !type) {
     return NextResponse.json({ success: false, message: 'Missing fields' }, { status: 400 })
   }
 
   await connectToDB()
   const newContact = await Contact.create({ name, email, message, type })
-
   return NextResponse.json({ success: true, contact: newContact })
 }
 
@@ -69,7 +67,7 @@ export async function GET() {
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     )
 
-    const safeContacts = allContacts.map((c) => ({
+    const safeContacts = allContacts.map((c: any) => ({
       id: c._id.toString(),
       name: c.name,
       email: c.email,
@@ -82,18 +80,14 @@ export async function GET() {
 
     return NextResponse.json({ success: true, contacts: safeContacts })
   } catch (error) {
-    console.error('Error fetching contact data:', error)
-    return NextResponse.json(
-      { success: false, message: 'Internal Server Error' },
-      { status: 500 }
-    )
+    console.error('❌ GET /api/contact error:', error)
+    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
   }
 }
 
 // PATCH: Update status of submission
 export async function PATCH(req: NextRequest) {
   const { id, status } = await req.json()
-
   if (!id || !status) {
     return NextResponse.json({ success: false, message: 'Missing id or status' }, { status: 400 })
   }
@@ -113,7 +107,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ success: true, updated })
   } catch (error) {
-    console.error('Error updating status:', error)
+    console.error('❌ PATCH /api/contact error:', error)
     return NextResponse.json({ success: false, message: 'Database update failed' }, { status: 500 })
   }
 }
