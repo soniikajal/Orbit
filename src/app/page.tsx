@@ -131,14 +131,14 @@ const HomePage: React.FC = () => {
     {
       id: '1',
       name: 'Kajal Soni',
-      position: 'Founder | Full Stack Developer',
+      position: 'Founder',
       experience: 'ICE Branch - Founder and Full Stack Developer with expertise in web development and project leadership',
       image: '/images/team/kajal.png'
     },
     {
       id: '2',
       name: 'Manik Bhushan',
-      position: 'Creative Head | Designer',
+      position: 'Head of Design',
       experience: 'Mechanical Branch - Creative Head with expertise in design and visual content creation',
       image: '/images/team/manik.png'
     },
