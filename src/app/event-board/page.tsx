@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import Footer from '@/components/layout/Footer';
 import { EventBoardEvent } from './event_data';
+import { getAvailableVenues, navigateToVenue, VenueLocation } from '@/utils/venues';
 
 interface Event {
   id: string;
@@ -16,7 +17,6 @@ interface Event {
   organizer: string;
   venue?: string;
   time?: string;
-  registrationRequired: boolean;
 }
 
 const EventBoardPage: React.FC = () => {
@@ -32,6 +32,10 @@ const EventBoardPage: React.FC = () => {
   const [showEventForm, setShowEventForm] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [availableVenues, setAvailableVenues] = useState<VenueLocation[]>([]);
+  const [filteredVenues, setFilteredVenues] = useState<VenueLocation[]>([]);
+  const [showVenueDropdown, setShowVenueDropdown] = useState(false);
+  const [venueSearchQuery, setVenueSearchQuery] = useState('');
   const [eventForm, setEventForm] = useState({
     eventName: '',
     category: '',
@@ -41,10 +45,19 @@ const EventBoardPage: React.FC = () => {
     time: '',
     organizer: '',
     contactEmail: '',
-    registrationRequired: false,
     additionalInfo: ''
   });
   const eventsPerPage = 8;
+
+  // Load available venues when component mounts
+  useEffect(() => {
+    const loadVenues = async () => {
+      const venues = await getAvailableVenues();
+      setAvailableVenues(venues);
+      setFilteredVenues(venues);
+    };
+    loadVenues();
+  }, []);
 
   // Animation setup
   useEffect(() => {
@@ -171,6 +184,41 @@ const EventBoardPage: React.FC = () => {
     }));
   };
 
+  const handleVenueSearch = (query: string) => {
+    setVenueSearchQuery(query);
+    setEventForm(prev => ({ ...prev, venue: query }));
+    
+    if (query.trim() === '') {
+      setFilteredVenues(availableVenues);
+    } else {
+      const filtered = availableVenues.filter(venue =>
+        venue.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredVenues(filtered);
+    }
+    setShowVenueDropdown(true);
+  };
+
+  const handleVenueSelect = (venueName: string) => {
+    setEventForm(prev => ({ ...prev, venue: venueName }));
+    setVenueSearchQuery(venueName);
+    setShowVenueDropdown(false);
+  };
+
+  const handleVenueInputFocus = () => {
+    setShowVenueDropdown(true);
+    if (venueSearchQuery.trim() === '') {
+      setFilteredVenues(availableVenues);
+    }
+  };
+
+  const handleVenueInputBlur = () => {
+    // Delay hiding dropdown to allow for click selection
+    setTimeout(() => {
+      setShowVenueDropdown(false);
+    }, 200);
+  };
+
   const handleEventFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -183,7 +231,6 @@ const EventBoardPage: React.FC = () => {
       time: eventForm.time,
       organizer: eventForm.organizer,
       contactEmail: session?.user?.email || '',
-      registrationRequired: eventForm.registrationRequired,
       additionalInfo: eventForm.additionalInfo,
     };
 
@@ -210,9 +257,10 @@ const EventBoardPage: React.FC = () => {
           time: '',
           organizer: '',
           contactEmail: session?.user?.email || '',
-          registrationRequired: false,
           additionalInfo: '',
         });
+        setVenueSearchQuery('');
+        setFilteredVenues(availableVenues);
       } else {
         alert(data.message || 'Submission failed.');
       }
@@ -235,9 +283,11 @@ const EventBoardPage: React.FC = () => {
       time: '',
       organizer: '',
       contactEmail: session?.user?.email || '',
-      registrationRequired: false,
       additionalInfo: ''
     });
+    setVenueSearchQuery('');
+    setFilteredVenues(availableVenues);
+    setShowVenueDropdown(false);
   };
 
   const handleAddEventClick = () => {
@@ -456,28 +506,38 @@ const EventBoardPage: React.FC = () => {
 
                       {/* Event Details */}
                       <div className="mb-3 sm:mb-4 flex-shrink-0">
-                        {event.venue && (
-                          <div className="mb-1">
-                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
-                              fontFamily: 'Inter, sans-serif',
-                              wordWrap: 'break-word',
-                              hyphens: 'auto'
-                            }}>
-                              Venue: {event.venue}
-                            </span>
-                          </div>
-                        )}
+                        <div className="mb-1">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word',
+                            hyphens: 'auto'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Venue:</span>{' '}
+                            {event.venue ? (
+                              <button
+                                onClick={() => navigateToVenue(event.venue!)}
+                                className="text-[#FACC6B] hover:text-[#F4C430] underline transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
+                                title="Click to navigate to this location"
+                              >
+                                {event.venue}
+                                <svg className="w-2 h-2 sm:w-3 sm:h-3 opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                </svg>
+                              </button>
+                            ) : (
+                              'TBA'
+                            )}
+                          </span>
+                        </div>
 
-                        {event.time && (
-                          <div className="mb-2">
-                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
-                              fontFamily: 'Inter, sans-serif',
-                              wordWrap: 'break-word'
-                            }}>
-                              Time: {event.time}
-                            </span>
-                          </div>
-                        )}
+                        <div className="mb-2">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Time:</span> {event.time || 'TBA'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Add to Calendar Button */}
@@ -668,19 +728,63 @@ const EventBoardPage: React.FC = () => {
 
                     {/* Venue and Date */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
+                      <div className="relative">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Venue *
                         </label>
-                        <input
-                          type="text"
-                          required
-                          value={eventForm.venue}
-                          onChange={(e) => handleEventFormChange('venue', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="Event venue"
-                        />
+                        <div className="relative">
+                          <input
+                            type="text"
+                            required
+                            value={venueSearchQuery}
+                            onChange={(e) => handleVenueSearch(e.target.value)}
+                            onFocus={handleVenueInputFocus}
+                            onBlur={handleVenueInputBlur}
+                            className="w-full h-[50px] px-4 pr-10 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            placeholder="Search for a venue..."
+                            autoComplete="off"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                          </div>
+                        </div>
+                        
+                        {/* Dropdown */}
+                        {showVenueDropdown && filteredVenues.length > 0 && (
+                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
+                            {filteredVenues.map((venue, index) => (
+                              <button
+                                key={venue.name}
+                                type="button"
+                                onClick={() => handleVenueSelect(venue.name)}
+                                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors duration-200 text-[14px] ${
+                                  index === 0 ? 'rounded-t-[20px]' : ''
+                                } ${
+                                  index === filteredVenues.length - 1 ? 'rounded-b-[20px]' : ''
+                                }`}
+                                style={{ fontFamily: 'Inter, sans-serif' }}
+                              >
+                                {venue.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* No results message */}
+                        {showVenueDropdown && filteredVenues.length === 0 && venueSearchQuery.trim() !== '' && (
+                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg p-4">
+                            <p className="text-[14px] text-gray-500 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              No venues found matching "{venueSearchQuery}"
+                            </p>
+                          </div>
+                        )}
+                        
+                        <p className="mt-1 text-[12px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          Only campus locations available for navigation
+                        </p>
                       </div>
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -701,10 +805,11 @@ const EventBoardPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Time
+                          Time *
                         </label>
                         <input
                           type="time"
+                          required
                           value={eventForm.time}
                           onChange={(e) => handleEventFormChange('time', e.target.value)}
                           className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
@@ -746,20 +851,6 @@ const EventBoardPage: React.FC = () => {
                       <p className="mt-1 text-[12px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Contact email is automatically set to your logged-in account email
                       </p>
-                    </div>
-
-                    {/* Registration Required */}
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        id="registrationRequired"
-                        checked={eventForm.registrationRequired}
-                        onChange={(e) => handleEventFormChange('registrationRequired', e.target.checked)}
-                        className="w-4 h-4 text-[#F45B69] border border-gray-300 rounded focus:ring-[#F45B69] focus:ring-2"
-                      />
-                      <label htmlFor="registrationRequired" className="text-[16px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        Registration Required
-                      </label>
                     </div>
 
                     {/* Additional Info */}

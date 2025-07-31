@@ -7,8 +7,10 @@ import InteractiveMap from '@/components/map/InteractiveMap';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import { useScrollAnimations } from '@/hooks/useScrollAnimations';
+import { useSearchParams } from 'next/navigation';
 
 const NavigationPage: React.FC = () => {
+  const searchParams = useSearchParams();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [startLocation, setStartLocation] = useState('Your Location');
@@ -39,6 +41,17 @@ const NavigationPage: React.FC = () => {
     };
     loadBuildings();
   }, []);
+
+  // Handle destination from URL parameters (e.g., from event venue click)
+  useEffect(() => {
+    const destination = searchParams.get('destination');
+    if (destination) {
+      const decodedDestination = decodeURIComponent(destination);
+      setSearchQuery(decodedDestination);
+      setRouteQuery(decodedDestination);
+      setShowQuickTip(false); // Hide tip when coming from external link
+    }
+  }, [searchParams]);
 
   const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;

@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    const query: any = { approved: true };
+    const query: any = { approved: true }; // Only show approved events
 
     if (!isNaN(month) && !isNaN(year)) {
       const start = new Date(year, month, 1);
@@ -24,11 +24,27 @@ export async function GET(req: NextRequest) {
     }
 
     const totalEvents = await Event.countDocuments(query);
-    const events = await Event.find(query).sort({ date: 1 }).skip(skip).limit(limit);
+    const events = await Event.find(query)
+      .sort({ date: 1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(); // Use lean() for better performance and cleaner objects
+    
+    console.log('Events from database:', events); // Debug log
+    console.log('Sample event fields:', events[0] ? Object.keys(events[0]) : 'No events found'); // Debug log
+
+    // Ensure venue and time fields are properly formatted
+    const formattedEvents = events.map(event => ({
+      ...event,
+      id: event._id.toString(),
+      venue: event.venue || '',
+      time: event.time || '',
+      _id: undefined // Remove _id from response
+    }));
 
     return NextResponse.json({
       success: true,
-      events,
+      events: formattedEvents,
       totalEvents,
       totalPages: Math.ceil(totalEvents / limit),
     });
@@ -43,16 +59,39 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDB()
     const data = await req.json()
+    
+    console.log('Received event data for creation:', data); // Debug log
+    
+    // Validate required fields
+    if (!data.title || !data.description || !data.category || !data.venue || !data.date || !data.organizer || !data.contactEmail) {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Missing required fields: title, description, category, venue, date, organizer, contactEmail' 
+      }, { status: 400 });
+    }
 
-    const event = await Event.create({
-      ...data,
+    // Create event with explicit field mapping
+    const eventData = {
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      venue: data.venue, // Explicitly map venue
+      date: data.date,
+      time: data.time || '', // Default to empty string if not provided
+      organizer: data.organizer,
+      contactEmail: data.contactEmail,
+      additionalInfo: data.additionalInfo || '',
       approved: false
-    })
+    };
 
-    return NextResponse.json({ success: true, event })
+    const event = await Event.create(eventData);
+    
+    console.log('Created event in database:', event.toObject()); // Debug log
+
+    return NextResponse.json({ success: true, event: event.toObject() })
   } catch (err) {
     console.error('POST /api/event-board error:', err)
-    return NextResponse.json({ success: false, message: 'Failed to submit event' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Failed to submit event', error: err.message }, { status: 500 })
   }
 }
 

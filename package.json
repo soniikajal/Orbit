@@ -10,7 +10,8 @@
     "serve": "next start",
     "type-check": "tsc --noEmit",
     "deploy:vercel": "vercel --prod",
-    "deploy:netlify": "netlify deploy --prod"
+    "deploy:netlify": "netlify deploy --prod",
+    "seed-events": "node seed-events.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
