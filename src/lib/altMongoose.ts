@@ -1,8 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose, { Connection } from 'mongoose'
 
-let altConnection: typeof mongoose | null = null
+let altConnection: Connection | null = null
 
-export async function connectToAltDB() {
+export async function connectToAltDB(): Promise<Connection> {
   if (altConnection) return altConnection
 
   try {
