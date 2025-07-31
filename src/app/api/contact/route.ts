@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectToDB } from '@/lib/mongoose'
-import { connectToAltDB } from '@/lib/altMongoose'
+import getAltContactModel from '@/models/AltContact'
 import Contact from '@/models/Contact'
 
 // POST: Submit new contact
@@ -31,9 +31,8 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer())
     const base64Image = buffer.toString('base64')
 
-    await connectToAltDB()
-
-    const newContact = await Contact.create({
+    const AltContact = await getAltContactModel()
+    const newContact = await AltContact.create({
       name,
       email,
       message,
@@ -52,7 +51,6 @@ export async function POST(req: Request) {
   }
 
   await connectToDB()
-
   const newContact = await Contact.create({ name, email, message, type })
 
   return NextResponse.json({ success: true, contact: newContact })
@@ -61,8 +59,8 @@ export async function POST(req: Request) {
 // GET: Fetch all contact submissions
 export async function GET() {
   try {
-    await connectToAltDB()
-    const bugReports = await Contact.find().sort({ timestamp: -1 })
+    const AltContact = await getAltContactModel()
+    const bugReports = await AltContact.find().sort({ timestamp: -1 })
 
     await connectToDB()
     const otherContacts = await Contact.find().sort({ timestamp: -1 })
@@ -101,12 +99,10 @@ export async function PATCH(req: NextRequest) {
   }
 
   try {
-    // Try to update in altDB first (bug reports)
-    await connectToAltDB()
-    let updated = await Contact.findByIdAndUpdate(id, { status }, { new: true })
+    const AltContact = await getAltContactModel()
+    let updated = await AltContact.findByIdAndUpdate(id, { status }, { new: true })
 
     if (!updated) {
-      // Fallback to main DB
       await connectToDB()
       updated = await Contact.findByIdAndUpdate(id, { status }, { new: true })
     }
