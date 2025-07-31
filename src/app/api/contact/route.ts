@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { connectToDB } from '@/lib/mongoose'
+import { connectToAltDB } from '@/lib/altMongoose'
 import Contact from '@/models/Contact'
 import getAltContactModel from '@/models/AltContact'
 
@@ -9,6 +10,7 @@ export async function POST(req: Request) {
 
   if (contentType.includes('multipart/form-data')) {
     const formData = await req.formData()
+
     const name = formData.get('name') as string
     const email = formData.get('email') as string
     const message = formData.get('message') as string
@@ -30,6 +32,7 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer())
     const base64Image = buffer.toString('base64')
 
+    await connectToAltDB()
     const AltContact = await getAltContactModel()
 
     const newContact = await AltContact.create({
@@ -43,20 +46,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, contact: newContact })
   }
 
-  // For queries or feedback
+  // Fallback for JSON (query/feedback)
   const { name, email, message, type } = await req.json()
+
   if (!email || !message || !type) {
     return NextResponse.json({ success: false, message: 'Missing fields' }, { status: 400 })
   }
 
   await connectToDB()
   const newContact = await Contact.create({ name, email, message, type })
+
   return NextResponse.json({ success: true, contact: newContact })
 }
 
 // GET: Fetch all contact submissions
 export async function GET() {
   try {
+    await connectToAltDB()
     const AltContact = await getAltContactModel()
     const bugReports = await AltContact.find().sort({ timestamp: -1 })
 
@@ -67,7 +73,7 @@ export async function GET() {
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
     )
 
-    const safeContacts = allContacts.map((c: any) => ({
+    const safeContacts = allContacts.map((c) => ({
       id: c._id.toString(),
       name: c.name,
       email: c.email,
@@ -80,20 +86,26 @@ export async function GET() {
 
     return NextResponse.json({ success: true, contacts: safeContacts })
   } catch (error) {
-    console.error('❌ GET /api/contact error:', error)
-    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 })
+    console.error('Error fetching contact data:', error)
+    return NextResponse.json(
+      { success: false, message: 'Internal Server Error' },
+      { status: 500 }
+    )
   }
 }
 
 // PATCH: Update status of submission
 export async function PATCH(req: NextRequest) {
   const { id, status } = await req.json()
+
   if (!id || !status) {
     return NextResponse.json({ success: false, message: 'Missing id or status' }, { status: 400 })
   }
 
   try {
+    await connectToAltDB()
     const AltContact = await getAltContactModel()
+
     let updated = await AltContact.findByIdAndUpdate(id, { status }, { new: true })
 
     if (!updated) {
@@ -107,7 +119,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ success: true, updated })
   } catch (error) {
-    console.error('❌ PATCH /api/contact error:', error)
+    console.error('Error updating status:', error)
     return NextResponse.json({ success: false, message: 'Database update failed' }, { status: 500 })
   }
 }
