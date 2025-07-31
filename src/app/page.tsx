@@ -202,13 +202,16 @@ const HomePage: React.FC = () => {
         body,
       });
       const data = await res.json();
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       if (data.success) {
         alert('Your message has been sent!');
-        setContactForm({ name: '', email: '', message: '', bugImage: null });
       } else {
         alert('Something went wrong.');
       }
     } catch (error) {
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       console.error('Error:', error);
       alert('Network error.');
     }
@@ -219,6 +222,9 @@ const HomePage: React.FC = () => {
       const file = e.target.files[0];
       if (file.size > 50 * 1024) {
         alert('Image must be under 50KB');
+        // Clear the file input and state
+        e.target.value = '';
+        setContactForm(prev => ({ ...prev, bugImage: null }));
         return;
       }
       setContactForm(prev => ({ ...prev, bugImage: file }));
