@@ -73,7 +73,10 @@ const testEvents = [
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://kush:6CoKisnyZyOjEYKn@orbit.ggl8heh.mongodb.net/');
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI environment variable is required');
+    }
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
     
     // Clear existing events (optional)
