@@ -576,7 +576,7 @@ const EventBoardPage: React.FC = () => {
                           }}>
                             <span className="font-bold text-[#FACC6B]">Venue:</span>{' '}
                             {event.venue ? (
-                              availableVenues.some(venue => venue.name === event.venue) ? (
+                              availableVenues.some(venue => venue.name === event.venue || venue.originalName === event.venue) ? (
                                 <button
                                   onClick={(e) => {
                                     e.preventDefault();
