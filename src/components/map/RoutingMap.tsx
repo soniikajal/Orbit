@@ -178,15 +178,23 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
       draggableWaypoints: false,
       fitSelectedRoutes: true,
       show: false,
-      createMarker: () => null,
+      createMarker: function (i, wp, nWps) {
+        return L.marker(wp.latLng, {
+          icon: L.icon({
+            iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          })
+        });
+      },
     })
-      .on('routesfound', function (e) {
-        console.log("✅ Route found on Vercel");
-        setTimeout(() => {
-          mapInstance.current?.invalidateSize();
-        }, 300); // delay to allow CSS/layout paint
-      })
-      .addTo(mapInstance.current!);
+    .on('routesfound', function (e) {
+      console.log("✅ Route found on Vercel");
+      setTimeout(() => {
+        mapInstance.current?.invalidateSize();
+      }, 300); // delay to allow CSS/layout paint
+    })
+    .addTo(mapInstance.current!);
   };
 
 
