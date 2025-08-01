@@ -162,9 +162,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
               © 2025 Orbit | All Rights Reserved.
             </p>
-            <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <a
+              href="/privacy-policy"
+              className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end hover:text-global-text2 transition-colors duration-200"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              target="_self"
+            >
               Privacy Policy
-            </button>
+            </a>
           </div>
         </div>
       </div>
