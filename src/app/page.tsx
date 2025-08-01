@@ -284,7 +284,7 @@ const HomePage: React.FC = () => {
           
           .safari-team-image {
             width: 100% !important;
-            height: 150px !important;
+            aspect-ratio: 1 / 1 !important;
             position: relative !important;
             overflow: hidden !important;
             border-radius: 12px !important;
@@ -618,7 +618,7 @@ const HomePage: React.FC = () => {
                   }}
                 >
                   {/* Member Image */}
-                  <div className="safari-team-image w-full h-[150px] bg-gray-200 rounded-[12px] mb-3 overflow-hidden relative">
+                  <div className="safari-team-image w-full aspect-square bg-gray-200 rounded-[12px] mb-3 overflow-hidden relative">
                     {member.image ? (
                       <Image
                         src={member.image}
