@@ -116,9 +116,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
                   Email: nsutorbit@gmail.com
                 </p>
-                <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Phone: 7827044075
-                </p>
+                
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[22px] text-left text-global-text4 " style={{ fontFamily: 'Inter, sans-serif' }}>
                   NSUT, Sector 3, Dwarka,<br />New Delhi - 110078
                 </p>
@@ -162,9 +160,14 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4" style={{ fontFamily: 'Inter, sans-serif' }}>
               © 2025 Orbit | All Rights Reserved.
             </p>
-            <button className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <a
+              href="/privacy-policy"
+              className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[23px] text-left text-global-text4 underline self-end hover:text-global-text2 transition-colors duration-200"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+              target="_self"
+            >
               Privacy Policy
-            </button>
+            </a>
           </div>
         </div>
       </div>

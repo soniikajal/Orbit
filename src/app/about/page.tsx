@@ -121,7 +121,7 @@ const AboutPage: React.FC = () => {
       {
         id: '5',
         name: 'Manik Bhushan',
-        position: 'Head of Design',
+        position: 'Design Lead',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/manik-bhushan/',
         instagram: 'https://www.instagram.com/maeniikkk/',
@@ -143,6 +143,7 @@ const AboutPage: React.FC = () => {
         position: 'Graphic Designer',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/sakshi-sahu-ss/',
+        instagram: 'https://www.instagram.com/ssakshi.13/',
         image: '/images/team/sakshi.png'
       },
         {
@@ -206,7 +207,7 @@ const AboutPage: React.FC = () => {
               {/* Section Header */}
               <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[40px]">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                  Who are we?
+                  <span style={{ color: '#262626' }}>Who are we?</span>
                 </h2>
                 <div className="w-full bg-global-background5 border border-global-text2 rounded-[30px] p-8 sm:p-10 md:p-12 lg:p-[50px]">
                   <div className="flex flex-col gap-6 text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -254,7 +255,7 @@ const AboutPage: React.FC = () => {
               {/* Section Header */}
               <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[40px]">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                  Our Mission
+                  <span style={{ color: '#262626' }}>Our Mission</span>
                 </h2>
                 
                 <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-6 sm:leading-7 md:leading-8 lg:leading-[28px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -278,7 +279,7 @@ const AboutPage: React.FC = () => {
                   </div> */}
                   
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    Simplify Navigation
+                    <span style={{ color: '#262626' }}>Simplify Navigation</span>
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
                   <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -350,7 +351,7 @@ const AboutPage: React.FC = () => {
                     </svg>
                   </div> */}
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[28px] font-semibold leading-7 sm:leading-8 md:leading-9 lg:leading-[34px] text-global-text2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                    Foster Innovation
+                    <span style={{ color: '#262626' }}>Foster Innovation</span>
                   </h3>
                   <div className="w-full h-[2px] bg-black"></div>
                   <p className="text-sm sm:text-base md:text-lg lg:text-[16px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[24px] text-global-text2" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -369,7 +370,7 @@ const AboutPage: React.FC = () => {
               {/* Section Header */}
               <div className="w-full flex flex-col justify-start items-start gap-6 sm:gap-8 md:gap-10 lg:gap-[30px]">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
-                  The <span className="text-[#F45B69]">Humans</span> behind Orbit
+                  <span style={{ color: '#262626' }}>The </span><span className="text-[#F45B69]">Humans</span><span style={{ color: '#262626' }}> behind Orbit</span>
                 </h2>
               </div>
 
@@ -441,7 +442,7 @@ const AboutPage: React.FC = () => {
                     {/* Member Info */}
                     <div className="w-full text-center">
                       <h4 className="text-lg font-bold text-black mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {member.name} | <span className="text-gray-600 font-normal">{member.branch}</span>
+                        <span style={{ color: '#262626' }}>{member.name}</span> | <span className="text-gray-600 font-normal">{member.branch}</span>
                       </h4>
                       <p className="text-sm text-gray-700 mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {member.position}

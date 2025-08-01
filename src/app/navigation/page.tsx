@@ -1,14 +1,35 @@
 // src/app/navigation/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { createPortal } from 'react-dom';
 import InteractiveMap from '@/components/map/InteractiveMap';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import { useScrollAnimations } from '@/hooks/useScrollAnimations';
+import { useSearchParams } from 'next/navigation';
 
-const NavigationPage: React.FC = () => {
+// Loading component for Suspense
+const NavigationLoading = () => (
+  <div className="w-full flex flex-col justify-start items-end">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center">
+      <div className="w-full flex flex-col justify-start items-start mt-0 sm:mt-0 md:mt-0">
+        <main className="w-full py-2">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2 mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+            Navigate through the campus
+          </h1>
+          <div className="w-full mb-[15px] relative">
+            <div className="w-full h-[56px] px-4 pl-6 pr-14 text-base rounded-[30px] bg-gray-100 animate-pulse" />
+          </div>
+          <div className="w-full max-w-[1240px] h-[650px] bg-gray-100 rounded-[30px] border border-gray-200 animate-pulse" />
+        </main>
+      </div>
+    </div>
+  </div>
+);
+
+const NavigationPageContent: React.FC = () => {
+  const searchParams = useSearchParams();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [startLocation, setStartLocation] = useState('Your Location');
@@ -39,6 +60,17 @@ const NavigationPage: React.FC = () => {
     };
     loadBuildings();
   }, []);
+
+  // Handle destination from URL parameters (e.g., from event venue click)
+  useEffect(() => {
+    const destination = searchParams.get('destination');
+    if (destination) {
+      const decodedDestination = decodeURIComponent(destination);
+      setSearchQuery(decodedDestination);
+      setRouteQuery(decodedDestination);
+      setShowQuickTip(false); // Hide tip when coming from external link
+    }
+  }, [searchParams]);
 
   const handleNewsletterEmailChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = typeof value === 'string' ? value : value.target.value;
@@ -461,6 +493,15 @@ const NavigationPage: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Main component with Suspense wrapper
+const NavigationPage: React.FC = () => {
+  return (
+    <Suspense fallback={<NavigationLoading />}>
+      <NavigationPageContent />
+    </Suspense>
   );
 };
 

@@ -30,21 +30,47 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   const locationAddedToFuse = useRef<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(17);
   const [mapReady, setMapReady] = useState(false);
+  const [buildingsLoaded, setBuildingsLoaded] = useState(false);
+  const pendingRouteQuery = useRef<string>('');
 
+  // Handle searchQuery changes
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== '') {
+      pendingRouteQuery.current = searchQuery;
       setEndInput(searchQuery);
-      const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
-      if (building) {
-        endLatLng.current = building.latlng;
-        if (userLocation.current) {
-          startLatLng.current = userLocation.current;
-          setStartInput("Your Location");
+      
+      // Try to find and route immediately if buildings are loaded
+      if (buildingsLoaded) {
+        const building = buildings.current.find(b => 
+          b.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        if (building) {
+          endLatLng.current = building.latlng;
+          if (userLocation.current) {
+            startLatLng.current = userLocation.current;
+            setStartInput("Your Location");
+            tryRoute();
+          }
         }
-        tryRoute();
       }
     }
-  }, [searchQuery]);
+  }, [searchQuery, buildingsLoaded]);
+
+  // Retry routing when user location is found and there's a pending query
+  useEffect(() => {
+    if (userLocation.current && pendingRouteQuery.current && buildingsLoaded) {
+      const building = buildings.current.find(b => 
+        b.name.toLowerCase().includes(pendingRouteQuery.current.toLowerCase())
+      );
+      if (building) {
+        endLatLng.current = building.latlng;
+        startLatLng.current = userLocation.current;
+        setStartInput("Your Location");
+        tryRoute();
+        pendingRouteQuery.current = ''; // Clear pending query
+      }
+    }
+  }, [userLocation.current, buildingsLoaded]);
 
   useEffect(() => {
     const initMap = async () => {
@@ -76,13 +102,19 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
             onLocationSelect("Your Location");
           }
 
-          L.marker(e.latlng, {
-            icon: L.icon({
-              iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png',
-              iconSize: [32, 32],
-              iconAnchor: [16, 32],
-            })
-          }).addTo(mapInstance.current!).bindPopup("You are here").openPopup();
+          try {
+            if (mapInstance.current) {
+              L.marker(e.latlng, {
+                icon: L.icon({
+                  iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png',
+                  iconSize: [32, 32],
+                  iconAnchor: [16, 32],
+                })
+              }).addTo(mapInstance.current).bindPopup("You are here").openPopup();
+            }
+          } catch (error) {
+            console.error('Error adding user location marker:', error);
+          }
         });
 
         const markersRes = await fetch('/markers.json');
@@ -90,22 +122,36 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         markersData.features.forEach((f: any) => {
           const latlng = L.latLng(f.geometry.coordinates[1], f.geometry.coordinates[0]);
           buildings.current.push({ name: f.properties.name, latlng });
-          L.marker(latlng, {
-            icon: L.icon({
-              iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png',
-              iconSize: [32, 32],
-              iconAnchor: [16, 32]
-            })
-          }).addTo(mapInstance.current!).bindPopup(`<b>${f.properties.name}</b>`);
+          
+          try {
+            if (mapInstance.current) {
+              L.marker(latlng, {
+                icon: L.icon({
+                  iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png',
+                  iconSize: [32, 32],
+                  iconAnchor: [16, 32]
+                })
+              }).addTo(mapInstance.current).bindPopup(`<b>${f.properties.name}</b>`);
+            }
+          } catch (error) {
+            console.error('Error adding marker for', f.properties.name, ':', error);
+          }
         });
 
         fuse.current = new Fuse(buildings.current, { keys: ['name'], threshold: 0.3 });
+        setBuildingsLoaded(true); // Mark buildings as loaded
 
-        const pathsRes = await fetch('/paths.json');
-        const pathsData = await pathsRes.json();
-        L.geoJSON(pathsData, {
-          style: { color: '#888', weight: 2.5, dashArray: '4,4' }
-        }).addTo(mapInstance.current!);
+        try {
+          const pathsRes = await fetch('/paths.json');
+          const pathsData = await pathsRes.json();
+          if (mapInstance.current) {
+            L.geoJSON(pathsData, {
+              style: { color: '#888', weight: 2.5, dashArray: '4,4' }
+            }).addTo(mapInstance.current);
+          }
+        } catch (error) {
+          console.error('Error loading paths:', error);
+        }
 
         setMapReady(true);
       }
@@ -155,46 +201,55 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   };
 
   const tryRoute = () => {
-    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) return;
+    if (!startLatLng.current || !endLatLng.current || !mapInstance.current) {
+      console.warn('Cannot create route: missing coordinates or map instance');
+      return;
+    }
 
     // Clear old route
-    if (routingControl.current) {
-      mapInstance.current.removeControl(routingControl.current);
+    if (routingControl.current && mapInstance.current) {
+      try {
+        mapInstance.current.removeControl(routingControl.current);
+      } catch (error) {
+        console.warn('Error removing old routing control:', error);
+      }
       routingControl.current = null;
     }
 
-    routingControl.current = L.Routing.control({
-      waypoints: [startLatLng.current, endLatLng.current],
-      router: L.Routing.osrmv1({
-        profile: 'foot',
-        serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
-      }),
-      lineOptions: {
-        styles: [{ color: '#007bff', weight: 5 }],
-        extendToWaypoints: true,
-        missingRouteTolerance: 10,
-      },
-      addWaypoints: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      show: false,
-      createMarker: function (i, wp, nWps) {
-        return L.marker(wp.latLng, {
-          icon: L.icon({
-            iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png',
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-          })
+    try {
+      routingControl.current = L.Routing.control({
+        waypoints: [startLatLng.current, endLatLng.current],
+        router: L.Routing.osrmv1({
+          profile: 'foot',
+          serviceUrl: 'https://nsut-osrm.onrender.com/route/v1',
+        }),
+        lineOptions: {
+          styles: [{ color: '#007bff', weight: 5 }],
+          extendToWaypoints: true,
+          missingRouteTolerance: 10,
+        },
+        addWaypoints: false,
+        fitSelectedRoutes: true,
+        show: false,
+      } as any)
+        .on('routesfound', function (e) {
+          console.log("✅ Route found on Vercel");
+          setTimeout(() => {
+            if (mapInstance.current) {
+              mapInstance.current.invalidateSize();
+            }
+          }, 300); // delay to allow CSS/layout paint
+        })
+        .on('routingerror', function (e) {
+          console.error('Routing error:', e);
         });
-      },
-    })
-    .on('routesfound', function (e) {
-      console.log("✅ Route found on Vercel");
-      setTimeout(() => {
-        mapInstance.current?.invalidateSize();
-      }, 300); // delay to allow CSS/layout paint
-    })
-    .addTo(mapInstance.current!);
+
+      if (mapInstance.current) {
+        routingControl.current.addTo(mapInstance.current);
+      }
+    } catch (error) {
+      console.error('Error creating routing control:', error);
+    }
   };
 
 

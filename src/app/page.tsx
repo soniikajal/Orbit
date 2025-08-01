@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
     {
       id: '2',
       name: 'Manik Bhushan',
-      position: 'Head of Design',
+      position: 'Design Lead',
       experience: 'Mechanical Branch - Creative Head with expertise in design and visual content creation',
       image: '/images/team/manik.png'
     },
@@ -202,13 +202,16 @@ const HomePage: React.FC = () => {
         body,
       });
       const data = await res.json();
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       if (data.success) {
         alert('Your message has been sent!');
-        setContactForm({ name: '', email: '', message: '', bugImage: null });
       } else {
         alert('Something went wrong.');
       }
     } catch (error) {
+      // Always clear bugImage after submit (success or error)
+      setContactForm(prev => ({ ...prev, bugImage: null, name: '', email: '', message: '' }));
       console.error('Error:', error);
       alert('Network error.');
     }
@@ -219,6 +222,9 @@ const HomePage: React.FC = () => {
       const file = e.target.files[0];
       if (file.size > 50 * 1024) {
         alert('Image must be under 50KB');
+        // Clear the file input and state
+        e.target.value = '';
+        setContactForm(prev => ({ ...prev, bugImage: null }));
         return;
       }
       setContactForm(prev => ({ ...prev, bugImage: file }));
@@ -278,7 +284,7 @@ const HomePage: React.FC = () => {
           
           .safari-team-image {
             width: 100% !important;
-            height: 150px !important;
+            aspect-ratio: 1 / 1 !important;
             position: relative !important;
             overflow: hidden !important;
             border-radius: 12px !important;
@@ -356,7 +362,7 @@ const HomePage: React.FC = () => {
             <div className="relative w-full h-auto flex flex-col justify-start items-start pt-[100px] pb-40 lg:pb-60"> {/* Added more top padding for content below fixed navbar */}
               <div className={`relative transition-all duration-2200 ease-elegant delay-100 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 <h1 className="text-[80px] sm:text-[120px] md:text-[160px] lg:text-[280px] xl:text-[320px] font-bold leading-[0.8] text-left text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  <span style={{ fontSize: 'clamp(100px, 25vw, 230px)', lineHeight: 0.8, display: 'block', marginTop:'30px', marginLeft: 'clamp(-12px, -3vw, -32px)' }}>NSUT</span>
+                  <span style={{ fontSize: 'clamp(100px, 25vw, 230px)', lineHeight: 0.8, display: 'block', marginTop:'30px', marginLeft: 'clamp(-12px, -3vw, -32px)', color: '#262626' }}>NSUT</span>
                 </h1>
                 <h2 className="absolute top-[80%] left-[12%] font-normal leading-[0.8] text-[#F45B69] tracking-wide" style={{ fontFamily: 'Lost in South, cursive', fontSize: 'clamp(40px, 10vw, 90px)', marginLeft: 'clamp(-12px, -3vw, -32px)'}}>
                   SURVIVAL KIT
@@ -412,20 +418,20 @@ const HomePage: React.FC = () => {
             {/* Event Board */}
             <Link href="/event-board" className="block">
   <div
-    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
+    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] shadow-[0px_5px_1px_#000000] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
       visibleSections.has('what-we-offer')
         ? 'opacity-100 translate-y-0 delay-200'
         : 'opacity-0 translate-y-8'
     }`}
     style={{ minHeight: '220px' }} // adjust as needed for your design
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/1.svg"
       alt="Event Board Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -455,20 +461,20 @@ const HomePage: React.FC = () => {
             {/* Launch Pad */}
 <Link href="/Launchpad" className="block">
   <div
-    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
+    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] shadow-[0px_5px_1px_#000000] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
       visibleSections.has('what-we-offer')
         ? 'opacity-100 translate-y-0 delay-300'
         : 'opacity-0 translate-y-8'
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/3.svg"
       alt="Launch Pad Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -505,13 +511,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/2.svg"
       alt="Navigation Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -548,13 +554,13 @@ const HomePage: React.FC = () => {
     }`}
     style={{ minHeight: '220px' }}
   >
-    {/* SVG Background on the right */}
+    {/* SVG Background on the right (hidden on mobile) */}
     <Image
       src="/images/home/4.svg"
       alt="Study Hub Illustration"
       width={260}
       height={260}
-      className="pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
+      className="hidden sm:block pointer-events-none select-none absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 z-0 w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] md:w-[190px] md:h-[190px] lg:w-[250px] lg:h-[250px] opacity-70 sm:opacity-100"
       style={{ objectFit: 'contain' }}
     />
 
@@ -591,11 +597,11 @@ const HomePage: React.FC = () => {
         >
           {/* Section Header */}
           <div className="w-full flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-[36px] justify-start items-center">
-            <div className="w-full flex flex-col sm:flex-row justify-start items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[38px]">
+            <div className="w-full flex flex-col sm:flex-row justify-start items-start md:items-center gap-4 sm:gap-6 md:gap-8 lg:gap-[38px]">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[80px] font-bold leading-10 sm:leading-12 md:leading-14 lg:leading-[97px] text-left text-global-text2" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 'bold' }}>
                 Meet the team
               </h2>
-              <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%]" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-base sm:text-lg md:text-xl lg:text-[18px] font-normal leading-5 sm:leading-6 md:leading-7 lg:leading-[21px] text-left text-global-text2 w-full sm:w-2/5 md:w-1/3 lg:w-[36%] md:mt-6" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Meet the students who’ve lived it, struggled through it, and now want to fix it.
               </p>
             </div>
@@ -612,7 +618,7 @@ const HomePage: React.FC = () => {
                   }}
                 >
                   {/* Member Image */}
-                  <div className="safari-team-image w-full h-[150px] bg-gray-200 rounded-[12px] mb-3 overflow-hidden relative">
+                  <div className="safari-team-image w-full aspect-square bg-gray-200 rounded-[12px] mb-3 overflow-hidden relative">
                     {member.image ? (
                       <Image
                         src={member.image}

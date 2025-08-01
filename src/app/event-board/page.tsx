@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import Footer from '@/components/layout/Footer';
 import { EventBoardEvent } from './event_data';
+import { getAvailableVenues, navigateToVenue, VenueLocation } from '@/utils/venues';
 
 interface Event {
   id: string;
@@ -16,7 +17,6 @@ interface Event {
   organizer: string;
   venue?: string;
   time?: string;
-  registrationRequired: boolean;
 }
 
 const EventBoardPage: React.FC = () => {
@@ -32,6 +32,14 @@ const EventBoardPage: React.FC = () => {
   const [showEventForm, setShowEventForm] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [availableVenues, setAvailableVenues] = useState<VenueLocation[]>([]);
+  const [filteredVenues, setFilteredVenues] = useState<VenueLocation[]>([]);
+  const [showVenueDropdown, setShowVenueDropdown] = useState(false);
+  const [venueSearchQuery, setVenueSearchQuery] = useState('');
+  const [showOrganizerDropdown, setShowOrganizerDropdown] = useState(false);
+  const [isOrganizerOther, setIsOrganizerOther] = useState(false);
+  const [isCategoryOther, setIsCategoryOther] = useState(false);
+  const [eventDates, setEventDates] = useState<string[]>(['']);
   const [eventForm, setEventForm] = useState({
     eventName: '',
     category: '',
@@ -41,10 +49,42 @@ const EventBoardPage: React.FC = () => {
     time: '',
     organizer: '',
     contactEmail: '',
-    registrationRequired: false,
     additionalInfo: ''
   });
   const eventsPerPage = 8;
+
+  // Organizer suggestions
+  const organizerSuggestions = [
+    'Ashwamedh',
+    'Crescendo',
+    'Junoon',
+    'Mirage',
+    'Spic Macay',
+    'IEEE',
+    'Enactus',
+    'FES',
+    'E-Cell',
+    'TEDxNSIT',
+    'The Alliance',
+    'Crosslinks',
+    'DebSOC',
+    'Other'
+  ];
+
+  // Load available venues when component mounts
+  useEffect(() => {
+    const loadVenues = async () => {
+      try {
+        const venues = await getAvailableVenues();
+        console.log('Loaded venues:', venues.length);
+        setAvailableVenues(venues);
+        setFilteredVenues(venues);
+      } catch (error) {
+        console.error('Error loading venues:', error);
+      }
+    };
+    loadVenues();
+  }, []);
 
   // Animation setup
   useEffect(() => {
@@ -91,6 +131,28 @@ const EventBoardPage: React.FC = () => {
   useEffect(() => {
     loadEvents();
   }, [selectedMonth, selectedYear, currentPage]);
+
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      
+      // Close organizer dropdown if clicking outside
+      if (showOrganizerDropdown && !target.closest('.organizer-dropdown-container')) {
+        setShowOrganizerDropdown(false);
+      }
+      
+      // Close venue dropdown if clicking outside
+      if (showVenueDropdown && !target.closest('.venue-dropdown-container')) {
+        setShowVenueDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showOrganizerDropdown, showVenueDropdown]);
 
   const loadEvents = async () => {
     try {
@@ -171,19 +233,96 @@ const EventBoardPage: React.FC = () => {
     }));
   };
 
+  const handleVenueSearch = (query: string) => {
+    setVenueSearchQuery(query);
+    setEventForm(prev => ({ ...prev, venue: query }));
+    
+    if (query.trim() === '') {
+      setFilteredVenues(availableVenues);
+    } else {
+      const filtered = availableVenues.filter(venue =>
+        venue.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredVenues(filtered);
+    }
+    setShowVenueDropdown(true);
+  };
+
+  const handleOrganizerSelect = (organizer: string) => {
+    if (organizer === 'Other') {
+      setIsOrganizerOther(true);
+      setEventForm(prev => ({ ...prev, organizer: '' }));
+    } else {
+      setIsOrganizerOther(false);
+      setEventForm(prev => ({ ...prev, organizer }));
+    }
+    setShowOrganizerDropdown(false);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    if (category === 'Other') {
+      setIsCategoryOther(true);
+      setEventForm(prev => ({ ...prev, category: '' }));
+    } else {
+      setIsCategoryOther(false);
+      setEventForm(prev => ({ ...prev, category }));
+    }
+  };
+
+  const addEventDate = () => {
+    setEventDates(prev => [...prev, '']);
+  };
+
+  const removeEventDate = (index: number) => {
+    if (eventDates.length > 1) {
+      setEventDates(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateEventDate = (index: number, date: string) => {
+    setEventDates(prev => prev.map((d, i) => i === index ? date : d));
+    // Update the main form date with the first date for backward compatibility
+    if (index === 0) {
+      setEventForm(prev => ({ ...prev, date }));
+    }
+  };
+
+  const handleVenueSelect = (venueName: string) => {
+    setEventForm(prev => ({ ...prev, venue: venueName }));
+    setVenueSearchQuery(venueName);
+    setShowVenueDropdown(false);
+  };
+
+  const handleVenueInputFocus = () => {
+    setShowVenueDropdown(true);
+    if (venueSearchQuery.trim() === '') {
+      setFilteredVenues(availableVenues);
+    }
+  };
+
+  const handleVenueInputBlur = () => {
+    // Delay hiding dropdown to allow for click selection
+    setTimeout(() => {
+      setShowVenueDropdown(false);
+    }, 300);
+  };
+
   const handleEventFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Filter out empty dates and sort them
+    const validDates = eventDates.filter(date => date.trim() !== '').sort();
 
     const eventData = {
       title: eventForm.eventName,
       category: eventForm.category,
       description: eventForm.description,
-      venue: eventForm.venue,
-      date: eventForm.date,
-      time: eventForm.time,
+      venue: eventForm.venue || undefined, // Send undefined if empty
+      date: validDates[0] || eventForm.date, // Use first date as primary date
+      additionalDates: validDates.length > 1 ? validDates.slice(1) : [], // Additional dates for multi-day events
+      time: eventForm.time || undefined, // Send undefined if empty
       organizer: eventForm.organizer,
       contactEmail: session?.user?.email || '',
-      registrationRequired: eventForm.registrationRequired,
       additionalInfo: eventForm.additionalInfo,
     };
 
@@ -210,9 +349,14 @@ const EventBoardPage: React.FC = () => {
           time: '',
           organizer: '',
           contactEmail: session?.user?.email || '',
-          registrationRequired: false,
           additionalInfo: '',
         });
+        setEventDates(['']);
+        setVenueSearchQuery('');
+        setFilteredVenues(availableVenues);
+        setShowOrganizerDropdown(false);
+        setIsOrganizerOther(false);
+        setIsCategoryOther(false);
       } else {
         alert(data.message || 'Submission failed.');
       }
@@ -235,9 +379,15 @@ const EventBoardPage: React.FC = () => {
       time: '',
       organizer: '',
       contactEmail: session?.user?.email || '',
-      registrationRequired: false,
       additionalInfo: ''
     });
+    setEventDates(['']);
+    setVenueSearchQuery('');
+    setFilteredVenues(availableVenues);
+    setShowOrganizerDropdown(false);
+    setIsOrganizerOther(false);
+    setIsCategoryOther(false);
+    setShowVenueDropdown(false);
   };
 
   const handleAddEventClick = () => {
@@ -456,28 +606,57 @@ const EventBoardPage: React.FC = () => {
 
                       {/* Event Details */}
                       <div className="mb-3 sm:mb-4 flex-shrink-0">
-                        {event.venue && (
-                          <div className="mb-1">
-                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
-                              fontFamily: 'Inter, sans-serif',
-                              wordWrap: 'break-word',
-                              hyphens: 'auto'
-                            }}>
-                              Venue: {event.venue}
-                            </span>
-                          </div>
-                        )}
+                        <div className="mb-1">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word',
+                            hyphens: 'auto'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Venue:</span>{' '}
+                            {event.venue ? (
+                              availableVenues.some(venue => venue.name === event.venue || venue.originalName === event.venue) ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Navigating to venue:', event.venue);
+                                    navigateToVenue(event.venue!);
+                                  }}
+                                  className="text-gray-400 hover:text-gray-300 underline transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
+                                  title="Click to navigate to this location"
+                                >
+                                  {event.venue}
+                                  <svg className="w-2 h-2 sm:w-3 sm:h-3 opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                  </svg>
+                                </button>
+                              ) : (
+                                <span className="text-gray-400">{event.venue}</span>
+                              )
+                            ) : (
+                              'TBA'
+                            )}
+                          </span>
+                        </div>
 
-                        {event.time && (
-                          <div className="mb-2">
-                            <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
-                              fontFamily: 'Inter, sans-serif',
-                              wordWrap: 'break-word'
-                            }}>
-                              Time: {event.time}
-                            </span>
-                          </div>
-                        )}
+                        <div className="mb-2">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Time:</span> {event.time || 'TBA'}
+                          </span>
+                        </div>
+
+                        <div className="mb-2">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word',
+                            hyphens: 'auto'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Organizer:</span> {event.organizer || 'TBA'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Add to Calendar Button */}
@@ -631,23 +810,48 @@ const EventBoardPage: React.FC = () => {
                       <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Category *
                       </label>
-                      <select
-                        required
-                        value={eventForm.category}
-                        onChange={(e) => handleEventFormChange('category', e.target.value)}
-                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                        style={{ fontFamily: 'Inter, sans-serif' }}
-                      >
-                        <option value="">Select a category</option>
-                        <option value="Technical Fest">Technical Fest</option>
-                        <option value="Cultural Fest">Cultural Fest</option>
-                        <option value="Sports Event">Sports Event</option>
-                        <option value="Workshop">Workshop</option>
-                        <option value="Seminar">Seminar</option>
-                        <option value="Competition">Competition</option>
-                        <option value="Social Impact">Social Impact</option>
-                        <option value="Other">Other</option>
-                      </select>
+                      {!isCategoryOther ? (
+                        <select
+                          required
+                          value={eventForm.category}
+                          onChange={(e) => handleCategoryChange(e.target.value)}
+                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                        >
+                          <option value="">Select a category</option>
+                          <option value="Technical Fest">Technical Fest</option>
+                          <option value="Cultural Fest">Cultural Fest</option>
+                          <option value="Sports Event">Sports Event</option>
+                          <option value="Workshop">Workshop</option>
+                          <option value="Seminar">Seminar</option>
+                          <option value="Competition">Competition</option>
+                          <option value="Social Impact">Social Impact</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            required
+                            value={eventForm.category}
+                            onChange={(e) => handleEventFormChange('category', e.target.value)}
+                            className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            placeholder="Enter custom category"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsCategoryOther(false);
+                              setEventForm(prev => ({ ...prev, category: '' }));
+                            }}
+                            className="h-[50px] px-4 text-[12px] rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            Choose from list
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Description */}
@@ -668,32 +872,107 @@ const EventBoardPage: React.FC = () => {
 
                     {/* Venue and Date */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
+                      <div className="relative venue-dropdown-container">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Venue *
+                          Venue
                         </label>
-                        <input
-                          type="text"
-                          required
-                          value={eventForm.venue}
-                          onChange={(e) => handleEventFormChange('venue', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="Event venue"
-                        />
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={venueSearchQuery}
+                            onChange={(e) => handleVenueSearch(e.target.value)}
+                            onFocus={handleVenueInputFocus}
+                            onBlur={handleVenueInputBlur}
+                            className="w-full h-[50px] px-4 pr-10 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            placeholder="Search for a venue (optional)..."
+                            autoComplete="off"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                          </div>
+                        </div>
+                        
+                        {/* Dropdown */}
+                        {showVenueDropdown && filteredVenues.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
+                            {filteredVenues.map((venue, index) => (
+                              <button
+                                key={venue.name}
+                                type="button"
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  handleVenueSelect(venue.name);
+                                }}
+                                className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors duration-200 text-[14px] ${
+                                  index === 0 ? 'rounded-t-[20px]' : ''
+                                } ${
+                                  index === filteredVenues.length - 1 ? 'rounded-b-[20px]' : ''
+                                }`}
+                                style={{ fontFamily: 'Inter, sans-serif' }}
+                              >
+                                {venue.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* No results message */}
+                        {showVenueDropdown && filteredVenues.length === 0 && venueSearchQuery.trim() !== '' && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg p-4">
+                            <p className="text-[14px] text-gray-500 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              No venues found matching "{venueSearchQuery}"
+                            </p>
+                          </div>
+                        )}
+                        
+                        <p className="mt-1 text-[12px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          Only campus locations available for navigation
+                        </p>
                       </div>
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Date *
+                          Event Date(s) *
                         </label>
-                        <input
-                          type="date"
-                          required
-                          value={eventForm.date}
-                          onChange={(e) => handleEventFormChange('date', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                        />
+                        <div className="space-y-2">
+                          {eventDates.map((date, index) => (
+                            <div key={index} className="flex items-center gap-2">
+                              <input
+                                type="date"
+                                required={index === 0}
+                                value={date}
+                                onChange={(e) => updateEventDate(index, e.target.value)}
+                                className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                                style={{ fontFamily: 'Inter, sans-serif' }}
+                              />
+                              {eventDates.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => removeEventDate(index)}
+                                  className="h-[50px] w-[50px] rounded-full border border-red-300 text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center"
+                                  title="Remove date"
+                                >
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={addEventDate}
+                            className="w-full h-[40px] border-2 border-dashed border-gray-300 rounded-[20px] text-gray-500 hover:border-[#F45B69] hover:text-[#F45B69] transition-colors duration-200 flex items-center justify-center gap-2"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add another date (for multi-day events)
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -711,19 +990,71 @@ const EventBoardPage: React.FC = () => {
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         />
                       </div>
-                      <div>
+                      <div className="relative organizer-dropdown-container">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Organizer *
                         </label>
-                        <input
-                          type="text"
-                          required
-                          value={eventForm.organizer}
-                          onChange={(e) => handleEventFormChange('organizer', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="Organizing body/society"
-                        />
+                        {!isOrganizerOther ? (
+                          <div className="relative">
+                            <button
+                              type="button"
+                              onClick={() => setShowOrganizerDropdown(!showOrganizerDropdown)}
+                              className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200 text-left bg-white flex items-center justify-between"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                            >
+                              <span className={eventForm.organizer ? 'text-black' : 'text-gray-500'}>
+                                {eventForm.organizer || 'Select organizing body/society'}
+                              </span>
+                              <svg 
+                                className={`w-4 h-4 transition-transform duration-200 ${showOrganizerDropdown ? 'rotate-180' : ''}`} 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+                            
+                            {showOrganizerDropdown && (
+                              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
+                                {organizerSuggestions.map((organizer, index) => (
+                                  <button
+                                    key={index}
+                                    type="button"
+                                    onClick={() => handleOrganizerSelect(organizer)}
+                                    className="w-full px-4 py-3 text-left text-[14px] hover:bg-gray-50 transition-colors duration-200 first:rounded-t-[20px] last:rounded-b-[20px]"
+                                    style={{ fontFamily: 'Inter, sans-serif' }}
+                                  >
+                                    {organizer}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              required
+                              value={eventForm.organizer}
+                              onChange={(e) => handleEventFormChange('organizer', e.target.value)}
+                              className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                              placeholder="Enter organizing body/society"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsOrganizerOther(false);
+                                setEventForm(prev => ({ ...prev, organizer: '' }));
+                              }}
+                              className="h-[50px] px-4 text-[12px] rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                            >
+                              Choose from list
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -746,20 +1077,6 @@ const EventBoardPage: React.FC = () => {
                       <p className="mt-1 text-[12px] text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Contact email is automatically set to your logged-in account email
                       </p>
-                    </div>
-
-                    {/* Registration Required */}
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        id="registrationRequired"
-                        checked={eventForm.registrationRequired}
-                        onChange={(e) => handleEventFormChange('registrationRequired', e.target.checked)}
-                        className="w-4 h-4 text-[#F45B69] border border-gray-300 rounded focus:ring-[#F45B69] focus:ring-2"
-                      />
-                      <label htmlFor="registrationRequired" className="text-[16px] font-bold text-black" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        Registration Required
-                      </label>
                     </div>
 
                     {/* Additional Info */}
