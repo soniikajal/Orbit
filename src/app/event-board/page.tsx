@@ -72,9 +72,14 @@ const EventBoardPage: React.FC = () => {
   // Load available venues when component mounts
   useEffect(() => {
     const loadVenues = async () => {
-      const venues = await getAvailableVenues();
-      setAvailableVenues(venues);
-      setFilteredVenues(venues);
+      try {
+        const venues = await getAvailableVenues();
+        console.log('Loaded venues:', venues.length);
+        setAvailableVenues(venues);
+        setFilteredVenues(venues);
+      } catch (error) {
+        console.error('Error loading venues:', error);
+      }
     };
     loadVenues();
   }, []);
@@ -269,7 +274,7 @@ const EventBoardPage: React.FC = () => {
     // Delay hiding dropdown to allow for click selection
     setTimeout(() => {
       setShowVenueDropdown(false);
-    }, 200);
+    }, 300);
   };
 
   const handleEventFormSubmit = async (e: React.FormEvent) => {
@@ -573,7 +578,12 @@ const EventBoardPage: React.FC = () => {
                             {event.venue ? (
                               availableVenues.some(venue => venue.name === event.venue) ? (
                                 <button
-                                  onClick={() => navigateToVenue(event.venue!)}
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('Navigating to venue:', event.venue);
+                                    navigateToVenue(event.venue!);
+                                  }}
                                   className="text-gray-400 hover:text-gray-300 underline transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
                                   title="Click to navigate to this location"
                                 >
@@ -789,7 +799,7 @@ const EventBoardPage: React.FC = () => {
 
                     {/* Venue and Date */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative">
+                      <div className="relative venue-dropdown-container">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Venue *
                         </label>
@@ -815,12 +825,15 @@ const EventBoardPage: React.FC = () => {
                         
                         {/* Dropdown */}
                         {showVenueDropdown && filteredVenues.length > 0 && (
-                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
                             {filteredVenues.map((venue, index) => (
                               <button
                                 key={venue.name}
                                 type="button"
-                                onClick={() => handleVenueSelect(venue.name)}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  handleVenueSelect(venue.name);
+                                }}
                                 className={`w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors duration-200 text-[14px] ${
                                   index === 0 ? 'rounded-t-[20px]' : ''
                                 } ${
@@ -836,7 +849,7 @@ const EventBoardPage: React.FC = () => {
                         
                         {/* No results message */}
                         {showVenueDropdown && filteredVenues.length === 0 && venueSearchQuery.trim() !== '' && (
-                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg p-4">
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg p-4">
                             <p className="text-[14px] text-gray-500 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
                               No venues found matching "{venueSearchQuery}"
                             </p>

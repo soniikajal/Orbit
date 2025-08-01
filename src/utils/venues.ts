@@ -23,5 +23,11 @@ export const getAvailableVenues = async (): Promise<VenueLocation[]> => {
 export const navigateToVenue = (venueName: string) => {
   const encodedVenue = encodeURIComponent(venueName);
   // Navigate to fullmap page with the venue as a query parameter in a new tab
-  window.open(`/navigation/fullmap?destination=${encodedVenue}`, '_blank');
+  const newWindow = window.open(`/navigation/fullmap?destination=${encodedVenue}`, '_blank');
+  
+  // Check if popup was blocked
+  if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+    // Fallback: navigate in same tab if popup was blocked
+    window.location.href = `/navigation/fullmap?destination=${encodedVenue}`;
+  }
 };
