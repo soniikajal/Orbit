@@ -36,6 +36,8 @@ const EventBoardPage: React.FC = () => {
   const [filteredVenues, setFilteredVenues] = useState<VenueLocation[]>([]);
   const [showVenueDropdown, setShowVenueDropdown] = useState(false);
   const [venueSearchQuery, setVenueSearchQuery] = useState('');
+  const [showOrganizerDropdown, setShowOrganizerDropdown] = useState(false);
+  const [isOrganizerOther, setIsOrganizerOther] = useState(false);
   const [eventForm, setEventForm] = useState({
     eventName: '',
     category: '',
@@ -48,6 +50,24 @@ const EventBoardPage: React.FC = () => {
     additionalInfo: ''
   });
   const eventsPerPage = 8;
+
+  // Organizer suggestions
+  const organizerSuggestions = [
+    'Ashwamedh',
+    'Crescendo',
+    'Junoon',
+    'Mirage',
+    'Spic Macay',
+    'IEEE',
+    'Enactus',
+    'FES',
+    'E-Cell',
+    'TEDxNSIT',
+    'The Alliance',
+    'Crosslinks',
+    'DebSOC',
+    'Other'
+  ];
 
   // Load available venues when component mounts
   useEffect(() => {
@@ -104,6 +124,28 @@ const EventBoardPage: React.FC = () => {
   useEffect(() => {
     loadEvents();
   }, [selectedMonth, selectedYear, currentPage]);
+
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      
+      // Close organizer dropdown if clicking outside
+      if (showOrganizerDropdown && !target.closest('.organizer-dropdown-container')) {
+        setShowOrganizerDropdown(false);
+      }
+      
+      // Close venue dropdown if clicking outside
+      if (showVenueDropdown && !target.closest('.venue-dropdown-container')) {
+        setShowVenueDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showOrganizerDropdown, showVenueDropdown]);
 
   const loadEvents = async () => {
     try {
@@ -199,6 +241,17 @@ const EventBoardPage: React.FC = () => {
     setShowVenueDropdown(true);
   };
 
+  const handleOrganizerSelect = (organizer: string) => {
+    if (organizer === 'Other') {
+      setIsOrganizerOther(true);
+      setEventForm(prev => ({ ...prev, organizer: '' }));
+    } else {
+      setIsOrganizerOther(false);
+      setEventForm(prev => ({ ...prev, organizer }));
+    }
+    setShowOrganizerDropdown(false);
+  };
+
   const handleVenueSelect = (venueName: string) => {
     setEventForm(prev => ({ ...prev, venue: venueName }));
     setVenueSearchQuery(venueName);
@@ -261,6 +314,8 @@ const EventBoardPage: React.FC = () => {
         });
         setVenueSearchQuery('');
         setFilteredVenues(availableVenues);
+        setShowOrganizerDropdown(false);
+        setIsOrganizerOther(false);
       } else {
         alert(data.message || 'Submission failed.');
       }
@@ -287,6 +342,8 @@ const EventBoardPage: React.FC = () => {
     });
     setVenueSearchQuery('');
     setFilteredVenues(availableVenues);
+    setShowOrganizerDropdown(false);
+    setIsOrganizerOther(false);
     setShowVenueDropdown(false);
   };
 
@@ -820,19 +877,71 @@ const EventBoardPage: React.FC = () => {
                           style={{ fontFamily: 'Inter, sans-serif' }}
                         />
                       </div>
-                      <div>
+                      <div className="relative organizer-dropdown-container">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                           Organizer *
                         </label>
-                        <input
-                          type="text"
-                          required
-                          value={eventForm.organizer}
-                          onChange={(e) => handleEventFormChange('organizer', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                          placeholder="Organizing body/society"
-                        />
+                        {!isOrganizerOther ? (
+                          <div className="relative">
+                            <button
+                              type="button"
+                              onClick={() => setShowOrganizerDropdown(!showOrganizerDropdown)}
+                              className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200 text-left bg-white flex items-center justify-between"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                            >
+                              <span className={eventForm.organizer ? 'text-black' : 'text-gray-500'}>
+                                {eventForm.organizer || 'Select organizing body/society'}
+                              </span>
+                              <svg 
+                                className={`w-4 h-4 transition-transform duration-200 ${showOrganizerDropdown ? 'rotate-180' : ''}`} 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+                            
+                            {showOrganizerDropdown && (
+                              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-[20px] shadow-lg max-h-60 overflow-y-auto">
+                                {organizerSuggestions.map((organizer, index) => (
+                                  <button
+                                    key={index}
+                                    type="button"
+                                    onClick={() => handleOrganizerSelect(organizer)}
+                                    className="w-full px-4 py-3 text-left text-[14px] hover:bg-gray-50 transition-colors duration-200 first:rounded-t-[20px] last:rounded-b-[20px]"
+                                    style={{ fontFamily: 'Inter, sans-serif' }}
+                                  >
+                                    {organizer}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              required
+                              value={eventForm.organizer}
+                              onChange={(e) => handleEventFormChange('organizer', e.target.value)}
+                              className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                              placeholder="Enter organizing body/society"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsOrganizerOther(false);
+                                setEventForm(prev => ({ ...prev, organizer: '' }));
+                              }}
+                              className="h-[50px] px-4 text-[12px] rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                              style={{ fontFamily: 'Inter, sans-serif' }}
+                            >
+                              Choose from list
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
