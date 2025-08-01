@@ -418,7 +418,7 @@ const HomePage: React.FC = () => {
             {/* Event Board */}
             <Link href="/event-board" className="block">
   <div
-    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
+    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background5 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] shadow-[0px_5px_1px_#000000] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
       visibleSections.has('what-we-offer')
         ? 'opacity-100 translate-y-0 delay-200'
         : 'opacity-0 translate-y-8'
@@ -461,7 +461,7 @@ const HomePage: React.FC = () => {
             {/* Launch Pad */}
 <Link href="/Launchpad" className="block">
   <div
-    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
+    className={`relative w-full flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-[16px] justify-start items-center bg-global-background1 border border-global-text2 rounded-[30px] p-6 sm:p-8 md:p-10 lg:p-[46px] shadow-[0px_5px_1px_#000000] overflow-hidden transition-all duration-700 ease-out hover:scale-105 hover:shadow-xl cursor-pointer ${
       visibleSections.has('what-we-offer')
         ? 'opacity-100 translate-y-0 delay-300'
         : 'opacity-0 translate-y-8'
