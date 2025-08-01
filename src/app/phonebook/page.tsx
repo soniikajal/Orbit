@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Footer from '@/components/layout/Footer';
 import { 
   FacultyMember, 
   facultyData
@@ -40,18 +39,18 @@ const PhonebookPage: React.FC = () => {
       const normalizedName = deptName.toLowerCase();
       
       if (normalizedName.includes('computer science') || normalizedName.includes('computer')) return '💻';
-      if (normalizedName.includes('information technology') || normalizedName.includes('it')) return '�️';
+      if (normalizedName.includes('information technology') || normalizedName.includes('it')) return '🖥️';
       if (normalizedName.includes('electrical') || normalizedName.includes('electronics')) return '⚡';
       if (normalizedName.includes('mechanical')) return '⚙️';
       if (normalizedName.includes('civil')) return '🏗️';
       if (normalizedName.includes('chemical') || normalizedName.includes('chemistry')) return '⚗️';
       if (normalizedName.includes('biological') || normalizedName.includes('biology') || normalizedName.includes('bio')) return '🧬';
-      if (normalizedName.includes('physics')) return '�';
+      if (normalizedName.includes('physics')) return '🔬';
       if (normalizedName.includes('mathematics') || normalizedName.includes('math')) return '🔢';
-      if (normalizedName.includes('management') || normalizedName.includes('business')) return '�';
+      if (normalizedName.includes('management') || normalizedName.includes('business')) return '📊';
       if (normalizedName.includes('instrumentation') || normalizedName.includes('control')) return '🎛️';
       if (normalizedName.includes('physical education') || normalizedName.includes('sports')) return '🏃';
-      if (normalizedName.includes('communication')) return '�';
+      if (normalizedName.includes('communication')) return '📡';
       
       // Default icon for unknown departments
       return '🏛️';
@@ -576,8 +575,6 @@ const PhonebookPage: React.FC = () => {
                 </div>
               )}
             </main>
-
-            <Footer />
           </div>
         </div>
       </div>

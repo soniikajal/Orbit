@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import EditText from '@/components/ui/EditText';
 import Button from '@/components/ui/Button';
-import Footer from '@/components/layout/Footer';
 import { useScrollAnimations } from '@/hooks/useScrollAnimations';
 
 interface TeamMember {
@@ -480,9 +479,6 @@ const AboutPage: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            {/* Footer */}
-            <Footer />
           </div>
         </div>
 

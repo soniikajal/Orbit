@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import TextArea from '@/components/ui/TextArea';
-import Footer from '@/components/layout/Footer';
 
 interface TeamMember {
   id: string;
@@ -851,8 +850,6 @@ const HomePage: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* Footer */}
-        <Footer />
       </div>
 
       {/* Scroll to Top Arrow */}

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
 import TextArea from '@/components/ui/TextArea';
-import Footer from '@/components/layout/Footer';
 import { LaunchpadProject } from './launchpad_projects';
 
 
@@ -874,9 +873,6 @@ const LaunchpadPage: React.FC = () => {
                 </div>
               </div>
             )}
-
-            {/* Footer */}
-            <Footer />
           </div>
         </div>
       </div>

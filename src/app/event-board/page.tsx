@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import EditText from '@/components/ui/EditText';
-import Footer from '@/components/layout/Footer';
 import { EventBoardEvent } from './event_data';
 import { getAvailableVenues, navigateToVenue, VenueLocation } from '@/utils/venues';
 
@@ -1118,9 +1117,6 @@ const EventBoardPage: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/* Footer */}
-          <Footer />
         </div>
       </div>
     </div>
