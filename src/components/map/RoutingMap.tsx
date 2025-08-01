@@ -30,21 +30,47 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
   const locationAddedToFuse = useRef<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(17);
   const [mapReady, setMapReady] = useState(false);
+  const [buildingsLoaded, setBuildingsLoaded] = useState(false);
+  const pendingRouteQuery = useRef<string>('');
 
+  // Handle searchQuery changes
   useEffect(() => {
     if (searchQuery && searchQuery.trim() !== '') {
+      pendingRouteQuery.current = searchQuery;
       setEndInput(searchQuery);
-      const building = buildings.current.find(b => b.name.toLowerCase().includes(searchQuery.toLowerCase()));
-      if (building) {
-        endLatLng.current = building.latlng;
-        if (userLocation.current) {
-          startLatLng.current = userLocation.current;
-          setStartInput("Your Location");
+      
+      // Try to find and route immediately if buildings are loaded
+      if (buildingsLoaded) {
+        const building = buildings.current.find(b => 
+          b.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        if (building) {
+          endLatLng.current = building.latlng;
+          if (userLocation.current) {
+            startLatLng.current = userLocation.current;
+            setStartInput("Your Location");
+            tryRoute();
+          }
         }
-        tryRoute();
       }
     }
-  }, [searchQuery]);
+  }, [searchQuery, buildingsLoaded]);
+
+  // Retry routing when user location is found and there's a pending query
+  useEffect(() => {
+    if (userLocation.current && pendingRouteQuery.current && buildingsLoaded) {
+      const building = buildings.current.find(b => 
+        b.name.toLowerCase().includes(pendingRouteQuery.current.toLowerCase())
+      );
+      if (building) {
+        endLatLng.current = building.latlng;
+        startLatLng.current = userLocation.current;
+        setStartInput("Your Location");
+        tryRoute();
+        pendingRouteQuery.current = ''; // Clear pending query
+      }
+    }
+  }, [userLocation.current, buildingsLoaded]);
 
   useEffect(() => {
     const initMap = async () => {
@@ -100,6 +126,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         });
 
         fuse.current = new Fuse(buildings.current, { keys: ['name'], threshold: 0.3 });
+        setBuildingsLoaded(true); // Mark buildings as loaded
 
         const pathsRes = await fetch('/paths.json');
         const pathsData = await pathsRes.json();

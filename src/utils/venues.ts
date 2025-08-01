@@ -22,6 +22,6 @@ export const getAvailableVenues = async (): Promise<VenueLocation[]> => {
 // Function to navigate to a specific venue
 export const navigateToVenue = (venueName: string) => {
   const encodedVenue = encodeURIComponent(venueName);
-  // Navigate to navigation page with the venue as a query parameter
-  window.open(`/navigation?destination=${encodedVenue}`, '_blank');
+  // Navigate to fullmap page with the venue as a query parameter in a new tab
+  window.open(`/navigation/fullmap?destination=${encodedVenue}`, '_blank');
 };

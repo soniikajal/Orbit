@@ -514,16 +514,20 @@ const EventBoardPage: React.FC = () => {
                           }}>
                             <span className="font-bold text-[#FACC6B]">Venue:</span>{' '}
                             {event.venue ? (
-                              <button
-                                onClick={() => navigateToVenue(event.venue!)}
-                                className="text-[#FACC6B] hover:text-[#F4C430] underline transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
-                                title="Click to navigate to this location"
-                              >
-                                {event.venue}
-                                <svg className="w-2 h-2 sm:w-3 sm:h-3 opacity-70" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-                                </svg>
-                              </button>
+                              availableVenues.some(venue => venue.name === event.venue) ? (
+                                <button
+                                  onClick={() => navigateToVenue(event.venue!)}
+                                  className="text-gray-400 hover:text-gray-300 underline transition-colors duration-200 cursor-pointer inline-flex items-center gap-1"
+                                  title="Click to navigate to this location"
+                                >
+                                  {event.venue}
+                                  <svg className="w-2 h-2 sm:w-3 sm:h-3 opacity-70" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                                  </svg>
+                                </button>
+                              ) : (
+                                <span className="text-gray-400">{event.venue}</span>
+                              )
                             ) : (
                               'TBA'
                             )}

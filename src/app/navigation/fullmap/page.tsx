@@ -1,15 +1,39 @@
 // src/app/navigation/fullmap/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import InteractiveMap from '@/components/map/InteractiveMap';
 
-export default function FullMapPage() {
+const FullMapPageContent = () => {
+  const searchParams = useSearchParams();
   const [showQuickTip, setShowQuickTip] = useState(true);
+  const [routeQuery, setRouteQuery] = useState('');
+  const [mapKey, setMapKey] = useState(0); // Force re-render when route changes
+
+  // Handle destination from URL parameters (e.g., from event venue click)
+  useEffect(() => {
+    const destination = searchParams.get('destination');
+    if (destination) {
+      const decodedDestination = decodeURIComponent(destination);
+      setRouteQuery(decodedDestination);
+      setShowQuickTip(false); // Hide tip when coming from external link
+      
+      // Force map re-render to ensure proper initialization with route
+      setTimeout(() => {
+        setMapKey(prev => prev + 1);
+      }, 100);
+    }
+  }, [searchParams]);
 
   return (
     <div className="h-screen w-screen fixed top-0 left-0 z-0">
-      <InteractiveMap className="w-full h-full" showSearchBar={true} />
+      <InteractiveMap 
+        key={mapKey}
+        className="w-full h-full" 
+        showSearchBar={true} 
+        searchQuery={routeQuery}
+      />
       
       {/* Quick Tip Widget */}
       {showQuickTip && (
@@ -44,5 +68,30 @@ export default function FullMapPage() {
         </div>
       )}
     </div>
+  );
+};
+
+export default function FullMapPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen w-screen fixed top-0 left-0 z-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex items-center justify-center">
+        <div className="text-center text-white">
+          <div className="mb-4">
+            <svg className="w-16 h-16 mx-auto mb-4 text-white/70 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            Loading Campus Map...
+          </h3>
+          <p className="text-white/80 text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            Please wait while the interactive map loads
+          </p>
+        </div>
+      </div>
+    }>
+      <FullMapPageContent />
+    </Suspense>
   );
 }
