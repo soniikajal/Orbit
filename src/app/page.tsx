@@ -362,7 +362,7 @@ const HomePage: React.FC = () => {
             <div className="relative w-full h-auto flex flex-col justify-start items-start pt-[100px] pb-40 lg:pb-60"> {/* Added more top padding for content below fixed navbar */}
               <div className={`relative transition-all duration-2200 ease-elegant delay-100 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
                 <h1 className="text-[80px] sm:text-[120px] md:text-[160px] lg:text-[280px] xl:text-[320px] font-bold leading-[0.8] text-left text-black" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  <span style={{ fontSize: 'clamp(100px, 25vw, 230px)', lineHeight: 0.8, display: 'block', marginTop:'30px', marginLeft: 'clamp(-12px, -3vw, -32px)' }}>NSUT</span>
+                  <span style={{ fontSize: 'clamp(100px, 25vw, 230px)', lineHeight: 0.8, display: 'block', marginTop:'30px', marginLeft: 'clamp(-12px, -3vw, -32px)', color: '#262626' }}>NSUT</span>
                 </h1>
                 <h2 className="absolute top-[80%] left-[12%] font-normal leading-[0.8] text-[#F45B69] tracking-wide" style={{ fontFamily: 'Lost in South, cursive', fontSize: 'clamp(40px, 10vw, 90px)', marginLeft: 'clamp(-12px, -3vw, -32px)'}}>
                   SURVIVAL KIT
