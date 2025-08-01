@@ -231,6 +231,15 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
         addWaypoints: false,
         fitSelectedRoutes: true,
         show: false,
+        createMarker: function (i, wp, nWps) {
+          return L.marker(wp.latLng, {
+            icon: L.icon({
+              iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png',
+              iconSize: [32, 32],
+              iconAnchor: [16, 32],
+            })
+          });
+        }
       } as any)
         .on('routesfound', function (e) {
           console.log("✅ Route found on Vercel");
@@ -251,6 +260,7 @@ export default function RoutingMap({ className = "", searchQuery, onLocationSele
       console.error('Error creating routing control:', error);
     }
   };
+
 
 
 
