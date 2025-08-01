@@ -56,11 +56,11 @@ export default function RootLayout({
         {/* Additional OpenGraph tags for better compatibility */}
         <meta property="og:title" content="Orbit - NSUT Survival Kit" />
         <meta property="og:description" content="Your complete guide to NSUT campus. Access maps, resources, events, and connect with fellow students all in one place." />
-        <meta property="og:image" content="https://orbit-nsut.vercel.app/images/ogimg.png" />
+        <meta property="og:image" content="https://nsutorbit.tech/images/ogimg.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:url" content="https://orbit-nsut.vercel.app" />
+        <meta property="og:url" content="https://nsutorbit.tech" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Orbit - NSUT Survival Kit" />
         
@@ -68,10 +68,10 @@ export default function RootLayout({
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Orbit - NSUT Survival Kit" />
         <meta name="twitter:description" content="Your complete guide to NSUT campus. Access maps, resources, events, and connect with fellow students all in one place." />
-        <meta name="twitter:image" content="https://orbit-nsut.vercel.app/images/ogimg.png" />
+        <meta name="twitter:image" content="https://nsutorbit.tech/images/ogimg.png" />
         
         {/* WhatsApp specific tags */}
-        <meta property="og:image:secure_url" content="https://orbit-nsut.vercel.app/images/ogimg.png" />
+        <meta property="og:image:secure_url" content="https://nsutorbit.tech/images/ogimg.png" />
         <meta name="theme-color" content="#fffcf9" />
       </head>
       <body className="bg-[#fffcf9]">
