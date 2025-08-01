@@ -38,6 +38,8 @@ const EventBoardPage: React.FC = () => {
   const [venueSearchQuery, setVenueSearchQuery] = useState('');
   const [showOrganizerDropdown, setShowOrganizerDropdown] = useState(false);
   const [isOrganizerOther, setIsOrganizerOther] = useState(false);
+  const [isCategoryOther, setIsCategoryOther] = useState(false);
+  const [eventDates, setEventDates] = useState<string[]>(['']);
   const [eventForm, setEventForm] = useState({
     eventName: '',
     category: '',
@@ -257,6 +259,34 @@ const EventBoardPage: React.FC = () => {
     setShowOrganizerDropdown(false);
   };
 
+  const handleCategoryChange = (category: string) => {
+    if (category === 'Other') {
+      setIsCategoryOther(true);
+      setEventForm(prev => ({ ...prev, category: '' }));
+    } else {
+      setIsCategoryOther(false);
+      setEventForm(prev => ({ ...prev, category }));
+    }
+  };
+
+  const addEventDate = () => {
+    setEventDates(prev => [...prev, '']);
+  };
+
+  const removeEventDate = (index: number) => {
+    if (eventDates.length > 1) {
+      setEventDates(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateEventDate = (index: number, date: string) => {
+    setEventDates(prev => prev.map((d, i) => i === index ? date : d));
+    // Update the main form date with the first date for backward compatibility
+    if (index === 0) {
+      setEventForm(prev => ({ ...prev, date }));
+    }
+  };
+
   const handleVenueSelect = (venueName: string) => {
     setEventForm(prev => ({ ...prev, venue: venueName }));
     setVenueSearchQuery(venueName);
@@ -280,13 +310,17 @@ const EventBoardPage: React.FC = () => {
   const handleEventFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Filter out empty dates and sort them
+    const validDates = eventDates.filter(date => date.trim() !== '').sort();
+
     const eventData = {
       title: eventForm.eventName,
       category: eventForm.category,
       description: eventForm.description,
-      venue: eventForm.venue,
-      date: eventForm.date,
-      time: eventForm.time,
+      venue: eventForm.venue || undefined, // Send undefined if empty
+      date: validDates[0] || eventForm.date, // Use first date as primary date
+      additionalDates: validDates.length > 1 ? validDates.slice(1) : [], // Additional dates for multi-day events
+      time: eventForm.time || undefined, // Send undefined if empty
       organizer: eventForm.organizer,
       contactEmail: session?.user?.email || '',
       additionalInfo: eventForm.additionalInfo,
@@ -317,10 +351,12 @@ const EventBoardPage: React.FC = () => {
           contactEmail: session?.user?.email || '',
           additionalInfo: '',
         });
+        setEventDates(['']);
         setVenueSearchQuery('');
         setFilteredVenues(availableVenues);
         setShowOrganizerDropdown(false);
         setIsOrganizerOther(false);
+        setIsCategoryOther(false);
       } else {
         alert(data.message || 'Submission failed.');
       }
@@ -345,10 +381,12 @@ const EventBoardPage: React.FC = () => {
       contactEmail: session?.user?.email || '',
       additionalInfo: ''
     });
+    setEventDates(['']);
     setVenueSearchQuery('');
     setFilteredVenues(availableVenues);
     setShowOrganizerDropdown(false);
     setIsOrganizerOther(false);
+    setIsCategoryOther(false);
     setShowVenueDropdown(false);
   };
 
@@ -772,23 +810,48 @@ const EventBoardPage: React.FC = () => {
                       <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                         Category *
                       </label>
-                      <select
-                        required
-                        value={eventForm.category}
-                        onChange={(e) => handleEventFormChange('category', e.target.value)}
-                        className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                        style={{ fontFamily: 'Inter, sans-serif' }}
-                      >
-                        <option value="">Select a category</option>
-                        <option value="Technical Fest">Technical Fest</option>
-                        <option value="Cultural Fest">Cultural Fest</option>
-                        <option value="Sports Event">Sports Event</option>
-                        <option value="Workshop">Workshop</option>
-                        <option value="Seminar">Seminar</option>
-                        <option value="Competition">Competition</option>
-                        <option value="Social Impact">Social Impact</option>
-                        <option value="Other">Other</option>
-                      </select>
+                      {!isCategoryOther ? (
+                        <select
+                          required
+                          value={eventForm.category}
+                          onChange={(e) => handleCategoryChange(e.target.value)}
+                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                        >
+                          <option value="">Select a category</option>
+                          <option value="Technical Fest">Technical Fest</option>
+                          <option value="Cultural Fest">Cultural Fest</option>
+                          <option value="Sports Event">Sports Event</option>
+                          <option value="Workshop">Workshop</option>
+                          <option value="Seminar">Seminar</option>
+                          <option value="Competition">Competition</option>
+                          <option value="Social Impact">Social Impact</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            required
+                            value={eventForm.category}
+                            onChange={(e) => handleEventFormChange('category', e.target.value)}
+                            className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            placeholder="Enter custom category"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsCategoryOther(false);
+                              setEventForm(prev => ({ ...prev, category: '' }));
+                            }}
+                            className="h-[50px] px-4 text-[12px] rounded-[30px] border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            Choose from list
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Description */}
@@ -811,19 +874,18 @@ const EventBoardPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="relative venue-dropdown-container">
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Venue *
+                          Venue
                         </label>
                         <div className="relative">
                           <input
                             type="text"
-                            required
                             value={venueSearchQuery}
                             onChange={(e) => handleVenueSearch(e.target.value)}
                             onFocus={handleVenueInputFocus}
                             onBlur={handleVenueInputBlur}
                             className="w-full h-[50px] px-4 pr-10 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
                             style={{ fontFamily: 'Inter, sans-serif' }}
-                            placeholder="Search for a venue..."
+                            placeholder="Search for a venue (optional)..."
                             autoComplete="off"
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -872,16 +934,45 @@ const EventBoardPage: React.FC = () => {
                       </div>
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Date *
+                          Event Date(s) *
                         </label>
-                        <input
-                          type="date"
-                          required
-                          value={eventForm.date}
-                          onChange={(e) => handleEventFormChange('date', e.target.value)}
-                          className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
-                        />
+                        <div className="space-y-2">
+                          {eventDates.map((date, index) => (
+                            <div key={index} className="flex items-center gap-2">
+                              <input
+                                type="date"
+                                required={index === 0}
+                                value={date}
+                                onChange={(e) => updateEventDate(index, e.target.value)}
+                                className="flex-1 h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
+                                style={{ fontFamily: 'Inter, sans-serif' }}
+                              />
+                              {eventDates.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => removeEventDate(index)}
+                                  className="h-[50px] w-[50px] rounded-full border border-red-300 text-red-500 hover:bg-red-50 transition-all duration-200 flex items-center justify-center"
+                                  title="Remove date"
+                                >
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={addEventDate}
+                            className="w-full h-[40px] border-2 border-dashed border-gray-300 rounded-[20px] text-gray-500 hover:border-[#F45B69] hover:text-[#F45B69] transition-colors duration-200 flex items-center justify-center gap-2"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add another date (for multi-day events)
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -889,11 +980,10 @@ const EventBoardPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[16px] font-bold text-black mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Time *
+                          Time
                         </label>
                         <input
                           type="time"
-                          required
                           value={eventForm.time}
                           onChange={(e) => handleEventFormChange('time', e.target.value)}
                           className="w-full h-[50px] px-4 text-[14px] rounded-[30px] border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#F45B69] focus:border-transparent transition-all duration-200"
