@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
       <p className="mb-4 text-gray-700">We may update this Privacy Policy as Orbit evolves. Changes will be posted here with a new date. Please check back periodically.</p>
 
       <h2 className="text-2xl font-semibold mt-8 mb-2">8. Contact Us</h2>
-      <p className="mb-4 text-gray-700">Questions or concerns? Email us at <a href="mailto:nsut.orbit@gmail.com" className="underline text-blue-600">nsut.orbit@gmail.com</a>. We’re happy to help!</p>
+      <p className="mb-4 text-gray-700">Questions or concerns? Email us at <a href="mailto:nsutorbit@gmail.com" className="underline text-blue-600">nsutorbit@gmail.com</a>. We’re happy to help!</p>
 
       <div className="mt-8">
         <Link href="/" className="text-blue-600 underline">Back to Home</Link>
