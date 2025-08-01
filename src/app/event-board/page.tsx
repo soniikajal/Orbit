@@ -609,6 +609,16 @@ const EventBoardPage: React.FC = () => {
                             <span className="font-bold text-[#FACC6B]">Time:</span> {event.time || 'TBA'}
                           </span>
                         </div>
+
+                        <div className="mb-2">
+                          <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
+                            fontFamily: 'Inter, sans-serif',
+                            wordWrap: 'break-word',
+                            hyphens: 'auto'
+                          }}>
+                            <span className="font-bold text-[#FACC6B]">Organizer:</span> {event.organizer || 'TBA'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Add to Calendar Button */}
