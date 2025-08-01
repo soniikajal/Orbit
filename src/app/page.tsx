@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
     {
       id: '2',
       name: 'Manik Bhushan',
-      position: 'Head of Design',
+      position: 'Design Lead',
       experience: 'Mechanical Branch - Creative Head with expertise in design and visual content creation',
       image: '/images/team/manik.png'
     },

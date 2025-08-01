@@ -121,7 +121,7 @@ const AboutPage: React.FC = () => {
       {
         id: '5',
         name: 'Manik Bhushan',
-        position: 'Head of Design',
+        position: 'Design Lead',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/manik-bhushan/',
         instagram: 'https://www.instagram.com/maeniikkk/',
@@ -143,6 +143,7 @@ const AboutPage: React.FC = () => {
         position: 'Graphic Designer',
         branch: 'Mechanical',
         linkedin: 'https://www.linkedin.com/in/sakshi-sahu-ss/',
+        instagram: 'https://www.instagram.com/ssakshi.13/',
         image: '/images/team/sakshi.png'
       },
         {
