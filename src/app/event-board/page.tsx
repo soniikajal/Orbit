@@ -580,7 +580,7 @@ const EventBoardPage: React.FC = () => {
                         WebkitLineClamp: 3,
                         WebkitBoxOrient: 'vertical',
                         wordWrap: 'break-word',
-                        hyphens: 'auto'
+                        hyphens: 'none'
                       }}>
                         {event.title}
                       </h3>
@@ -597,7 +597,7 @@ const EventBoardPage: React.FC = () => {
                         <p className="text-[12px] sm:text-[14px] font-normal leading-relaxed text-gray-300 break-words" style={{ 
                           fontFamily: 'Inter, sans-serif',
                           wordWrap: 'break-word',
-                          hyphens: 'auto'
+                          hyphens: 'none'
                         }}>
                           {event.description}
                         </p>
@@ -609,7 +609,7 @@ const EventBoardPage: React.FC = () => {
                           <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
                             fontFamily: 'Inter, sans-serif',
                             wordWrap: 'break-word',
-                            hyphens: 'auto'
+                            hyphens: 'none'
                           }}>
                             <span className="font-bold text-[#FACC6B]">Venue:</span>{' '}
                             {event.venue ? (
@@ -651,7 +651,7 @@ const EventBoardPage: React.FC = () => {
                           <span className="text-[10px] sm:text-[12px] text-gray-400 break-words block" style={{ 
                             fontFamily: 'Inter, sans-serif',
                             wordWrap: 'break-word',
-                            hyphens: 'auto'
+                            hyphens: 'none'
                           }}>
                             <span className="font-bold text-[#FACC6B]">Organizer:</span> {event.organizer || 'TBA'}
                           </span>
