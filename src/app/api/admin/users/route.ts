@@ -7,9 +7,12 @@ export async function GET() {
   try {
     await connectToDB()
 
-    const users = await User.find().sort({ lastLogin: -1 })
+    // Use raw MongoDB query to bypass Mongoose filtering
+    const rawUsers = await User.collection.find({}).toArray()
 
-    const formatted = users.map(u => ({
+    console.log('Fetched users:', rawUsers.length)
+
+    const formatted = rawUsers.map(u => ({
       id: u._id.toString(),
       name: u.name || '',
       email: u.email,
