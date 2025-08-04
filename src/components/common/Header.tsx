@@ -17,10 +17,12 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [survivalKitOpen, setSurvivalKitOpen] = useState(false);
   const [quickLinksOpen, setQuickLinksOpen] = useState(false);
+  const [adminDropdownOpen, setAdminDropdownOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   
   const survivalKitRef = useRef<HTMLDivElement>(null);
   const quickLinksRef = useRef<HTMLDivElement>(null);
+  const adminDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -39,6 +41,9 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
       }
       if (quickLinksRef.current && !quickLinksRef.current.contains(event.target as Node)) {
         setQuickLinksOpen(false);
+      }
+      if (adminDropdownRef.current && !adminDropdownRef.current.contains(event.target as Node)) {
+        setAdminDropdownOpen(false);
       }
       // Close mobile menu when clicking outside
       const target = event.target as HTMLElement;
@@ -270,7 +275,48 @@ const Header: React.FC<HeaderProps> = memo(({ className = '' }) => {
                   Loading...
                 </div>
               ) : session ? (
-                <SignOutButton className="px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 text-sm sm:text-base md:text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[20px] sm:rounded-[25px] md:rounded-[30px]" />
+                // Check if user is admin to show dropdown or regular sign out
+                session.user?.role === 'admin' ? (
+                  <div className="relative" ref={adminDropdownRef}>
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 text-sm sm:text-base md:text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[20px] sm:rounded-[25px] md:rounded-[30px]"
+                      onClick={() => setAdminDropdownOpen(!adminDropdownOpen)}
+                    >
+                      Actions
+                      <svg 
+                        className={`w-4 h-4 transition-all duration-300 ${adminDropdownOpen ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {/* Admin Dropdown Menu */}
+                    {adminDropdownOpen && (
+                      <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[100] animate-in fade-in-0 zoom-in-95 duration-200">
+                        <div className="py-2">
+                          <button
+                            className="block w-full text-left px-4 py-2 text-sm text-global-text2 hover:bg-gray-100 hover:text-global-text3 transition-all duration-200"
+                            onClick={() => {
+                              setAdminDropdownOpen(false);
+                              router.push('/admin');
+                            }}
+                          >
+                            Admin Panel
+                          </button>
+                          <hr className="my-1 border-gray-200" />
+                          <div className="px-4 py-2">
+                            <SignOutButton className="w-full text-left text-sm text-global-text2 hover:text-global-text3 bg-transparent border-none p-0 hover:bg-transparent" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <SignOutButton className="px-4 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 text-sm sm:text-base md:text-base bg-white text-black border border-black font-normal hover:bg-gray-50 transition-all duration-300 hover:scale-105 rounded-[20px] sm:rounded-[25px] md:rounded-[30px]" />
+                )
               ) : (
                 <SignInButton className={`px-4 py-2 sm:px-5 sm:py-3 md:px-8 md:py-4 lg:px-12 lg:py-5 text-sm sm:text-base md:text-lg lg:text-[20px] font-normal transition-all duration-300 rounded-[20px] sm:rounded-[25px] md:rounded-[30px] bg-transparent border min-w-[100px] sm:min-w-[120px] md:min-w-[160px] lg:min-w-[195px] text-center ${pathname === '/' ? 'text-white border-white hover:bg-white hover:text-black' : 'text-black border-[#262626] hover:bg-[#262626] hover:text-white'}`} />
               )}

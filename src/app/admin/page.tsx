@@ -29,6 +29,10 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<'users_analytics' | 'submissions' | 'launchpad' | 'events'>('users_analytics')
   const [users, setUsers] = useState<UserData[]>([])
+  const [sortConfig, setSortConfig] = useState<{
+    key: 'name' | 'email' | 'role' | 'lastLogin';
+    direction: 'asc' | 'desc';
+  }>({ key: 'role', direction: 'desc' }) // Default sort by role (admin first)
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [launchpadSubmissions, setLaunchpadSubmissions] = useState<any[]>([])
   const [eventSubmissions, setEventSubmissions] = useState<any[]>([])
@@ -244,6 +248,13 @@ export default function AdminDashboard() {
 
   // Handle user role changes
   const handleRoleChange = async (userId: string, currentRole: string) => {
+    // Check if current admin is authorized to change roles
+    const authorizedEmails = ['kushagra.kataria.ug24@nsut.ac.in', 'kajal.soni.ug24@nsut.ac.in']
+    if (!session?.user?.email || !authorizedEmails.includes(session.user.email)) {
+      alert('You are not authorized to change user roles. Only Kushagra Kataria and Kajal Soni can perform this action.')
+      return
+    }
+
     const newRole = currentRole === 'admin' ? 'user' : 'admin'
     const action = newRole === 'admin' ? 'promote' : 'demote'
     
@@ -281,6 +292,78 @@ export default function AdminDashboard() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Sorting functions
+  const handleSort = (key: 'name' | 'email' | 'role' | 'lastLogin') => {
+    let direction: 'asc' | 'desc' = 'asc'
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc'
+    }
+    setSortConfig({ key, direction })
+  }
+
+  const sortedUsers = [...users].sort((a, b) => {
+    const { key, direction } = sortConfig
+    let aValue: string | number = ''
+    let bValue: string | number = ''
+
+    switch (key) {
+      case 'name':
+        aValue = a.name.toLowerCase()
+        bValue = b.name.toLowerCase()
+        break
+      case 'email':
+        aValue = a.email.toLowerCase()
+        bValue = b.email.toLowerCase()
+        break
+      case 'role':
+        // Admin comes first when desc, User comes first when asc
+        aValue = a.role === 'admin' ? 1 : 0
+        bValue = b.role === 'admin' ? 1 : 0
+        break
+      case 'lastLogin':
+        // Convert to timestamp for proper date sorting
+        aValue = new Date(a.lastLogin).getTime()
+        bValue = new Date(b.lastLogin).getTime()
+        break
+    }
+
+    if (aValue < bValue) {
+      return direction === 'asc' ? -1 : 1
+    }
+    if (aValue > bValue) {
+      return direction === 'asc' ? 1 : -1
+    }
+    
+    // Secondary sort by name if primary values are equal
+    if (key !== 'name') {
+      const aName = a.name.toLowerCase()
+      const bName = b.name.toLowerCase()
+      if (aName < bName) return -1
+      if (aName > bName) return 1
+    }
+    
+    return 0
+  })
+
+  const getSortIcon = (columnKey: string) => {
+    if (sortConfig.key !== columnKey) {
+      return (
+        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+        </svg>
+      )
+    }
+    return sortConfig.direction === 'asc' ? (
+      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+      </svg>
+    ) : (
+      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    )
   }
 
   if (status === 'loading') {
@@ -483,25 +566,59 @@ export default function AdminDashboard() {
                     <table className="w-full table-auto min-w-[600px]">
                       <thead>
                         <tr className="bg-gray-50">
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Name
+                          <th 
+                            className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors" 
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            onClick={() => handleSort('name')}
+                          >
+                            <div className="flex items-center gap-1">
+                              Name
+                              {getSortIcon('name')}
+                            </div>
                           </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Email
+                          <th 
+                            className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors" 
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            onClick={() => handleSort('email')}
+                          >
+                            <div className="flex items-center gap-1">
+                              Email
+                              {getSortIcon('email')}
+                            </div>
                           </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Role
+                          <th 
+                            className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors" 
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            onClick={() => handleSort('role')}
+                          >
+                            <div className="flex items-center gap-1">
+                              Role
+                              {getSortIcon('role')}
+                            </div>
                           </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Last Login
+                          <th 
+                            className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 transition-colors" 
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                            onClick={() => handleSort('lastLogin')}
+                          >
+                            <div className="flex items-center gap-1">
+                              Last Login
+                              {getSortIcon('lastLogin')}
+                            </div>
                           </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Actions
-                          </th>
+                          {(() => {
+                            const authorizedEmails = ['kushagra.kataria.ug24@nsut.ac.in', 'kajal.soni.ug24@nsut.ac.in']
+                            const isAuthorized = session?.user?.email && authorizedEmails.includes(session.user.email)
+                            return isAuthorized ? (
+                              <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                Actions
+                              </th>
+                            ) : null
+                          })()}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
-                        {users.map((user) => (
+                        {sortedUsers.map((user) => (
                           <tr key={user.id} className="hover:bg-gray-50">
                             <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
                               {user.name}
@@ -521,20 +638,32 @@ export default function AdminDashboard() {
                             <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
                               {user.lastLogin}
                             </td>
-                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm">
-                              <button
-                                onClick={() => handleRoleChange(user.id, user.role)}
-                                disabled={isLoading || (user.email === session?.user?.email && user.role === 'admin')}
-                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
-                                  user.role === 'admin' 
-                                    ? 'bg-gray-500 text-white hover:bg-gray-600' 
-                                    : 'bg-[#f4c430] text-black hover:bg-[#e6b82a]'
-                                }`}
-                                title={user.email === session?.user?.email && user.role === 'admin' ? 'Cannot demote yourself' : ''}
-                              >
-                                {user.role === 'admin' ? 'Make User' : 'Make Admin'}
-                              </button>
-                            </td>
+                            {(() => {
+                              const authorizedEmails = ['kushagra.kataria.ug24@nsut.ac.in', 'kajal.soni.ug24@nsut.ac.in']
+                              const isAuthorized = session?.user?.email && authorizedEmails.includes(session.user.email)
+                              
+                              if (!isAuthorized) return null
+                              
+                              const isSelfDemotion = user.email === session?.user?.email && user.role === 'admin'
+                              const isDisabled = isLoading || isSelfDemotion
+                              
+                              return (
+                                <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm">
+                                  <button
+                                    onClick={() => handleRoleChange(user.id, user.role)}
+                                    disabled={isDisabled}
+                                    className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                      user.role === 'admin' 
+                                        ? 'bg-gray-500 text-white hover:bg-gray-600' 
+                                        : 'bg-[#f4c430] text-black hover:bg-[#e6b82a]'
+                                    }`}
+                                    title={isSelfDemotion ? 'Cannot demote yourself' : ''}
+                                  >
+                                    {user.role === 'admin' ? 'Make User' : 'Make Admin'}
+                                  </button>
+                                </td>
+                              )
+                            })()}
                           </tr>
                         ))}
                       </tbody>
