@@ -242,6 +242,47 @@ export default function AdminDashboard() {
     }
   }
 
+  // Handle user role changes
+  const handleRoleChange = async (userId: string, currentRole: string) => {
+    const newRole = currentRole === 'admin' ? 'user' : 'admin'
+    const action = newRole === 'admin' ? 'promote' : 'demote'
+    
+    if (!confirm(`Are you sure you want to ${action} this user to ${newRole}?`)) {
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, newRole }),
+      })
+
+      const data = await response.json()
+      
+      if (response.ok && data.success) {
+        // Update the user in the local state immediately
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.id === userId 
+              ? { ...user, role: newRole }
+              : user
+          )
+        )
+      } else {
+        alert(data.message || 'Failed to update user role')
+      }
+    } catch (error) {
+      console.error('Error updating user role:', error)
+      alert('Error updating user role')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-[#fffcf9] flex items-center justify-center">
@@ -369,58 +410,7 @@ export default function AdminDashboard() {
             {/* Users Management Tab */}
             {activeTab === 'users_analytics' && (
               <>
-              {<div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Registered Users
-                </h2>
-                <div className="overflow-x-auto -mx-4 sm:mx-0">
-                  <div className="min-w-full inline-block align-middle">
-                    <table className="w-full table-auto min-w-[600px]">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Name
-                          </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Email
-                          </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Role
-                          </th>
-                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            Last Login
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {users.map((user) => (
-                          <tr key={user.id} className="hover:bg-gray-50">
-                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              {user.name}
-                            </td>
-                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600 break-all" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              {user.email}
-                            </td>
-                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                user.role === 'admin' 
-                                  ? 'bg-[#f45b6a] text-white' 
-                                  : 'bg-gray-200 text-gray-800'
-                              }`}>
-                                {user.role}
-                              </span>
-                            </td>
-                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
-                              {user.lastLogin}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>}
-              {<div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+              {<div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Application Analytics
                 </h2>
@@ -481,6 +471,74 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              </div>}
+              {<div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Registered Users
+                </h2>
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="min-w-full inline-block align-middle">
+                    <table className="w-full table-auto min-w-[600px]">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Name
+                          </th>
+                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Email
+                          </th>
+                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Role
+                          </th>
+                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Last Login
+                          </th>
+                          <th className="px-2 sm:px-4 py-3 text-left text-xs sm:text-sm font-medium text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {users.map((user) => (
+                          <tr key={user.id} className="hover:bg-gray-50">
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {user.name}
+                            </td>
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600 break-all" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {user.email}
+                            </td>
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                user.role === 'admin' 
+                                  ? 'bg-[#f45b6a] text-white' 
+                                  : 'bg-gray-200 text-gray-800'
+                              }`}>
+                                {user.role}
+                              </span>
+                            </td>
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {user.lastLogin}
+                            </td>
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm">
+                              <button
+                                onClick={() => handleRoleChange(user.id, user.role)}
+                                disabled={isLoading || (user.email === session?.user?.email && user.role === 'admin')}
+                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
+                                  user.role === 'admin' 
+                                    ? 'bg-gray-500 text-white hover:bg-gray-600' 
+                                    : 'bg-[#f4c430] text-black hover:bg-[#e6b82a]'
+                                }`}
+                                title={user.email === session?.user?.email && user.role === 'admin' ? 'Cannot demote yourself' : ''}
+                              >
+                                {user.role === 'admin' ? 'Make User' : 'Make Admin'}
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>}
