@@ -1,7 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Button from '@/components/ui/Button'
 
 interface UserData {
@@ -32,6 +32,12 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
   const [launchpadSubmissions, setLaunchpadSubmissions] = useState<any[]>([])
   const [eventSubmissions, setEventSubmissions] = useState<any[]>([])
+  const [approvedProjects, setApprovedProjects] = useState<any[]>([])
+  const [approvedEvents, setApprovedEvents] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date())
+  const [autoRefresh, setAutoRefresh] = useState(true)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     if (status !== 'authenticated') return;
@@ -44,38 +50,85 @@ export default function AdminDashboard() {
       return;
     }
 
-    loadMockData(); // ✅ Safe to load only after role is ready
+    loadAllData(); // ✅ Safe to load only after role is ready
   }, [session, status, router]);
 
+  // Auto refresh effect
+  useEffect(() => {
+    if (autoRefresh) {
+      intervalRef.current = setInterval(() => {
+        loadAllData(true); // Silent refresh
+      }, 30000); // Refresh every 30 seconds
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [autoRefresh]);
 
 
-  const loadMockData = async () => {
+
+  const loadAllData = async (silent = false) => {
+    if (!silent) setIsLoading(true)
+    
     try {
-      const [userRes, contactRes, launchpadRes, eventRes] = await Promise.all([
-        fetch('/api/admin/users'),
-        fetch('/api/contact'),
-        fetch('/api/admin/launchpad'),
-        fetch('/api/admin/event-board')
+      // Add cache-busting query parameter and no-cache headers
+      const cacheBuster = Date.now()
+      const headers = {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+
+      const [userRes, contactRes, launchpadRes, eventRes, approvedProjectsRes, approvedEventsRes] = await Promise.all([
+        fetch(`/api/admin/users?_=${cacheBuster}`, { headers }),
+        fetch(`/api/contact?_=${cacheBuster}`, { headers }),
+        fetch(`/api/admin/launchpad?_=${cacheBuster}`, { headers }),
+        fetch(`/api/admin/event-board?_=${cacheBuster}`, { headers }),
+        fetch(`/api/admin/approved-projects?_=${cacheBuster}`, { headers }),
+        fetch(`/api/admin/approved-events?_=${cacheBuster}`, { headers })
       ])
 
       const userData = await userRes.json()
       const contactData = await contactRes.json()
       const launchpadData = await launchpadRes.json()
       const eventData = await eventRes.json()
+      const approvedProjectsData = await approvedProjectsRes.json()
+      const approvedEventsData = await approvedEventsRes.json()
 
       setUsers(userData.users || [])
       setSubmissions(contactData.success ? contactData.contacts : [])
       setLaunchpadSubmissions(launchpadData.success ? launchpadData.projects : [])
       setEventSubmissions(eventData.success ? eventData.events : [])
+      setApprovedProjects(approvedProjectsData.success ? approvedProjectsData.projects : [])
+      setApprovedEvents(approvedEventsData.success ? approvedEventsData.events : [])
+      
+      setLastRefresh(new Date())
 
     } catch (err) {
       console.error('Failed to fetch data', err)
-      setUsers([])
-      setSubmissions([])
-      setLaunchpadSubmissions([])
-      setEventSubmissions([])
+      if (!silent) {
+        setUsers([])
+        setSubmissions([])
+        setLaunchpadSubmissions([])
+        setEventSubmissions([])
+        setApprovedProjects([])
+        setApprovedEvents([])
+      }
+    } finally {
+      if (!silent) setIsLoading(false)
     }
+  }
 
+  const manualRefresh = () => {
+    loadAllData()
   }
 
 
@@ -91,6 +144,8 @@ export default function AdminDashboard() {
         setLaunchpadSubmissions(prev =>
           prev.filter(project => project._id !== id)
         )
+        // Refresh approved projects list
+        loadAllData(true)
       } else {
         alert('Failed to update project status')
       }
@@ -112,12 +167,56 @@ export default function AdminDashboard() {
         setEventSubmissions(prev =>
           prev.filter(event => event._id !== id)
         )
+        // Refresh approved events list
+        loadAllData(true)
       } else {
         alert('Failed to update event status')
       }
     } catch (err) {
       console.error('Event approval error:', err)
       alert('Error approving/rejecting event')
+    }
+  }
+
+  const handleDeleteApprovedProject = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this approved project? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/admin/approved-projects?id=${id}`, {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.success) {
+        setApprovedProjects(prev => prev.filter(project => project._id !== id))
+      } else {
+        alert('Failed to delete project')
+      }
+    } catch (err) {
+      console.error('Delete project error:', err)
+      alert('Error deleting project')
+    }
+  }
+
+  const handleDeleteApprovedEvent = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this approved event? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/admin/approved-events?id=${id}`, {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.success) {
+        setApprovedEvents(prev => prev.filter(event => event._id !== id))
+      } else {
+        alert('Failed to delete event')
+      }
+    } catch (err) {
+      console.error('Delete event error:', err)
+      alert('Error deleting event')
     }
   }
 
@@ -167,12 +266,52 @@ export default function AdminDashboard() {
           <div className="max-w-6xl mx-auto">
             {/* Admin Header */}
             <div className="bg-gradient-to-r from-[#f45b6a] to-[#ff7b7b] rounded-lg shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-                Admin Dashboard
-              </h1>
-              <p className="text-white/90 text-sm sm:text-base md:text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Welcome back, {session.user?.name}! Manage users and monitor application activity.
-              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Admin Dashboard
+                  </h1>
+                  <p className="text-white/90 text-sm sm:text-base md:text-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Welcome back, {session.user?.name}! Manage users and monitor application activity.
+                  </p>
+                </div>
+                <div className="mt-4 sm:mt-0 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setAutoRefresh(!autoRefresh)}
+                      className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                        autoRefresh 
+                          ? 'bg-white/20 text-white' 
+                          : 'bg-white/10 text-white/70 hover:bg-white/20'
+                      }`}
+                    >
+                      Auto Refresh: {autoRefresh ? 'ON' : 'OFF'}
+                    </button>
+                    <button
+                      onClick={manualRefresh}
+                      disabled={isLoading}
+                      className="px-4 py-2 bg-white/20 text-white rounded-md text-sm font-medium hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    >
+                      {isLoading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          Refreshing...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          Refresh
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="text-white/80 text-sm">
+                    Last updated: {lastRefresh.toLocaleTimeString()}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Navigation Tabs */}
@@ -210,7 +349,7 @@ export default function AdminDashboard() {
                     }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
-                    Launchpad Applications
+                    Launchpad ({launchpadSubmissions.length} pending / {approvedProjects.length} approved)
                   </button>
                   <button
                     onClick={() => setActiveTab('events')}
@@ -221,7 +360,7 @@ export default function AdminDashboard() {
                     }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
-                    Event Submissions
+                    Events ({eventSubmissions.length} pending / {approvedEvents.length} approved)
                   </button>
                 </div>
               </div>
@@ -442,79 +581,234 @@ export default function AdminDashboard() {
             )}
             {/* Launchpad Tab */}
             {activeTab === 'launchpad' && (
-              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Pending Launchpad Applications
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                  {launchpadSubmissions.map((project) => (
-                    <div key={project._id} className="border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-base sm:text-lg font-semibold text-black mb-1">{project.projectName}</h3>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-2">{project.category}</p>
-                        <p className="text-xs sm:text-sm text-gray-700 mb-3">{project.description}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Skills:</b> {project.requiredSkills.join(', ')}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Looking for:</b> {project.lookingFor}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Team:</b> {project.teamMembers.join(', ')}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1 break-all"><b>Contact:</b> {project.contactEmail}</p>
-                        {project.additionalInfo && (
-                          <p className="text-xs sm:text-sm text-gray-600"><b>More:</b> {project.additionalInfo}</p>
-                        )}
-                      </div>
-                      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
-                        <Button onClick={() => handleApproval(project._id, true)} variant="primary" className="text-sm">
-                          Approve
-                        </Button>
-                        <Button onClick={() => handleApproval(project._id, false)} variant="danger" className="text-sm">
-                          Reject
-                        </Button>
-                      </div>
+              <div className="space-y-8">
+                {/* Pending Projects Section */}
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 border-l-4 border-yellow-400">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Pending Launchpad Applications
+                      </h2>
                     </div>
-                  ))}
+                    <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                      {launchpadSubmissions.length} pending
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                    {launchpadSubmissions.map((project) => (
+                      <div key={project._id} className="border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+                        <div>
+                          <h3 className="text-base sm:text-lg font-semibold text-black mb-1">{project.projectName}</h3>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-2">{project.category}</p>
+                          <p className="text-xs sm:text-sm text-gray-700 mb-3">{project.description}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Skills:</b> {project.requiredSkills.join(', ')}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Looking for:</b> {project.lookingFor}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Team:</b> {project.teamMembers.join(', ')}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1 break-all"><b>Contact:</b> {project.contactEmail}</p>
+                          {project.additionalInfo && (
+                            <p className="text-xs sm:text-sm text-gray-600"><b>More:</b> {project.additionalInfo}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
+                          <Button onClick={() => handleApproval(project._id, true)} variant="primary" className="text-sm">
+                            ✅ Approve
+                          </Button>
+                          <Button onClick={() => handleApproval(project._id, false)} variant="danger" className="text-sm">
+                            ❌ Reject
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {launchpadSubmissions.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="text-gray-400 text-4xl mb-2">📋</div>
+                      <p className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        No pending applications.
+                      </p>
+                    </div>
+                  )}
                 </div>
-                {launchpadSubmissions.length === 0 && (
-                  <p className="text-gray-600 mt-6 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    No pending applications.
-                  </p>
-                )}
+
+                {/* Section Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-[#fffcf9] text-gray-500">Approved Projects</span>
+                  </div>
+                </div>
+
+                {/* Approved Projects Section */}
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 border-l-4 border-green-400">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Approved Launchpad Projects
+                      </h2>
+                    </div>
+                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                      {approvedProjects.length} approved
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                    {approvedProjects.map((project) => (
+                      <div key={project._id} className="border border-green-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between bg-green-50 hover:shadow-md transition-shadow duration-200">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-base sm:text-lg font-semibold text-black">{project.projectName}</h3>
+                            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">✅ Approved</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-2">{project.category}</p>
+                          <p className="text-xs sm:text-sm text-gray-700 mb-3">{project.description}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Skills:</b> {project.requiredSkills.join(', ')}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Looking for:</b> {project.lookingFor}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Team:</b> {project.teamMembers.join(', ')}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1 break-all"><b>Contact:</b> {project.contactEmail}</p>
+                          {project.additionalInfo && (
+                            <p className="text-xs sm:text-sm text-gray-600"><b>More:</b> {project.additionalInfo}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
+                          <Button 
+                            onClick={() => handleDeleteApprovedProject(project._id)} 
+                            variant="danger" 
+                            className="text-sm"
+                          >
+                            🗑️ Delete Project
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {approvedProjects.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="text-gray-400 text-4xl mb-2">🎉</div>
+                      <p className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        No approved projects yet.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             {/* Event Submissions Tab */}
             {activeTab === 'events' && (
-              <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Pending Event Submissions
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                  {eventSubmissions.map((event) => (
-                    <div key={event._id} className="border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-base sm:text-lg font-semibold text-black mb-1">{event.title}</h3>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-2">{event.organizer}</p>
-                        <p className="text-xs sm:text-sm text-gray-700 mb-2">{event.description}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Venue:</b> {event.venue}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Date:</b> {event.date}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Time:</b> {event.time}</p>
-                        <p className="text-xs sm:text-sm text-gray-600 break-all"><b>Contact:</b> {event.contactEmail}</p>
-                      </div>
-                      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
-                        <Button onClick={() => handleEventApproval(event._id, true)} variant="primary" className="text-sm">
-                          Approve
-                        </Button>
-                        <Button onClick={() => handleEventApproval(event._id, false)} variant="danger" className="text-sm">
-                          Reject
-                        </Button>
-                      </div>
+              <div className="space-y-8">
+                {/* Pending Events Section */}
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 border-l-4 border-yellow-400">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Pending Event Submissions
+                      </h2>
                     </div>
-                  ))}
+                    <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
+                      {eventSubmissions.length} pending
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                    {eventSubmissions.map((event) => (
+                      <div key={event._id} className="border border-gray-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+                        <div>
+                          <h3 className="text-base sm:text-lg font-semibold text-black mb-1">{event.title}</h3>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-2">{event.organizer}</p>
+                          <p className="text-xs sm:text-sm text-gray-700 mb-2">{event.description}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Venue:</b> {event.venue}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Date:</b> {event.date}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Time:</b> {event.time}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 break-all"><b>Contact:</b> {event.contactEmail}</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
+                          <Button onClick={() => handleEventApproval(event._id, true)} variant="primary" className="text-sm">
+                            ✅ Approve
+                          </Button>
+                          <Button onClick={() => handleEventApproval(event._id, false)} variant="danger" className="text-sm">
+                            ❌ Reject
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {eventSubmissions.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="text-gray-400 text-4xl mb-2">📅</div>
+                      <p className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        No pending event submissions.
+                      </p>
+                    </div>
+                  )}
                 </div>
-                {eventSubmissions.length === 0 && (
-                  <p className="text-gray-600 mt-6 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    No pending event submissions.
-                  </p>
-                )}
+
+                {/* Section Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-[#fffcf9] text-gray-500">Approved Events</span>
+                  </div>
+                </div>
+
+                {/* Approved Events Section */}
+                <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 border-l-4 border-blue-400">
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        Approved Events
+                      </h2>
+                    </div>
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                      {approvedEvents.length} approved
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                    {approvedEvents.map((event) => (
+                      <div key={event._id} className="border border-blue-200 rounded-lg p-3 sm:p-4 flex flex-col justify-between bg-blue-50 hover:shadow-md transition-shadow duration-200">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-base sm:text-lg font-semibold text-black">{event.title}</h3>
+                            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">✅ Approved</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-2">{event.organizer}</p>
+                          <p className="text-xs sm:text-sm text-gray-700 mb-2">{event.description}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Venue:</b> {event.venue}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Date:</b> {event.date}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mb-1"><b>Time:</b> {event.time}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 break-all"><b>Contact:</b> {event.contactEmail}</p>
+                          {event.additionalInfo && (
+                            <p className="text-xs sm:text-sm text-gray-600 mt-2"><b>Additional Info:</b> {event.additionalInfo}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-4">
+                          <Button 
+                            onClick={() => handleDeleteApprovedEvent(event._id)} 
+                            variant="danger" 
+                            className="text-sm"
+                          >
+                            🗑️ Delete Event
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {approvedEvents.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="text-gray-400 text-4xl mb-2">🎊</div>
+                      <p className="text-gray-600" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        No approved events yet.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
+
           </div>
         </div>
       </div>

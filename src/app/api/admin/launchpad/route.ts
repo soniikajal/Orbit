@@ -8,7 +8,13 @@ export async function GET(req: NextRequest) {
     await connectToDB()
     const projects = await LaunchpadProject.find({ approved: false }).sort({ _id: -1 })
 
-    return NextResponse.json({ success: true, projects })
+    const response = NextResponse.json({ success: true, projects })
+    // Add no-cache headers to ensure fresh data
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    
+    return response
   } catch (err) {
     console.error('GET /api/admin/launchpad error:', err)
     return NextResponse.json({ success: false, message: 'Failed to fetch projects' }, { status: 500 })
